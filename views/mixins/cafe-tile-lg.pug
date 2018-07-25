@@ -1,0 +1,12 @@
+mixin cafe-tile-lg(cafe)
+    .col-md-6
+        .cafe-image-tile.js-scroll-to-map
+            .cafe-image-tile-image-wrapper(style='background-image:url("'+cafe.photo.value[0].url+'");background-size:cover;background-position:right center')
+            .cafe-image-tile-content
+                h3.cage-image-tile-name #{cafe.city.value}
+                address.cafe-tile-address
+                    span.cafe-tile-address-anchor(name=cafe.city.value).
+                        #{cafe.street.value}, #{cafe.city.value}
+                        <br/>#{cafe.zip_code.value}, #{cafe.country.value}, #{cafe.state.value}
+                        <br/>
+                        <br/>#{cafe.phone.value}

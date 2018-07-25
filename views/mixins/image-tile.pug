@@ -1,0 +1,16 @@
+mixin image-tile(title, text, image, img_left)
+    section.row.text-and-image
+        h2.col-lg-12 #{title}
+        .col-md-6
+            if img_left
+                img.img-responsive(src=image)
+            else
+                .text-and-image-text.
+                    !{text}
+        .col-md-6
+            if img_left
+                .text-and-image-text-right.
+                    !{text}
+            else
+                img.img-responsive(src=image)
+                

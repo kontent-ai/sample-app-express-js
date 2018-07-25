@@ -1,0 +1,10 @@
+mixin cafe-tile-contacts(cafe)
+    .col-md-6.col-lg-3
+        .cafe-tile.cursor-hand.js-scroll-to-map(data-address='#{cafe.city.value}, #{cafe.street.value}')
+            .cafe-tile-content
+                h3.cafe-tile-name #{cafe.city.value}
+                address.cafe-tile-address
+                    a.cafe-tile-address-anchor(name='#{cafe.city.value}' onclick='focusAddress(event)').
+                        #{cafe.street.value}, #{cafe.city.value}
+                        <br/>#{cafe.zip_code.value}, #{cafe.country.value}, #{cafe.state.value}
+                p #{cafe.phone.value}

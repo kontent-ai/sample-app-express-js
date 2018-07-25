@@ -1,0 +1,11 @@
+mixin product-tile(title, image, price, statuses)
+    .col-md-6.col-lg-4
+        article.product-tile
+            a(href='')
+                h1.product-heading #{title}
+                -if(statuses)
+                    span.product-tile-status #{statuses}
+                figure.product-tile-image
+                    img(src=image, title='')
+                .product-tile-info
+                    span.product-tile-price $#{price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}

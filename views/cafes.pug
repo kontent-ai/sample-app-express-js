@@ -1,0 +1,15 @@
+extends layout
+include ./mixins/cafe-tile-lg
+
+block content
+    h2 Our cafes
+    .row
+        each cafe in americanCafes
+            +cafe-tile-lg(cafe)
+    h2 Other places where you can drink our coffee
+    .row
+        each cafe in partnerCafes
+            div
+                h3 #{cafe.city.value}, #{cafe.country.value}
+                p.
+                    #{cafe.country.value}, #{cafe.street.value}, #{cafe.phone.value}

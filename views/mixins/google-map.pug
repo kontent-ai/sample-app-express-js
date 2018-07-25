@@ -1,0 +1,39 @@
+mixin google-map(addresses)
+    .map(id='map' style='position: absolute; width: 100%; height: 400px;')
+    <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyAVOq4C-rf7JVeHt6ws9vsf-KHIRpueASg'></script>
+    script.
+        function focusAddress(e) {
+            if (!e) e = window.event;
+            var sender = e.srcElement || e.target;
+            
+            if(sender.text){
+                geocoder.geocode({'address': sender.text}, function(results, status) {
+                    if (status === 'OK') {
+                        map.setCenter(results[0].geometry.location);
+                        map.setZoom(8);
+                    } else console.log('Geocode was not successful for the following reason: ' + status);
+                });
+            }
+        }
+        function placeMarker(address) {
+            geocoder.geocode({'address': address}, function(results, status) {
+                if (status === 'OK') {
+                    var marker = new google.maps.Marker({
+                        map: map,
+                        position: results[0].geometry.location
+                    });
+                } else console.log('Geocode was not successful for the following reason: ' + status);
+            });
+        }
+        var geocoder = new google.maps.Geocoder();
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: 40.854885, lng: -88.081807},
+            zoom: 4
+        });
+        var list = '#{addresses}';
+        if(list != '') {
+            list = list.split('|');
+            list.forEach(function(a) {
+                placeMarker(a);
+            });
+        }

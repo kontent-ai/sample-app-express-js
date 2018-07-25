@@ -1,0 +1,13 @@
+mixin article-lg(article)
+    .article-tile.article-tile-large
+        .col-md-12.col-lg-6
+            a(href='/articles/'+article.system.id)
+                img.article-tile-image(src=article.teaser_image.value[0].url)
+        .col-md-12.col-lg-6
+            .article-tile-date
+                =new Date(article.post_date.value).toString('MMMM d')
+            .article-tile-content
+                h2
+                    a(href='/articles/'+article.system.id) #{article.title.value}
+                p.article-tile-text.lead-paragraph.
+                    #{article.summary.value}

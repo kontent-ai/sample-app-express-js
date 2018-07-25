@@ -1,0 +1,38 @@
+extends layout
+include ./mixins/article-lg
+include ./mixins/article-sm
+include ./mixins/cafe-tile
+
+block content
+  section.banner-section(style='background-image: url("../images/banner-default.jpg");')
+    h2.banner-heading Roasting premium coffee
+    p.banner-text.
+      Discover the fascinating world of Dancing Goat high-quality coffee and you will never miss a single coffee break again.
+  .row
+    h1.title-tab Latest articles
+    +article-lg(articleList[0])
+    +article-sm(articleList[1])
+    +article-sm(articleList[2])
+    +article-sm(articleList[3])
+    +article-sm(articleList[4])
+  .row
+    .clear.center-text
+      a.btn.btn-more(href='/articles') More articles
+  .row
+    h1.title-tab Our story
+    .col-sm-12
+      .ourstory-section.center-text(style='background-image: url("../images/our-story.jpg");').
+        At Dancing Goat, we strive to do things right. Not only do we source the best coffees you can get your hands on. We also make sure we have a direct relationship with our farmers. Visiting the micro farms where we source our coffees is our daily bread. This way, we can guarantee the highest quality standard all year long. No middle-men, no unfair shares. Our farmers get the best deal possible. So do you.
+  .row
+    .clear.center-text
+      a.btn.btn-more(href='') Read the whole story
+  .row
+    div
+      h1.title-tab Taste our coffee
+    +cafe-tile(cafeList[0])
+    +cafe-tile(cafeList[1])
+    +cafe-tile(cafeList[2])
+    +cafe-tile(cafeList[3])
+  .row
+    .clear.center-text
+      a.btn.btn-more(href='') Find out more

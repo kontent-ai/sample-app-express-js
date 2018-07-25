@@ -1,0 +1,28 @@
+extends layout
+include ./mixins/cafe-tile-contacts
+include ./mixins/google-map
+
+block content
+    .col-md-12
+        h2.contact-title Roastery
+        ul.contact-info
+            li #{americanCafes[0].phone.value}
+            li
+                a(href='mailto:#{americanCafes[0].email.value}')
+                    =americanCafes[0].email.value
+            li #{americanCafes[0].city.value}, #{americanCafes[0].street.value},
+            li #{americanCafes[0].zip_code.value}, #{americanCafes[0].country.value}, #{americanCafes[0].state.value}
+    div
+        h2 Our cafes
+        .row
+            each cafe in americanCafes
+                +cafe-tile-contacts(cafe)
+    h2.map-title Drop in
+    div
+        -
+            var addresses = '';
+            americanCafes.forEach(function(cafe){
+                addresses += (cafe.street.value.substring(1) + ", " + cafe.city.value + ", " + cafe.zip_code.value + "|");
+            });
+            addresses = addresses.slice(0, -1);
+        +google-map(addresses)

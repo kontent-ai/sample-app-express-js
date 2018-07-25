@@ -1,0 +1,31 @@
+extends layout
+include ./mixins/store-filter
+include ./mixins/product-tile
+
+block content
+    .container.product-page-container
+        nav.sub-menu.row
+            .store-menu-list.row
+                ul
+                    li
+                        a(href='/store/coffees') Coffees
+                    li
+                        a(href='/store/brewers') Brewers
+        .product-page.row
+            .flex
+                aside.col-md-4.col-lg-3.product-filter
+                    h4 Coffee processing
+                    div
+                        each proc in processings
+                            +store-filter(proc)
+                    h4 Status
+                    div
+                        each status in productStatuses
+                            +store-filter(status)
+                .col-md-8.col-lg-9.product-list(id='product-list')
+                    -var list = (type == "coffees") ? coffees : brewers;
+                    each p in list
+                        -let statuses = undefined;
+                        -if(p.product_status.value.length > 0)
+                            -statuses = p.product_status.value.map((x) => x.name).join(", ");
+                        +product-tile(p.product_name.value, p.image.value[0].url, p.price.value, statuses)

@@ -1,0 +1,14 @@
+include ./mixins/header
+include ./mixins/footer
+
+doctype html
+html
+  head
+    title= 'Dancing Goat'
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    div#root.page-wrap
+      +header
+      .container
+        block content
+      +footer

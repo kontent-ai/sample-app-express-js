@@ -1,0 +1,4 @@
+mixin store-filter(taxonomy)
+    span.checkbox.js-postback
+        input(id='#{taxonomy.codename}', type='checkbox')
+        label(for='#{taxonomy.codename}') #{taxonomy.name}
