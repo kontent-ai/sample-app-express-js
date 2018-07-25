@@ -1,4 +1,4 @@
-var DeliveryClient = require('../client');
+var DeliveryClient = require('../delivery');
 var LinkResolver = require('../resolvers/LinkResolver');
 var express = require('express');
 var router = express.Router();

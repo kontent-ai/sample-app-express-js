@@ -10,7 +10,7 @@ var ensureCoffees = function(req, res, next) {
 }
 
 var ensureBrewers = function(req, res, next) {
-    if(req.params.type == "coffee") next();
+    if(req.params.type == "coffees") next();
 
     brewerRepo = app.getRepository("BrewerRepository");
     brewerRepo.ensureItems().subscribe(response => {
@@ -23,10 +23,13 @@ var render = function(req, res, next) {
 
     res.render('store', {
         'type': type,
-        'processings': coffeeRepo.getAllProcessings(),
-        'coffees': coffeeRepo.getAllCoffees(),
+        'productStatuses': coffeeRepo.GetAllStatuses(),
+        //Coffee items
+        'processings': (type == "coffees") ? coffeeRepo.getAllProcessings() : [],
+        'coffees': (type == "coffees") ? coffeeRepo.getAllCoffees() : [],
+        //Brewer items
         'brewers': (type == "brewers") ? brewerRepo.getAllBrewers() : [],
-        'productStatuses': coffeeRepo.GetAllStatuses()
+        'manufacturers': (type == "brewers") ? brewerRepo.getAllManufacturers() : []
     });
 }
 

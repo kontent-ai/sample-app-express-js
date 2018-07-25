@@ -1,4 +1,4 @@
-var DeliveryClient = require('../client');
+var DeliveryClient = require('../delivery');
 var HostedVideoResolver = require('../resolvers/HostedVideoResolver');
 var TweetResolver = require('../resolvers/TweetResolver');
 var LinkResolver = require('../resolvers/LinkResolver');

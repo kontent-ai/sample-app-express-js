@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 repositories = [];
 require('datejs');
+var serverjs = require('./public/scripts/server')
 app = express();
 
 // view engine setup
@@ -58,6 +59,9 @@ app.getRepository = function(name){
   }
   return repo;
 };
+
+// register main.js for use in Pug
+app.locals.serverjs = serverjs;
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

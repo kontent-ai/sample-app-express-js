@@ -8,4 +8,5 @@ mixin product-tile(title, image, price, statuses)
                 figure.product-tile-image
                     img(src=image, title='')
                 .product-tile-info
-                    span.product-tile-price $#{price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+                    span.product-tile-price 
+                        =serverjs.formatPrice(price, 'en-US')

@@ -1,0 +1,5 @@
+mixin filters-productstatus(productStatuses)
+    h4 Status
+    div
+        each status in productStatuses
+            +filter-checkbox(status.codename, status.name)

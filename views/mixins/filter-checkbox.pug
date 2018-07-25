@@ -1,0 +1,4 @@
+mixin filter-checkbox(name, text)
+    span.checkbox.js-postback
+        input(id=name, type='checkbox', onclick='filterChanged(this)')
+        label(for=name) #{text}

@@ -1,4 +1,4 @@
-var DeliveryClient = require('../client');
+var DeliveryClient = require('../delivery');
 const { Observable, defer } = require('rxjs');
 
 
