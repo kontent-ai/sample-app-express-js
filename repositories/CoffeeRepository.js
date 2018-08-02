@@ -8,7 +8,6 @@ function CoffeeRepository() {
     this.name = "CoffeeRepository";
     this.items;
     this.processings;
-    this.productStatuses;
 
     this.createDummyObservable = function() {
         return Observable.create(observer => {
@@ -18,15 +17,11 @@ function CoffeeRepository() {
     }
 
     this.ensureItems = function() {
-        if(this.items && this.processings && this.productStatuses) {
+        if(this.items && this.processings) {
             return this.createDummyObservable();
         }
         else {
             var final = Observable.create(observer => {
-                var obs3 = defer(function(){
-                    return DeliveryClient.taxonomy("product_status")
-                    .getObservable();
-                });
 
                 var obs2 = defer(function() {
                     return DeliveryClient.items()
@@ -35,7 +30,7 @@ function CoffeeRepository() {
                 });
 
                 var obs1 = defer(function(){
-                    return DeliveryClient.taxonomy("processing")
+                    return DeliveryClient.taxonomy('processing')
                     .getObservable();
                 });
 
@@ -45,13 +40,9 @@ function CoffeeRepository() {
                     // Now get items
                     obs2.subscribe(response => {
                         this.items = response.items;
-                        //Now get product statuses
-                        obs3.subscribe(response => {
-                            this.productStatuses = response.taxonomy.terms;
-                            // Finish this observable
-                            observer.next(42);
-                            observer.complete();
-                        });
+                        // Finish this observable
+                        observer.next(42);
+                        observer.complete();
                     })
                 });
             });
@@ -60,12 +51,60 @@ function CoffeeRepository() {
         }
     }
 
+    this.containsProcessings = function(keys) {
+        var result = false;
+        var processings = this.getAllProcessings();
+        processings.forEach(proc => {
+            if(!result) keys.forEach(key => {
+                if(proc.codename == key) {
+                    result = true;
+                }
+            });
+        });
+        return result;
+    }
+
     this.getAllProcessings = function() {
         return this.processings;
     }
 
-    this.getAllCoffees = function() {
-        return this.items;
+    this.getCoffee = function(codename) {
+        return this.items.find(o => o.system.codename === codename);
+    }
+
+    this.getAllCoffees = function(params) {
+        var items = this.items;
+
+        if(params){
+            // Convert object into list of keys
+            var keys = Object.keys(params);
+            if(keys.length > 0){
+                var storeRepo = app.getRepository("StoreRepository");
+                if(this.containsProcessings(keys)) items = this.filterCoffeesByProcessing(items, keys);
+                if(storeRepo.containsStatuses(keys)) items = storeRepo.filterProductsByStatus(items, keys);
+            }
+        }
+        
+        return items;
+    }
+
+    this.filterCoffeesByProcessing = function(coffees, keys) {
+        var result = [];
+        coffees.forEach(coffee => {
+            var match = false;
+            for(var k=0; k<keys.length; k++) {
+                if(!match) {
+                    for(var p=0; p<coffee.processing.value.length; p++) {
+                        if(coffee.processing.value[p].codename == keys[k]) {
+                            match = true;
+                            result.push(coffee);
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+        return result;
     }
 
     this.GetAllStatuses = function() {

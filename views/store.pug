@@ -9,14 +9,12 @@ include ./mixins/product-tile
 block content
     -   
         var list = (type == "coffees") ? coffees : brewers;
-    script.
-        var allproducts = #{list}; 
     .container.product-page-container
         nav.sub-menu.row
             .store-menu-list.row
                 ul
                     li
-                        a(href='/store/coffees') Coffees
+                        a(href='/store/coffees') Coffee
                     li
                         a(href='/store/brewers') Brewers
         .product-page.row
@@ -30,7 +28,4 @@ block content
                     +filters-productstatus(productStatuses)
                 .col-md-8.col-lg-9.product-list(id='product-list')
                     each p in list
-                        -let productStatuses = undefined;
-                        -if(p.product_status.value.length > 0)
-                            -productStatuses = p.product_status.value.map((x) => x.name).join(", ");
-                        +product-tile(p.product_name.value, p.image.value[0].url, p.price.value, productStatuses)
+                        +product-tile(p)

@@ -1,10 +1,7 @@
 mixin filters-brewerprices
     h4 Price
-    -
-        let priceRanges = [
-            { min: 0, max: 50 },
-            { min: 50, max: 250 },
-            { min: 250, max: 5000 },
-        ];
     -for(var i=0; i<priceRanges.length; i++)
-        +filter-checkbox("PriceRange-"+i, serverjs.formatPrice(priceRanges[i].min, 'en-US') + " - " + serverjs.formatPrice(priceRanges[i].max, 'en-US'))
+        +filter-checkbox(
+            priceRanges[i].id,
+            priceRanges[i].text,
+            'price')

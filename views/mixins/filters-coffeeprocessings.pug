@@ -2,4 +2,4 @@ mixin filters-coffeeprocessings(processings)
     h4 Coffee processing
     div
         each proc in processings
-            +filter-checkbox(proc.codename, proc.name)
+            +filter-checkbox(proc.codename, proc.name, 'processing')

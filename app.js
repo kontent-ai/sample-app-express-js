@@ -24,13 +24,16 @@ app.use('/', require('./routes/cafes'));
 app.use('/', require('./routes/articles'));
 app.use('/', require('./routes/aboutus'));
 app.use('/', require('./routes/contacts'));
-app.use('/', require('./routes/store'))
+app.use('/', require('./routes/store'));
+app.use('/', require('./routes/coffee'));
+app.use('/', require('./routes/brewer'));
 
 // repoistories
 var CoffeeRepository = require('./repositories/CoffeeRepository');
 var CafeRepository = require('./repositories/CafeRepository');
 var ArticleRepository = require('./repositories/ArticleRepository');
 var BrewerRepository = require('./repositories/BrewerRepository');
+var StoreRepository = require('./repositories/StoreRepository');
 
 app.getRepository = function(name){
   var repo;
@@ -51,6 +54,9 @@ app.getRepository = function(name){
         break;
       case "BrewerRepository":
         repo = new BrewerRepository();
+        break;
+      case "StoreRepository":
+        repo = new StoreRepository();
         break;
     }
     if(repo){

@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var coffeeRepo, brewerRepo;
+var coffeeRepo, brewerRepo, storeRepo;
 
 var ensureCoffees = function(req, res, next) {
     coffeeRepo = app.getRepository("CoffeeRepository");
@@ -10,10 +10,18 @@ var ensureCoffees = function(req, res, next) {
 }
 
 var ensureBrewers = function(req, res, next) {
-    if(req.params.type == "coffees") next();
+    if(req.params.type == "brewers") {
+        brewerRepo = app.getRepository("BrewerRepository");
+        brewerRepo.ensureItems().subscribe(response => {
+            next();
+        });
+    }
+    else next();
+}
 
-    brewerRepo = app.getRepository("BrewerRepository");
-    brewerRepo.ensureItems().subscribe(response => {
+var ensureStore = function(req, res, next) {
+    storeRepo = app.getRepository("StoreRepository");
+    storeRepo.ensureItems().subscribe(response => {
         next();
     });
 }
@@ -23,17 +31,20 @@ var render = function(req, res, next) {
 
     res.render('store', {
         'type': type,
-        'productStatuses': coffeeRepo.GetAllStatuses(),
+        //req is needed in Pug to get URL
+        'req' : req,
+        'productStatuses': storeRepo.getAllProductStatuses(),
+        'priceRanges': storeRepo.priceRanges,
         //Coffee items
         'processings': (type == "coffees") ? coffeeRepo.getAllProcessings() : [],
-        'coffees': (type == "coffees") ? coffeeRepo.getAllCoffees() : [],
+        'coffees': (type == "coffees") ? coffeeRepo.getAllCoffees(req.query) : [],
         //Brewer items
-        'brewers': (type == "brewers") ? brewerRepo.getAllBrewers() : [],
-        'manufacturers': (type == "brewers") ? brewerRepo.getAllManufacturers() : []
+        'brewers': (type == "brewers") ? brewerRepo.getAllBrewers(req.query) : [],
+        'manufacturers': (type == "brewers") ? brewerRepo.getAllManufacturers() : [],
     });
 }
 
-router.get('/store', [ensureCoffees, render]);
-router.get('/store/:type', [ensureCoffees, ensureBrewers, render]);
+router.get('/store', [ensureCoffees, ensureStore, render]);
+router.get('/store/:type', [ensureCoffees, ensureBrewers, ensureStore, render]);
 
 module.exports = router;

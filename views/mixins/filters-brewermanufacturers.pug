@@ -2,4 +2,4 @@ mixin filters-brewermanufacturers(manufacturers)
     h4 Manufacturer
     div
         each man in manufacturers
-            +filter-checkbox(man.codename, man.name)
+            +filter-checkbox(man.codename, man.name, 'manufacturer')
