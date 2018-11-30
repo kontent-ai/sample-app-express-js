@@ -1,29 +1,18 @@
+const IRepository = require("./repository-base");
 const deliveryClient = require('../delivery');
 const hostedVideoResolver = require('../resolvers/hosted-video-resolver');
 const tweetResolver = require('../resolvers/tweet-resolver');
 const linkResolver = require('../resolvers/link-resolver');
-const { Observable } = require('rxjs');
 
-/**
- * Returns a repository for requesting articles from Kentico Cloud
- * @returns {ArticleRepository} an ArticleRepository object
- */
-function ArticleRepository() {
-
-    if (!(this instanceof ArticleRepository)) return new ArticleRepository();
-    this.name = "ArticleRepository";
-    this.items = void 0;
-
-    this.createDummyObservable = function() {
-        return Observable.create(observer => {
-            observer.next(42);
-            observer.complete();
-        });
+class ArticleRepository extends IRepository {
+    
+    constructor() {
+        super("ArticleRepository");
     }
 
-    this.ensureItems = function() {
+    ensureItems() {
         if(this.items) {
-            return this.createDummyObservable();
+            return super.createDummyObservable();
         }
 
         const obs = deliveryClient.items()
@@ -51,14 +40,13 @@ function ArticleRepository() {
         return obs;
     }
 
-    this.getAllArticles = function() {
+    getAllArticles() {
         return this.items;
     }
 
-    this.getArticle = function(id) {
+    getArticle(id) {
         return this.items.filter((article) => article.system.id == id);
     }
-
 }
 
 module.exports = ArticleRepository;

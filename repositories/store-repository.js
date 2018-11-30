@@ -1,46 +1,35 @@
+const IRepository = require("./repository-base");
 const deliveryClient = require('../delivery');
-const { Observable } = require('rxjs');
 
-/**
- * Returns a repository for requesting product statuses from Kentico Cloud and filters products based on price range
- * @returns {StoreRepository} a StoreRepository object
- */
-function StoreRepository() {
+class StoreRepository extends IRepository {
 
-    if (!(this instanceof StoreRepository)) return new StoreRepository();
-    this.name = "StoreRepository";
-    this.productStatuses = void 0;
-    this.priceRanges = [
-        {
-            id: 'price-low',
-            min: 0,
-            max: 50,
-            text: '$0.00 - $50.00'
-        },
-        {
-            id: 'price-mid',
-            min: 50,
-            max: 250,
-            text: '$50.00 - $250.00'
-        },
-        {
-            id: 'price-high',
-            min: 250,
-            max: 5000,
-            text: '$250.00 - $5000.00'
-        }
-    ];
-
-    this.createDummyObservable = function() {
-        return Observable.create(observer => {
-            observer.next(42);
-            observer.complete();
-        });
+    constructor(){
+        super("StoreRepository");
+        this.priceRanges = [
+            {
+                id: 'price-low',
+                min: 0,
+                max: 50,
+                text: '$0.00 - $50.00'
+            },
+            {
+                id: 'price-mid',
+                min: 50,
+                max: 250,
+                text: '$50.00 - $250.00'
+            },
+            {
+                id: 'price-high',
+                min: 250,
+                max: 5000,
+                text: '$250.00 - $5000.00'
+            }
+        ];
     }
 
-    this.ensureItems = function() {
+    ensureItems() {
         if(this.productStatuses) {
-            return this.createDummyObservable();
+            return super.createDummyObservable();
         }
 
         const obs = deliveryClient.taxonomy('product_status').getObservable();
@@ -52,11 +41,11 @@ function StoreRepository() {
         return obs;
     }
 
-    this.getAllProductStatuses = function() {
+    getAllProductStatuses() {
         return this.productStatuses;
     }
 
-    this.containsPriceRanges = function(keys) {
+    containsPriceRanges(keys) {
         let result = false;
         const ranges = this.priceRanges;
 
@@ -71,7 +60,7 @@ function StoreRepository() {
         return result;
     }
 
-    this.containsStatuses = function(keys) {
+    containsStatuses(keys) {
         let result = false;
         const statuses = this.getAllProductStatuses();
 
@@ -86,7 +75,7 @@ function StoreRepository() {
         return result;
     }
 
-    this.filterProductsByPrice = function(products, keys) {
+    filterProductsByPrice(products, keys) {
         const result = [];
 
         products.forEach(prod => {
@@ -111,7 +100,7 @@ function StoreRepository() {
         return result;
     }
 
-    this.filterProductsByStatus = function(products, keys) {
+    static filterProductsByStatus(products, keys) {
         const result = [];
 
         products.forEach(prod => {

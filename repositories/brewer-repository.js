@@ -1,27 +1,17 @@
+const IRepository = require("./repository-base");
 const deliveryClient = require('../delivery');
 const { Observable, defer } = require('rxjs');
+const StoreRepository = require("./store-repository");
 
-/**
- * Returns a repository for requesting brewers from Kentico Cloud
- * @returns {BrewerRepository} a BrewerRepository object
- */
-function BrewerRepository() {
+class BrewerRepository extends IRepository {
 
-    if (!(this instanceof BrewerRepository)) return new BrewerRepository();
-    this.name = "BrewerRepository";
-    this.items = void 0;
-    this.manufacturers = void 0;
-
-    this.createDummyObservable = function() {
-        return Observable.create(observer => {
-            observer.next(42);
-            observer.complete();
-        });
+    constructor() {
+        super("BrewerRepository");
     }
 
-    this.ensureItems = function() {
+    ensureItems() {
         if(this.items && this.manufacturers) {
-            return this.createDummyObservable();
+            return super.createDummyObservable();
         }
 
         const final = Observable.create(observer => {
@@ -52,7 +42,7 @@ function BrewerRepository() {
 
     }
 
-    this.containsManufacturers = function(keys) {
+    containsManufacturers(keys) {
         let result = false;
         const manufacturers = this.getAllManufacturers();
 
@@ -67,15 +57,15 @@ function BrewerRepository() {
         return result;
     }
 
-    this.getBrewer = function(codename) {
+    getBrewer(codename) {
         return this.items.find(brewer => brewer.system.codename === codename);
     }
 
-    this.getAllManufacturers = function() {
+    getAllManufacturers() {
         return this.manufacturers;
     }
 
-    this.getAllBrewers = function(params) {
+    getAllBrewers(params) {
         let filteredList = this.items;
 
         if(params) {
@@ -85,8 +75,8 @@ function BrewerRepository() {
             if(keys.length > 0){
                 const storeRepo = app.getRepository("StoreRepository");//eslint-disable-line
 
-                if(this.containsManufacturers(keys)) filteredList = this.filterBrewersByManufacturer(filteredList, keys);
-                if(storeRepo.containsStatuses(keys)) filteredList = storeRepo.filterProductsByStatus(filteredList, keys);
+                if(this.containsManufacturers(keys)) filteredList = BrewerRepository.filterBrewersByManufacturer(filteredList, keys);
+                if(storeRepo.containsStatuses(keys)) filteredList = StoreRepository.filterProductsByStatus(filteredList, keys);
                 if(storeRepo.containsPriceRanges(keys)) filteredList = storeRepo.filterProductsByPrice(filteredList, keys);
             }
         }
@@ -94,7 +84,7 @@ function BrewerRepository() {
         return filteredList;
     }
 
-    this.filterBrewersByManufacturer = function(brewers, keys) {
+    static filterBrewersByManufacturer(brewers, keys) {
         const result = [];
 
         brewers.forEach(brewer => {

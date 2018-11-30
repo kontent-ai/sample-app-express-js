@@ -1,27 +1,17 @@
+const IRepository = require("./repository-base");
 const deliveryClient = require('../delivery');
 const { Observable, defer } = require('rxjs');
+const StoreRepository = require("./store-repository");
 
-/**
- * Returns a repository for requesting coffees from Kentico Cloud
- * @returns {CoffeeRepository} a CoffeeRepository object
- */
-function CoffeeRepository() {
+class CoffeeRepository extends IRepository {
 
-    if (!(this instanceof CoffeeRepository)) return new CoffeeRepository();
-    this.name = "CoffeeRepository";
-    this.items = void 0;
-    this.processings = void 0;
-
-    this.createDummyObservable = function() {
-        return Observable.create(observer => {
-            observer.next(42);
-            observer.complete();
-        });
+    constructor() {
+        super("CoffeeRepository");
     }
 
-    this.ensureItems = function() {
+    ensureItems() {
         if(this.items && this.processings) {
-            return this.createDummyObservable();
+            return super.createDummyObservable();
         }
 
         const final = Observable.create(observer => {
@@ -53,7 +43,7 @@ function CoffeeRepository() {
         return final;
     }
 
-    this.containsProcessings = function(keys) {
+    containsProcessings(keys) {
         let result = false;
         const processings = this.getAllProcessings();
 
@@ -68,15 +58,15 @@ function CoffeeRepository() {
         return result;
     }
 
-    this.getAllProcessings = function() {
+    getAllProcessings() {
         return this.processings;
     }
 
-    this.getCoffee = function(codename) {
+    getCoffee(codename) {
         return this.items.find(coffee => coffee.system.codename === codename);
     }
 
-    this.getAllCoffees = function(params) {
+    getAllCoffees(params) {
         let filteredItems = this.items;
 
         if(params){
@@ -86,15 +76,15 @@ function CoffeeRepository() {
             if(keys.length > 0){
                 const storeRepo = app.getRepository("StoreRepository");//eslint-disable-line
 
-                if(this.containsProcessings(keys)) filteredItems = this.filterCoffeesByProcessing(filteredItems, keys);
-                if(storeRepo.containsStatuses(keys)) filteredItems = storeRepo.filterProductsByStatus(filteredItems, keys);
+                if(this.containsProcessings(keys)) filteredItems = CoffeeRepository.filterCoffeesByProcessing(filteredItems, keys);
+                if(storeRepo.containsStatuses(keys)) filteredItems = StoreRepository.filterProductsByStatus(filteredItems, keys);
             }
         }
         
         return filteredItems;
     }
 
-    this.filterCoffeesByProcessing = function(coffees, keys) {
+    static filterCoffeesByProcessing(coffees, keys) {
         const result = [];
 
         coffees.forEach(coffee => {
@@ -115,11 +105,6 @@ function CoffeeRepository() {
 
         return result;
     }
-
-    this.GetAllStatuses = function() {
-        return this.productStatuses;
-    }
-
 }
 
 module.exports = CoffeeRepository;
