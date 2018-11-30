@@ -1,11 +1,11 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 repositories = [];
 require('datejs');
-var serverjs = require('./public/scripts/server')
+const serverjs = require('./public/scripts/server')
 app = express();
 
 // view engine setup
@@ -22,21 +22,21 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', require('./routes/index'));
 app.use('/', require('./routes/cafes'));
 app.use('/', require('./routes/articles'));
-app.use('/', require('./routes/aboutus'));
+app.use('/', require('./routes/about-us'));
 app.use('/', require('./routes/contacts'));
 app.use('/', require('./routes/store'));
 app.use('/', require('./routes/coffee'));
 app.use('/', require('./routes/brewer'));
 
 // repoistories
-var CoffeeRepository = require('./repositories/CoffeeRepository');
-var CafeRepository = require('./repositories/CafeRepository');
-var ArticleRepository = require('./repositories/ArticleRepository');
-var BrewerRepository = require('./repositories/BrewerRepository');
-var StoreRepository = require('./repositories/StoreRepository');
+const CoffeeRepository = require('./repositories/coffee-repository');
+const CafeRepository = require('./repositories/cafe-repository');
+const ArticleRepository = require('./repositories/article-repository');
+const BrewerRepository = require('./repositories/brewer-repository');
+const StoreRepository = require('./repositories/store-repository');
 
 app.getRepository = function(name){
-  var repo;
+  let repo;
   for(i=0; i<repositories.length; i++){
     if(repositories[i].name === name) repo = repositories[i];
   }

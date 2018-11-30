@@ -1,15 +1,15 @@
-var express = require('express');
-var router = express.Router();
-var coffeeRepo, brewerRepo, storeRepo;
+const express = require('express');
+const router = express.Router();
+let coffeeRepo, brewerRepo, storeRepo;
 
-var ensureCoffees = function(req, res, next) {
+const ensureCoffees = function(req, res, next) {
     coffeeRepo = app.getRepository("CoffeeRepository");
     coffeeRepo.ensureItems().subscribe(response => {
         next();
     });
 }
 
-var ensureBrewers = function(req, res, next) {
+const ensureBrewers = function(req, res, next) {
     if(req.params.type == "brewers") {
         brewerRepo = app.getRepository("BrewerRepository");
         brewerRepo.ensureItems().subscribe(response => {
@@ -19,15 +19,15 @@ var ensureBrewers = function(req, res, next) {
     else next();
 }
 
-var ensureStore = function(req, res, next) {
+const ensureStore = function(req, res, next) {
     storeRepo = app.getRepository("StoreRepository");
     storeRepo.ensureItems().subscribe(response => {
         next();
     });
 }
 
-var render = function(req, res, next) {
-    var type = req.params.type ? req.params.type : "coffees";
+const render = function(req, res, next) {
+    const type = req.params.type ? req.params.type : "coffees";
 
     res.render('store', {
         'type': type,

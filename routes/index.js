@@ -1,23 +1,23 @@
-var express = require('express');
-var router = express.Router();
-var articleRepo;
-var cafeRepo;
+const express = require('express');
+const router = express.Router();
+let articleRepo;
+let cafeRepo;
 
-var ensureCafes = function(req, res, next) {
+const ensureCafes = function(req, res, next) {
   cafeRepo = app.getRepository("CafeRepository");
   cafeRepo.ensureItems().subscribe(response => {
       next();
   });
 }
 
-var ensureArticles = function(req, res, next) {
+const ensureArticles = function(req, res, next) {
   articleRepo = app.getRepository("ArticleRepository");
   articleRepo.ensureItems().subscribe(response => {
       next();
   });
 }
 
-var render = function(req, res) {
+const render = function(req, res) {
   res.render('index', {
     'articleList': articleRepo.getAllArticles(),
     'cafeList': cafeRepo.getCafesInCountry('USA')

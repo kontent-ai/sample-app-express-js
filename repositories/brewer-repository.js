@@ -1,4 +1,4 @@
-var DeliveryClient = require('../delivery');
+const deliveryClient = require('../delivery');
 const { Observable, defer } = require('rxjs');
 
 function BrewerRepository() {
@@ -20,14 +20,14 @@ function BrewerRepository() {
             return this.createDummyObservable();
         }
         else {
-            var final = Observable.create(observer => {
-                var obs2 = defer(function(){
-                    return DeliveryClient.items()
+            let final = Observable.create(observer => {
+                let obs2 = defer(function(){
+                    return deliveryClient.items()
                     .type('brewer')
                     .getObservable();
                 });
-                var obs1 = defer(function(){
-                    return DeliveryClient.taxonomy('manufacturer')
+                let obs1 = defer(function(){
+                    return deliveryClient.taxonomy('manufacturer')
                     .getObservable();
                 });
 
@@ -49,8 +49,8 @@ function BrewerRepository() {
     }
 
     this.containsManufacturers = function(keys) {
-        var result = false;
-        var manufacturers = this.getAllManufacturers();
+        let result = false;
+        const manufacturers = this.getAllManufacturers();
         manufacturers.forEach(man => {
             if(!result) keys.forEach(key => {
                 if(man.codename == key) {
@@ -70,13 +70,13 @@ function BrewerRepository() {
     }
 
     this.getAllBrewers = function(params) {
-        var items = this.items;
+        let items = this.items;
 
         if(params) {
             // Convert object into list of keys
-            var keys = Object.keys(params);
+            const keys = Object.keys(params);
             if(keys.length > 0){
-                var storeRepo = app.getRepository("StoreRepository");
+                const storeRepo = app.getRepository("StoreRepository");
                 if(this.containsManufacturers(keys)) items = this.filterBrewersByManufacturer(items, keys);
                 if(storeRepo.containsStatuses(keys)) items = storeRepo.filterProductsByStatus(items, keys);
                 if(storeRepo.containsPriceRanges(keys)) items = storeRepo.filterProductsByPrice(items, keys);
@@ -87,12 +87,12 @@ function BrewerRepository() {
     }
 
     this.filterBrewersByManufacturer = function(brewers, keys) {
-        var result = [];
+        let result = [];
         brewers.forEach(brewer => {
-            var match = false;
-            for(var k=0; k<keys.length; k++) {
+            let match = false;
+            for(let k=0; k<keys.length; k++) {
                 if(!match) {
-                    for(var p=0; p<brewer.manufacturer.value.length; p++) {
+                    for(let p=0; p<brewer.manufacturer.value.length; p++) {
                         if(brewer.manufacturer.value[p].codename == keys[k]) {
                             match = true;
                             result.push(brewer);

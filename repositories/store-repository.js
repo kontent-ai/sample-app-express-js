@@ -1,4 +1,4 @@
-var DeliveryClient = require('../delivery');
+const deliveryClient = require('../delivery');
 const { Observable, defer } = require('rxjs');
 
 function StoreRepository() {
@@ -24,7 +24,7 @@ function StoreRepository() {
             return this.createDummyObservable();
         }
         else {
-            var obs = DeliveryClient.taxonomy('product_status').getObservable();
+            let obs = deliveryClient.taxonomy('product_status').getObservable();
             obs.subscribe(response => { this.productStatuses = response.taxonomy.terms; });
             return obs;
         }
@@ -35,8 +35,8 @@ function StoreRepository() {
     }
 
     this.containsPriceRanges = function(keys) {
-        var result = false;
-        var ranges = this.priceRanges;
+        let result = false;
+        const ranges = this.priceRanges;
         ranges.forEach(range => {
             if(!result) keys.forEach(key => {
                 if(range.id == key) {
@@ -49,8 +49,8 @@ function StoreRepository() {
     }
 
     this.containsStatuses = function(keys) {
-        var result = false;
-        var statuses = this.getAllProductStatuses();
+        let result = false;
+        const statuses = this.getAllProductStatuses();
         statuses.forEach(status => {
             if(!result) keys.forEach(key => {
                 if(status.codename == key) {
@@ -62,13 +62,13 @@ function StoreRepository() {
     }
 
     this.filterProductsByPrice = function(products, keys) {
-        var result = [];
+        let result = [];
         products.forEach(prod => {
-            var match = false;
-            for(var k=0; k<keys.length; k++) {
+            let match = false;
+            for(let k=0; k<keys.length; k++) {
                 if(!match) {
                     //Find range in array that matches id in keys
-                    var range = this.priceRanges.find(o => o.id === keys[k]);
+                    const range = this.priceRanges.find(o => o.id === keys[k]);
                     if(range) {
                         if(prod.price.value <= range.max && prod.price.value >= range.min) {
                             match = true;
@@ -83,14 +83,14 @@ function StoreRepository() {
     }
 
     this.filterProductsByStatus = function(products, keys) {
-        var result = [];
+        let result = [];
 
         products.forEach(prod => {
-            var match = false;
-            var statuses = prod.product_status.value.map((x) => x.codename);
-            for(var k=0; k<keys.length; k++) {
+            let match = false;
+            const statuses = prod.product_status.value.map((x) => x.codename);
+            for(let k=0; k<keys.length; k++) {
                 if(!match) {
-                    for(var s=0; s<statuses.length; s++) {
+                    for(let s=0; s<statuses.length; s++) {
                         if(statuses[s] == keys[k]) {
                             match = true;
                             result.push(prod);

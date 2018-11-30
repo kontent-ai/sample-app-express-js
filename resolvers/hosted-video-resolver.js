@@ -1,4 +1,4 @@
-module.exports.ResolveModularContent = function(video){
+module.exports.resolveModularContent = function(video){
     if (video.video_host.value.find(item => item.codename === "vimeo")) {
         return `<iframe class="hosted-video__wrapper"
                     src="https://player.vimeo.com/video/${video.video_id.value}?title =0&byline =0&portrait =0"

@@ -1,7 +1,7 @@
-var DeliveryClient = require('../delivery');
-var HostedVideoResolver = require('../resolvers/HostedVideoResolver');
-var TweetResolver = require('../resolvers/TweetResolver');
-var LinkResolver = require('../resolvers/LinkResolver');
+const deliveryClient = require('../delivery');
+const hostedVideoResolver = require('../resolvers/hosted-video-resolver');
+const tweetResolver = require('../resolvers/tweet-resolver');
+const linkResolver = require('../resolvers/link-resolver');
 const { Observable, defer } = require('rxjs');
 
 function ArticleRepository() {
@@ -22,20 +22,20 @@ function ArticleRepository() {
             return this.createDummyObservable();
         }
         else {
-            var obs = DeliveryClient.items()
+            let obs = deliveryClient.items()
             .type('article')
             .orderParameter('elements.post_date', 1)
             .queryConfig({
                 richTextResolver: (item) => {
                   if (item.system.type == 'hosted_video') {
-                    return HostedVideoResolver.ResolveModularContent(item);
+                    return hostedVideoResolver.resolveModularContent(item);
                   }
                   else if (item.system.type == 'tweet') {
-                    return TweetResolver.ResolveModularContent(item);
+                    return tweetResolver.resolveModularContent(item);
                   }
                   else return "";
                 },
-                linkResolver: (link) => LinkResolver.resolveContentLink(link)
+                linkResolver: (link) => linkResolver.resolveContentLink(link)
             })
             .getObservable();
             obs.subscribe(response => { this.items = response.items; });

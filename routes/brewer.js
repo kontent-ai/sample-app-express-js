@@ -1,15 +1,15 @@
-var express = require('express');
-var router = express.Router();
-var brewerRepo;
+const express = require('express');
+const router = express.Router();
+let brewerRepo;
 
-var ensureBrewers = function(req, res, next) {
+const ensureBrewers = function(req, res, next) {
     brewerRepo = app.getRepository("BrewerRepository");
     brewerRepo.ensureItems().subscribe(response => {
         next();
     });
 }
 
-var render = function(req, res, next) {
+const render = function(req, res, next) {
     res.render('brewer', { 'brewer': brewerRepo.getBrewer(req.params.codename)});
 }
 

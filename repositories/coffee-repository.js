@@ -1,4 +1,4 @@
-var DeliveryClient = require('../delivery');
+const deliveryClient = require('../delivery');
 const { Observable, defer } = require('rxjs');
 
 
@@ -21,16 +21,16 @@ function CoffeeRepository() {
             return this.createDummyObservable();
         }
         else {
-            var final = Observable.create(observer => {
+            let final = Observable.create(observer => {
 
-                var obs2 = defer(function() {
-                    return DeliveryClient.items()
+                let obs2 = defer(function() {
+                    return deliveryClient.items()
                     .type('coffee')
                     .getObservable();
                 });
 
-                var obs1 = defer(function(){
-                    return DeliveryClient.taxonomy('processing')
+                let obs1 = defer(function(){
+                    return deliveryClient.taxonomy('processing')
                     .getObservable();
                 });
 
@@ -52,8 +52,8 @@ function CoffeeRepository() {
     }
 
     this.containsProcessings = function(keys) {
-        var result = false;
-        var processings = this.getAllProcessings();
+        let result = false;
+        const processings = this.getAllProcessings();
         processings.forEach(proc => {
             if(!result) keys.forEach(key => {
                 if(proc.codename == key) {
@@ -73,13 +73,13 @@ function CoffeeRepository() {
     }
 
     this.getAllCoffees = function(params) {
-        var items = this.items;
+        let items = this.items;
 
         if(params){
             // Convert object into list of keys
-            var keys = Object.keys(params);
+            const keys = Object.keys(params);
             if(keys.length > 0){
-                var storeRepo = app.getRepository("StoreRepository");
+                const storeRepo = app.getRepository("StoreRepository");
                 if(this.containsProcessings(keys)) items = this.filterCoffeesByProcessing(items, keys);
                 if(storeRepo.containsStatuses(keys)) items = storeRepo.filterProductsByStatus(items, keys);
             }
@@ -89,12 +89,12 @@ function CoffeeRepository() {
     }
 
     this.filterCoffeesByProcessing = function(coffees, keys) {
-        var result = [];
+        let result = [];
         coffees.forEach(coffee => {
-            var match = false;
-            for(var k=0; k<keys.length; k++) {
+            let match = false;
+            for(let k=0; k<keys.length; k++) {
                 if(!match) {
-                    for(var p=0; p<coffee.processing.value.length; p++) {
+                    for(let p=0; p<coffee.processing.value.length; p++) {
                         if(coffee.processing.value[p].codename == keys[k]) {
                             match = true;
                             result.push(coffee);

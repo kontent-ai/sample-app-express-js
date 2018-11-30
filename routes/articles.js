@@ -1,19 +1,19 @@
-var express = require('express');
-var router = express.Router();
-var articleRepo;
+const express = require('express');
+const router = express.Router();
+let articleRepo;
 
-var ensureArticles = function(req, res, next) {
+const ensureArticles = function(req, res, next) {
     articleRepo = app.getRepository("ArticleRepository");
     articleRepo.ensureItems().subscribe(response => {
         next();
     });
 }
 
-var renderListing = function(req, res, next) {
+const renderListing = function(req, res, next) {
     res.render('articles', {'articleList': articleRepo.getAllArticles()});
 }
 
-var renderSingle = function(req, res, next) {
+const renderSingle = function(req, res, next) {
     res.render('articles', {'articleList': articleRepo.getArticle(req.params.id)});
 }
 

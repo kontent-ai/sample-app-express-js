@@ -1,4 +1,4 @@
-var DeliveryClient = require('../delivery');
+const deliveryClient = require('../delivery');
 const { Observable, defer } = require('rxjs');
 
 function CafeRepository() {
@@ -19,7 +19,7 @@ function CafeRepository() {
             return this.createDummyObservable();
         }
         else {
-            var obs = DeliveryClient.items()
+            let obs = deliveryClient.items()
             .type('cafe')
             .getObservable();
             obs.subscribe(response => { this.items = response.items; });
