@@ -6,7 +6,6 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
-    "@google/maps": "^0.5.4",
     "cookie-parser": "~1.4.3",
     "datejs": "^1.0.0-rc3",
     "debug": "~4.1.0",

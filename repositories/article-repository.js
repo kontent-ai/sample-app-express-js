@@ -1,10 +1,10 @@
-const IRepository = require("./repository-base");
+const RepositoryBase = require("./repository-base");
 const deliveryClient = require('../delivery');
 const hostedVideoResolver = require('../resolvers/hosted-video-resolver');
 const tweetResolver = require('../resolvers/tweet-resolver');
 const linkResolver = require('../resolvers/link-resolver');
 
-class ArticleRepository extends IRepository {
+class ArticleRepository extends RepositoryBase {
     
     constructor() {
         super("ArticleRepository");

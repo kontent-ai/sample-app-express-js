@@ -1,9 +1,9 @@
-const IRepository = require("./repository-base");
+const RepositoryBase = require("./repository-base");
 const deliveryClient = require('../delivery');
 const { Observable, defer } = require('rxjs');
 const StoreRepository = require("./store-repository");
 
-class BrewerRepository extends IRepository {
+class BrewerRepository extends RepositoryBase {
 
     constructor() {
         super("BrewerRepository");

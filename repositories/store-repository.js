@@ -1,7 +1,7 @@
-const IRepository = require("./repository-base");
+const RepositoryBase = require("./repository-base");
 const deliveryClient = require('../delivery');
 
-class StoreRepository extends IRepository {
+class StoreRepository extends RepositoryBase {
 
     constructor(){
         super("StoreRepository");
