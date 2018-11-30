@@ -1,5 +1,6 @@
 module.exports.resolveContentLink = function(link, language) {
     let resultLink;
+    
     switch (link.type) {
       case "article":
         resultLink = `/articles/${link.itemId}`;

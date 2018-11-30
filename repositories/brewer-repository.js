@@ -1,12 +1,16 @@
 const deliveryClient = require('../delivery');
 const { Observable, defer } = require('rxjs');
 
+/**
+ * Returns a repository for requesting brewers from Kentico Cloud
+ * @returns {BrewerRepository} a BrewerRepository object
+ */
 function BrewerRepository() {
 
     if (!(this instanceof BrewerRepository)) return new BrewerRepository();
     this.name = "BrewerRepository";
-    this.items;
-    this.manufacturers;
+    this.items = void 0;
+    this.manufacturers = void 0;
 
     this.createDummyObservable = function() {
         return Observable.create(observer => {
@@ -19,38 +23,39 @@ function BrewerRepository() {
         if(this.items && this.manufacturers) {
             return this.createDummyObservable();
         }
-        else {
-            let final = Observable.create(observer => {
-                let obs2 = defer(function(){
-                    return deliveryClient.items()
-                    .type('brewer')
-                    .getObservable();
-                });
-                let obs1 = defer(function(){
-                    return deliveryClient.taxonomy('manufacturer')
-                    .getObservable();
-                });
 
-                // Get manufacturers
-                obs1.subscribe(response => {
-                    this.manufacturers = response.taxonomy.terms;
-                    // Now get items
-                    obs2.subscribe(response => {
-                        this.items = response.items;
-                        // Finish this observable
-                        observer.next(42);
-                        observer.complete();
-                    });
-                });
+        const final = Observable.create(observer => {
+            const obs2 = defer(function(){
+                return deliveryClient.items()
+                .type('brewer')
+                .getObservable();
+            });
+            const obs1 = defer(function(){
+                return deliveryClient.taxonomy('manufacturer')
+                .getObservable();
             });
 
-            return final;
-        }
+            //Get manufacturers
+            obs1.subscribe(res1 => {
+                this.manufacturers = res1.taxonomy.terms;
+                //Now get items
+                obs2.subscribe(res2 => {
+                    this.items = res2.items;
+                    //Finish this observable
+                    observer.next(42);
+                    observer.complete();
+                });
+            });
+        });
+
+        return final;
+
     }
 
     this.containsManufacturers = function(keys) {
         let result = false;
         const manufacturers = this.getAllManufacturers();
+
         manufacturers.forEach(man => {
             if(!result) keys.forEach(key => {
                 if(man.codename == key) {
@@ -58,11 +63,12 @@ function BrewerRepository() {
                 }
             });
         });
+
         return result;
     }
 
     this.getBrewer = function(codename) {
-        return this.items.find(o => o.system.codename === codename);
+        return this.items.find(brewer => brewer.system.codename === codename);
     }
 
     this.getAllManufacturers = function() {
@@ -70,30 +76,34 @@ function BrewerRepository() {
     }
 
     this.getAllBrewers = function(params) {
-        let items = this.items;
+        let filteredList = this.items;
 
         if(params) {
-            // Convert object into list of keys
+            //Convert object into list of keys
             const keys = Object.keys(params);
+
             if(keys.length > 0){
-                const storeRepo = app.getRepository("StoreRepository");
-                if(this.containsManufacturers(keys)) items = this.filterBrewersByManufacturer(items, keys);
-                if(storeRepo.containsStatuses(keys)) items = storeRepo.filterProductsByStatus(items, keys);
-                if(storeRepo.containsPriceRanges(keys)) items = storeRepo.filterProductsByPrice(items, keys);
+                const storeRepo = app.getRepository("StoreRepository");//eslint-disable-line
+
+                if(this.containsManufacturers(keys)) filteredList = this.filterBrewersByManufacturer(filteredList, keys);
+                if(storeRepo.containsStatuses(keys)) filteredList = storeRepo.filterProductsByStatus(filteredList, keys);
+                if(storeRepo.containsPriceRanges(keys)) filteredList = storeRepo.filterProductsByPrice(filteredList, keys);
             }
         }
         
-        return items;
+        return filteredList;
     }
 
     this.filterBrewersByManufacturer = function(brewers, keys) {
-        let result = [];
+        const result = [];
+
         brewers.forEach(brewer => {
             let match = false;
-            for(let k=0; k<keys.length; k++) {
+
+            for(let key = 0; key < keys.length; key += 1) {
                 if(!match) {
-                    for(let p=0; p<brewer.manufacturer.value.length; p++) {
-                        if(brewer.manufacturer.value[p].codename == keys[k]) {
+                    for(let manu = 0; manu < brewer.manufacturer.value.length; manu += 1) {
+                        if(brewer.manufacturer.value[manu].codename == keys[key]) {
                             match = true;
                             result.push(brewer);
                             break;
@@ -102,6 +112,7 @@ function BrewerRepository() {
                 }
             }
         });
+
         return result;
     }
 }

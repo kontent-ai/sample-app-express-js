@@ -1,13 +1,16 @@
 const deliveryClient = require('../delivery');
 const { Observable, defer } = require('rxjs');
 
-
+/**
+ * Returns a repository for requesting coffees from Kentico Cloud
+ * @returns {CoffeeRepository} a CoffeeRepository object
+ */
 function CoffeeRepository() {
 
     if (!(this instanceof CoffeeRepository)) return new CoffeeRepository();
     this.name = "CoffeeRepository";
-    this.items;
-    this.processings;
+    this.items = void 0;
+    this.processings = void 0;
 
     this.createDummyObservable = function() {
         return Observable.create(observer => {
@@ -20,40 +23,40 @@ function CoffeeRepository() {
         if(this.items && this.processings) {
             return this.createDummyObservable();
         }
-        else {
-            let final = Observable.create(observer => {
 
-                let obs2 = defer(function() {
-                    return deliveryClient.items()
-                    .type('coffee')
-                    .getObservable();
-                });
+        const final = Observable.create(observer => {
 
-                let obs1 = defer(function(){
-                    return deliveryClient.taxonomy('processing')
-                    .getObservable();
-                });
-
-                // Get processings
-                obs1.subscribe(response => {
-                    this.processings = response.taxonomy.terms;
-                    // Now get items
-                    obs2.subscribe(response => {
-                        this.items = response.items;
-                        // Finish this observable
-                        observer.next(42);
-                        observer.complete();
-                    })
-                });
+            const obs2 = defer(function() {
+                return deliveryClient.items()
+                .type('coffee')
+                .getObservable();
             });
 
-            return final;
-        }
+            const obs1 = defer(function(){
+                return deliveryClient.taxonomy('processing')
+                .getObservable();
+            });
+
+            //Get processings
+            obs1.subscribe(res1 => {
+                this.processings = res1.taxonomy.terms;
+                //Now get items
+                obs2.subscribe(res2 => {
+                    this.items = res2.items;
+                    //Finish this observable
+                    observer.next(42);
+                    observer.complete();
+                })
+            });
+        });
+
+        return final;
     }
 
     this.containsProcessings = function(keys) {
         let result = false;
         const processings = this.getAllProcessings();
+
         processings.forEach(proc => {
             if(!result) keys.forEach(key => {
                 if(proc.codename == key) {
@@ -61,6 +64,7 @@ function CoffeeRepository() {
                 }
             });
         });
+
         return result;
     }
 
@@ -69,33 +73,37 @@ function CoffeeRepository() {
     }
 
     this.getCoffee = function(codename) {
-        return this.items.find(o => o.system.codename === codename);
+        return this.items.find(coffee => coffee.system.codename === codename);
     }
 
     this.getAllCoffees = function(params) {
-        let items = this.items;
+        let filteredItems = this.items;
 
         if(params){
-            // Convert object into list of keys
+            //Convert object into list of keys
             const keys = Object.keys(params);
+
             if(keys.length > 0){
-                const storeRepo = app.getRepository("StoreRepository");
-                if(this.containsProcessings(keys)) items = this.filterCoffeesByProcessing(items, keys);
-                if(storeRepo.containsStatuses(keys)) items = storeRepo.filterProductsByStatus(items, keys);
+                const storeRepo = app.getRepository("StoreRepository");//eslint-disable-line
+
+                if(this.containsProcessings(keys)) filteredItems = this.filterCoffeesByProcessing(filteredItems, keys);
+                if(storeRepo.containsStatuses(keys)) filteredItems = storeRepo.filterProductsByStatus(filteredItems, keys);
             }
         }
         
-        return items;
+        return filteredItems;
     }
 
     this.filterCoffeesByProcessing = function(coffees, keys) {
-        let result = [];
+        const result = [];
+
         coffees.forEach(coffee => {
             let match = false;
-            for(let k=0; k<keys.length; k++) {
+
+            for(let key = 0; key < keys.length; key += 1) {
                 if(!match) {
-                    for(let p=0; p<coffee.processing.value.length; p++) {
-                        if(coffee.processing.value[p].codename == keys[k]) {
+                    for(let proc = 0; proc < coffee.processing.value.length; proc += 1) {
+                        if(coffee.processing.value[proc].codename == keys[key]) {
                             match = true;
                             result.push(coffee);
                             break;
@@ -104,6 +112,7 @@ function CoffeeRepository() {
                 }
             }
         });
+
         return result;
     }
 

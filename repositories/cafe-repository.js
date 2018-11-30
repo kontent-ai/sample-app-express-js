@@ -1,11 +1,15 @@
 const deliveryClient = require('../delivery');
-const { Observable, defer } = require('rxjs');
+const { Observable } = require('rxjs');
 
+/**
+ * Returns a repository for requesting cafes from Kentico Cloud
+ * @returns {CafeRepository} a CafeRepository object
+ */
 function CafeRepository() {
 
     if (!(this instanceof CafeRepository)) return new CafeRepository();
     this.name = "CafeRepository";
-    this.items;
+    this.items = void 0;
 
     this.createDummyObservable = function() {
         return Observable.create(observer => {
@@ -18,13 +22,16 @@ function CafeRepository() {
         if(this.items) {
             return this.createDummyObservable();
         }
-        else {
-            let obs = deliveryClient.items()
-            .type('cafe')
-            .getObservable();
-            obs.subscribe(response => { this.items = response.items; });
-            return obs;
-        }
+
+        const obs = deliveryClient.items()
+        .type('cafe')
+        .getObservable();
+
+        obs.subscribe(response => {
+            this.items = response.items;
+        });
+
+        return obs;
     }
 
     this.getCafesInCountry = function(country) {

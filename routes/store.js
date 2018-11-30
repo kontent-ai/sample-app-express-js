@@ -2,30 +2,34 @@ const express = require('express');
 const router = express.Router();
 let coffeeRepo, brewerRepo, storeRepo;
 
+//eslint-disable-next-line
 const ensureCoffees = function(req, res, next) {
-    coffeeRepo = app.getRepository("CoffeeRepository");
-    coffeeRepo.ensureItems().subscribe(response => {
+    coffeeRepo = app.getRepository("CoffeeRepository");//eslint-disable-line
+    coffeeRepo.ensureItems().subscribe(() => {
         next();
     });
 }
 
+//eslint-disable-next-line
 const ensureBrewers = function(req, res, next) {
     if(req.params.type == "brewers") {
-        brewerRepo = app.getRepository("BrewerRepository");
-        brewerRepo.ensureItems().subscribe(response => {
+        brewerRepo = app.getRepository("BrewerRepository");//eslint-disable-line
+        brewerRepo.ensureItems().subscribe(() => {
             next();
         });
     }
     else next();
 }
 
+//eslint-disable-next-line
 const ensureStore = function(req, res, next) {
-    storeRepo = app.getRepository("StoreRepository");
-    storeRepo.ensureItems().subscribe(response => {
+    storeRepo = app.getRepository("StoreRepository");//eslint-disable-line
+    storeRepo.ensureItems().subscribe(() => {
         next();
     });
 }
 
+//eslint-disable-next-line
 const render = function(req, res, next) {
     const type = req.params.type ? req.params.type : "coffees";
 

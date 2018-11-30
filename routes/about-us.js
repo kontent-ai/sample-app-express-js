@@ -3,8 +3,9 @@ const linkResolver = require('../resolvers/link-resolver');
 const express = require('express');
 const router = express.Router();
 
+//eslint-disable-next-line
 router.get('/about-us', function(req, res, next){
-    //get about-us
+    //Get about-us
     deliveryClient.item('about_us')
     .queryConfig({
       linkResolver: (link) => linkResolver.resolveContentLink(link)
