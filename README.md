@@ -13,3 +13,4 @@ const projectId = '<your-project-id-here>';
 npm install
 npm start
 ```
+The application will then be available at localhost:3000 (configurable in /bin/www).
