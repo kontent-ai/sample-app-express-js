@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 let coffeeRepo, brewerRepo, storeRepo;
+let coffeeData, brewerData, storeData;
 
 //eslint-disable-next-line
 const ensureCoffees = function(req, res, next) {
     coffeeRepo = app.getRepository("CoffeeRepository");//eslint-disable-line
-    coffeeRepo.ensureItems().subscribe(() => {
+    coffeeData = coffeeRepo.ensureItems().subscribe(() => {
         next();
     });
 }
@@ -14,7 +15,7 @@ const ensureCoffees = function(req, res, next) {
 const ensureBrewers = function(req, res, next) {
     if(req.params.type == "brewers") {
         brewerRepo = app.getRepository("BrewerRepository");//eslint-disable-line
-        brewerRepo.ensureItems().subscribe(() => {
+        brewerData = brewerRepo.ensureItems().subscribe(() => {
             next();
         });
     }
@@ -24,7 +25,7 @@ const ensureBrewers = function(req, res, next) {
 //eslint-disable-next-line
 const ensureStore = function(req, res, next) {
     storeRepo = app.getRepository("StoreRepository");//eslint-disable-line
-    storeRepo.ensureItems().subscribe(() => {
+    storeData = storeRepo.ensureItems().subscribe(() => {
         next();
     });
 }
@@ -45,6 +46,12 @@ const render = function(req, res, next) {
         //Brewer items
         'brewers': (type == "brewers") ? brewerRepo.getAllBrewers(req.query) : [],
         'manufacturers': (type == "brewers") ? brewerRepo.getAllManufacturers() : [],
+    }, (err, html) => {
+        if(storeData) storeData.unsubscribe();
+        if(brewerData) brewerData.unsubscribe();
+        if(coffeeData) coffeeData.unsubscribe();
+        res.send(html);
+        res.end();
     });
 }
 

@@ -14,17 +14,16 @@ class BrewerRepository extends RepositoryBase {
             return super.createDummyObservable();
         }
 
+        const obs2 = defer(function(){
+            return deliveryClient.items()
+            .type('brewer')
+            .getObservable();
+        });
+        const obs1 = defer(function(){
+            return deliveryClient.taxonomy('manufacturer')
+            .getObservable();
+        });
         const final = Observable.create(observer => {
-            const obs2 = defer(function(){
-                return deliveryClient.items()
-                .type('brewer')
-                .getObservable();
-            });
-            const obs1 = defer(function(){
-                return deliveryClient.taxonomy('manufacturer')
-                .getObservable();
-            });
-
             //Get manufacturers
             obs1.subscribe(res1 => {
                 this.manufacturers = res1.taxonomy.terms;
@@ -39,7 +38,6 @@ class BrewerRepository extends RepositoryBase {
         });
 
         return final;
-
     }
 
     containsManufacturers(keys) {

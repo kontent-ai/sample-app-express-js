@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-let cafeRepo;
+let cafeRepo, data;
 
 //eslint-disable-next-line
 const ensureCafes = function(req, res, next) {
     cafeRepo = app.getRepository("CafeRepository");//eslint-disable-line
-    cafeRepo.ensureItems().subscribe(() => {
+    data = cafeRepo.ensureItems().subscribe(() => {
         next();
     });
 }
@@ -15,6 +15,10 @@ const render = function(req, res, next){
     res.render('cafes', {
         'partnerCafes': cafeRepo.getCafesNotInCountry('USA'),
         'americanCafes': cafeRepo.getCafesInCountry('USA')
+    }, (err, html) => {
+        if(data) data.unsubscribe();
+        res.send(html);
+        res.end();
     });
 }
 
