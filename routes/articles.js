@@ -13,7 +13,7 @@ const ensureArticles = function(req, res, next) {
 //eslint-disable-next-line
 const renderListing = function(req, res, next) {
     res.render('articles', {'articleList': articleRepo.getAllArticles()}, (err, html) =>{
-        data.unsubscribe();
+        if(data) data.unsubscribe();
         res.send(html);
         res.end();
     });
