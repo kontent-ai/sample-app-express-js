@@ -1,5 +1,5 @@
 # cloud-expressjs-app
-This is an Express JS application meant for use with the Dancing Goat sample project within Kentico Cloud. You can read more about the TypeScript Node.js SDK here: [https://github.com/Enngage/kentico-cloud-js](https://github.com/Enngage/kentico-cloud-js)
+This is an Express JS application meant for use with the Dancing Goat sample project within Kentico Cloud. You can read more about the our JavaScript SDKs here: [https://github.com/Enngage/kentico-cloud-js](https://github.com/Enngage/kentico-cloud-js)
 
 ### Setup
 
