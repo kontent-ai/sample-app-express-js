@@ -105,7 +105,7 @@ class StoreRepository extends RepositoryBase {
 
         products.forEach(prod => {
             let match = false;
-            const statuses = prod.product_status.value.map((status) => status.codename);
+            const statuses = prod.productStatus.value.map((status) => status.codename);
             
             for(let key = 0; key < keys.length; key += 1) {
                 if(!match) {

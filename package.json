@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node ./bin/www",
     "prepare": "npm run eslint-local",
-    "eslint-local": "./node_modules/.bin/eslint ./"
+    "eslint-local": "./node_modules/.bin/eslint ./",
+    "kc-generate": "./node_modules/.bin/kc-generate --projectId=<your project ID> --moduleResolution=CommonJs --codeType=JavaScript"
   },
   "dependencies": {
     "acorn": "^6.0.4",
@@ -22,6 +23,7 @@
     "rxjs": "^6.2.0"
   },
   "devDependencies": {
-    "eslint": "^5.9.0"
+    "eslint": "^5.9.0",
+    "kentico-cloud-model-generator-utility": "^1.2.0"
   }
 }

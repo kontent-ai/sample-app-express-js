@@ -5,14 +5,14 @@ block content
         .row
             .col-md-12
                 header
-                    h2 #{coffee.product_name.value}
+                    h2 #{coffee.productName.value}
         .row-fluid
             .col-lg-7.col-md-6
                 figure.image
-                    img(alt=coffee.product_name.value, src=coffee.image.value[0].url)
+                    img(alt=coffee.productName.value, src=coffee.image.value[0].url)
                 .description
                     div
-                        != coffee.long_description.getHtml()
+                        != coffee.longDescription.getHtml()
                     .product-detail-properties
                         h4 Parameters
                         .row

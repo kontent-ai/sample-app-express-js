@@ -1,5 +1,5 @@
 module.exports.resolveModularContent = function(tweet){
-    const tweetLink = tweet.tweet_link.value;
+    const tweetLink = tweet.tweetLink.value;
 
     return `<a href="${tweetLink}">${tweetLink}</a>`;
 }

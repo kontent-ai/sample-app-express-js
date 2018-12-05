@@ -1,8 +1,8 @@
 module.exports.resolveModularContent = function(video){
-    if (video.video_host.value.find(item => item.codename === "vimeo")) {
+    if (video.videoHost.value.find(item => item.codename === "vimeo")) {
 
         return `<iframe class="hosted-video__wrapper"
-                    src="https://player.vimeo.com/video/${video.video_id.value}?title =0&byline =0&portrait =0"
+                    src="https://player.vimeo.com/video/${video.videoId.value}?title =0&byline =0&portrait =0"
                     width="640"
                     height="360"
                     frameborder="0"
@@ -12,12 +12,12 @@ module.exports.resolveModularContent = function(video){
                     >
             </iframe>`;
     }
-    else if (video.video_host.value.find(item => item.codename === "youtube")) {
+    else if (video.videoHost.value.find(item => item.codename === "youtube")) {
 
         return `<iframe class="hosted-video__wrapper"
                     width="560"
                     height="315"
-                    src="https://www.youtube.com/embed/${video.video_id.value}"
+                    src="https://www.youtube.com/embed/${video.videoId.value}"
                     frameborder="0"
                     allowfullscreen
                     >

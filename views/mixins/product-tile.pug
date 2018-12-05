@@ -2,10 +2,10 @@ mixin product-tile(product)
     .col-md-6.col-lg-4
         article.product-tile
             a(href='/'+ product.system.type + '/' + product.system.codename)
-                h1.product-heading #{product.product_name.value}
+                h1.product-heading #{product.productName.value}
                 -let productStatuses = undefined;
-                -if(product.product_status.value.length > 0)
-                    -productStatuses = product.product_status.value.map((x) => x.name).join(", ");
+                -if(product.productStatus.value.length > 0)
+                    -productStatuses = product.productStatus.value.map((x) => x.name).join(", ");
                 -if(productStatuses)
                     span.product-tile-status #{productStatuses}
                 figure.product-tile-image

@@ -6,5 +6,5 @@ mixin cafe-tile-contacts(cafe)
                 address.cafe-tile-address
                     a.cafe-tile-address-anchor(name='#{cafe.city.value}' onclick='focusAddress(event)').
                         #{cafe.street.value}, #{cafe.city.value}
-                        <br/>#{cafe.zip_code.value}, #{cafe.country.value}, #{cafe.state.value}
+                        <br/>#{cafe.zipCode.value}, #{cafe.country.value}, #{cafe.state.value}
                 p #{cafe.phone.value}

@@ -7,13 +7,13 @@ block content
             article.article-detail.col-lg-9.col-md-12.article-detail-related-box
                 h2 #{articleList[0].title.value}
                 .article-detail-datetime 
-                    =new Date(articleList[0].post_date.value).toString('dddd, MMMM d, yyyy')
+                    =new Date(articleList[0].postDate.value).toString('dddd, MMMM d, yyyy')
                 .row
                     .article-detail-image.col-md-push-2.col-md-8
-                        img.img-responsive(src=articleList[0].teaser_image.value[0].url)
+                        img.img-responsive(src=articleList[0].teaserImage.value[0].url)
                 .row
                     .article-detail-content
-                        != articleList[0].body_copy.getHtml()
+                        != articleList[0].bodyCopy.getHtml()
     else
         .container
             each article, index in articleList
