@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 let data;
 
-//eslint-disable-next-line
+//eslint-disable-next-line no-unused-vars
 router.get('/about-us', function(req, res, next){
     //Get about-us
     data = deliveryClient.item('about_us')
@@ -13,7 +13,7 @@ router.get('/about-us', function(req, res, next){
     })
     .getObservable()
     .subscribe(response => {
-      res.render('about-us', { 'content_item': response.item }, (err, html) => {
+      res.render('about-us', { 'content_item': response.item }, (err, html) => { //eslint-disable-line handle-callback-err
         if(data) data.unsubscribe();
         res.send(html);
         res.end();

@@ -2,17 +2,17 @@ const express = require('express');
 const router = express.Router();
 let brewerRepo, data;
 
-//eslint-disable-next-line
+//eslint-disable-next-line no-unused-vars
 const ensureBrewers = function(req, res, next) {
-    brewerRepo = app.getRepository("BrewerRepository");//eslint-disable-line
+    brewerRepo = app.getRepository("BrewerRepository");//eslint-disable-line no-undef
     data = brewerRepo.ensureItems().subscribe(() => {
         next();
     });
 }
 
-//eslint-disable-next-line
+//eslint-disable-next-line no-unused-vars
 const render = function(req, res, next) {
-    res.render('brewer', { 'brewer': brewerRepo.getBrewer(req.params.codename)}, (err, html) => {
+    res.render('brewer', { 'brewer': brewerRepo.getBrewer(req.params.codename)}, (err, html) => { //eslint-disable-line handle-callback-err
         if(data) data.unsubscribe();
         res.send(html);
         res.end();
