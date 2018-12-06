@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 let coffeeRepo, brewerRepo, storeRepo;
-let coffeeData, brewerData, storeData;
+let coffeeData = void 0,
+brewerData = void 0,
+storeData = void 0;
 
 //eslint-disable-next-line no-unused-vars
 const ensureCoffees = function(req, res, next) {
@@ -47,9 +49,9 @@ const render = function(req, res, next) {
         'brewers': (type == "brewers") ? brewerRepo.getAllBrewers(req.query) : [],
         'manufacturers': (type == "brewers") ? brewerRepo.getAllManufacturers() : [],
     }, (err, html) => { //eslint-disable-line handle-callback-err
-        if(storeData) storeData.unsubscribe();
-        if(brewerData) brewerData.unsubscribe();
-        if(coffeeData) coffeeData.unsubscribe();
+        if(storeData !== void 0) storeData.unsubscribe();
+        if(brewerData !== void 0) brewerData.unsubscribe();
+        if(coffeeData !== void 0) coffeeData.unsubscribe();
         res.send(html);
         res.end();
     });

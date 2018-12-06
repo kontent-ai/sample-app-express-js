@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
-let articleRepo, cafeRepo, articleData, cafeData;
+let articleRepo, cafeRepo,
+articleData = void 0,
+cafeData = void 0;
 
 //eslint-disable-next-line no-unused-vars
 const ensureCafes = function(req, res, next) {
@@ -24,8 +26,8 @@ const render = function(req, res) {
     'articleList': articleRepo.getAllArticles(),
     'cafeList': cafeRepo.getCafesInCountry('USA')
   }, (err, html) => { //eslint-disable-line handle-callback-err
-    if(cafeData) cafeData.unsubscribe();
-    if(articleData) articleData.unsubscribe();
+    if(cafeData !== void 0) cafeData.unsubscribe();
+    if(articleData !== void 0) articleData.unsubscribe();
     res.send(html);
     res.end();
   });
