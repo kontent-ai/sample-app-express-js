@@ -16,8 +16,7 @@
     "express": "~4.16.0",
     "global": "^4.3.2",
     "http-errors": "~1.7.1",
-    "kentico-cloud-delivery": "^5.1.1",
-    "kentico-cloud-delivery-typescript-sdk": "^4.0.0-beta.7",
+    "kentico-cloud-delivery": "^5.2.1",
     "morgan": "~1.9.0",
     "pug": "^2.0.3",
     "rxjs": "^6.2.0"
