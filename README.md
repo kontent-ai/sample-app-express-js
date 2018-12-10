@@ -1,3 +1,5 @@
+[![Forums](https://img.shields.io/badge/chat-on%20forums-orange.svg)](https://forums.kenticocloud.com) [![Join the chat at https://kentico-community.slack.com](https://img.shields.io/badge/join-slack-E6186D.svg)](https://kentico-community.slack.com)
+
 # cloud-expressjs-app
 This is an Express JS application meant for use with the Dancing Goat sample project within Kentico Cloud. You can read more about the our JavaScript SDKs here: [https://github.com/Enngage/kentico-cloud-js](https://github.com/Enngage/kentico-cloud-js)
 
@@ -21,7 +23,7 @@ Full documentation and code samples for the JavaScript SDK can be found [here](h
 
 ### Questions & Answers
 
-Use [Stack Overflow to ask](http://stackoverflow.com/questions/ask?tags=kentico) questions. Make sure you label them with the [Kentico](https://stackoverflow.com/questions/tagged/kentico) tag to make it easy for the community to find them. Besides that, every repository has its own default communication channel. Some use [Slack](https://kentico-community.slack.com) ([![Join the chat at https://kentico-community.slack.com](https://img.shields.io/badge/join-slack-E6186D.svg)](https://kentico-community.slack.com)), other use [Community forums](https://forums.kenticocloud.com) ([![Forums](https://img.shields.io/badge/chat-on%20forums-orange.svg)](https://forums.kenticocloud.com)). Look out for the badges in the README files.
+Use [Stack Overflow to ask](http://stackoverflow.com/questions/ask?tags=kentico) questions. Make sure you label them with the [Kentico](https://stackoverflow.com/questions/tagged/kentico) tag to make it easy for the community to find them. Besides that, every repository has its own default communication channel. Some use [Slack](https://kentico-community.slack.com), others use [Community forums](https://forums.kenticocloud.com).
 
 Please don't use GitHub Issues for your questions. They're meant for tracking features and bugs.
 
