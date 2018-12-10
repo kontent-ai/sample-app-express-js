@@ -2,6 +2,7 @@ const RepositoryBase = require("./repository-base");
 const deliveryClient = require('../delivery');
 const { Observable, defer } = require('rxjs');
 const StoreRepository = require("./store-repository");
+const app = require("../app");
 
 class CoffeeRepository extends RepositoryBase {
 
@@ -11,7 +12,7 @@ class CoffeeRepository extends RepositoryBase {
 
     ensureItems() {
         if(this.items && this.processings) {
-            return super.createDummyObservable();
+            return RepositoryBase.createDummyObservable();
         }
 
         const final = Observable.create(observer => {
@@ -74,7 +75,7 @@ class CoffeeRepository extends RepositoryBase {
             const keys = Object.keys(params);
 
             if(keys.length > 0){
-                const storeRepo = app.getRepository("StoreRepository");//eslint-disable-line
+                const storeRepo = app.getRepository("StoreRepository");
 
                 if(this.containsProcessings(keys)) filteredItems = CoffeeRepository.filterCoffeesByProcessing(filteredItems, keys);
                 if(storeRepo.containsStatuses(keys)) filteredItems = StoreRepository.filterProductsByStatus(filteredItems, keys);

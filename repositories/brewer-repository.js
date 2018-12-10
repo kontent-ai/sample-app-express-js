@@ -2,6 +2,7 @@ const RepositoryBase = require("./repository-base");
 const deliveryClient = require('../delivery');
 const { Observable, defer } = require('rxjs');
 const StoreRepository = require("./store-repository");
+const app = require("../app");
 
 class BrewerRepository extends RepositoryBase {
 
@@ -11,7 +12,7 @@ class BrewerRepository extends RepositoryBase {
 
     ensureItems() {
         if(this.items && this.manufacturers) {
-            return super.createDummyObservable();
+            return RepositoryBase.createDummyObservable();
         }
 
         const obs2 = defer(function(){
@@ -71,7 +72,7 @@ class BrewerRepository extends RepositoryBase {
             const keys = Object.keys(params);
 
             if(keys.length > 0){
-                const storeRepo = app.getRepository("StoreRepository");//eslint-disable-line
+                const storeRepo = app.getRepository("StoreRepository");
 
                 if(this.containsManufacturers(keys)) filteredList = BrewerRepository.filterBrewersByManufacturer(filteredList, keys);
                 if(storeRepo.containsStatuses(keys)) filteredList = StoreRepository.filterProductsByStatus(filteredList, keys);

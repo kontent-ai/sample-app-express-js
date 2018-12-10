@@ -6,7 +6,7 @@ class RepositoryBase {
         this.name = name;
     }
 
-    createDummyObservable() {//eslint-disable-line
+    static createDummyObservable() {
         return Observable.create(observer => {
             observer.next(42);
             observer.complete();

@@ -8,6 +8,7 @@ module.exports = {
         "ecmaVersion": 2016
     },
     "rules": {
+        "no-unused-vars": ['error', { "args": "none" }],
         "accessor-pairs": "error",
         "array-bracket-newline": "error",
         "array-bracket-spacing": [
@@ -101,7 +102,7 @@ module.exports = {
         "max-lines": "error",
         "max-lines-per-function": "warn",
         "max-nested-callbacks": "error",
-        "max-params": "error",
+        "max-params": "warn",
         "max-statements": "warn",
         "max-statements-per-line": "error",
         "multiline-comment-style": "error",

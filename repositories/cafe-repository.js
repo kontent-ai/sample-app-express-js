@@ -9,7 +9,7 @@ class CafeRepository extends RepositoryBase {
 
     ensureItems() {
         if(this.items) {
-            return super.createDummyObservable();
+            return RepositoryBase.createDummyObservable();
         }
 
         const obs = deliveryClient.items()

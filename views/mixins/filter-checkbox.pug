@@ -1,10 +1,12 @@
 mixin filter-checkbox(name, text, element)
-    -var checked = req.param(name)
+    -
+        var checked = req.param(name)
+        var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
     span.checkbox.js-postback
         input(id=name,
         type='checkbox',
         data-element-name=element
-        onclick='filterChanged(this)',
+        onclick=`filterChanged(this, '${fullUrl}')`,
         checked=checked
         )
         label(for=name) #{text}

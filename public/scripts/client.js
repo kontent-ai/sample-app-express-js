@@ -1,3 +1,4 @@
+/*eslint-disable*/
 /**
  * Removes a query string parameter from the url.
  * @param {string} url The current URL
@@ -11,7 +12,8 @@ const removeURLParameter = function(url, parameter) {
         const prefix = `${encodeURIComponent(parameter)}=`;
         const pars = urlparts[1].split(/[&;]/gu);
 
-        for (let index = pars.length; index-- > 0;) {//eslint-disable-line
+        for (let index = pars.length; index > 0;) {
+            index -= 1;
             if (pars[index].lastIndexOf(prefix, 0) !== -1) {
                 pars.splice(index, 1);
             }
@@ -30,7 +32,7 @@ const removeURLParameter = function(url, parameter) {
  * @param {string} value The value to set for the parameter
  * @returns {string} Updated URL 
  */
-const updateQueryStringParameter = function(uri, key, value) {//eslint-disable-line
+const updateQueryStringParameter = function(uri, key, value) {
     const re = new RegExp(`([?&])${key}=.*?(&|#|$)`, "iu");
 
     if (uri.match(re)) {
@@ -51,16 +53,15 @@ const updateQueryStringParameter = function(uri, key, value) {//eslint-disable-l
 /**
  * Event fired when filter control in store listing is clicked. Adds or removes values from query string parameters and reloads page.
  * @param {object} sender Filter control which was clicked
+ * @param {string} url The current URL
  * @returns {void}
  */
-const filterChanged = function(sender) {//eslint-disable-line
-    let url = window.location.href;//eslint-disable-line
-
+const filterChanged = function(sender, url) {
     if(sender.checked) {
         url = updateQueryStringParameter(url, sender.id, 1);
     }
     else {
         url = removeURLParameter(url, sender.id);
     }
-    window.location = url;//eslint-disable-line
+    window.location.href = url;
 }

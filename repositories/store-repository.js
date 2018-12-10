@@ -29,7 +29,7 @@ class StoreRepository extends RepositoryBase {
 
     ensureItems() {
         if(this.productStatuses) {
-            return super.createDummyObservable();
+            return RepositoryBase.createDummyObservable();
         }
 
         const obs = deliveryClient.taxonomy('product_status').getObservable();

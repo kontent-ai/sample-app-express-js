@@ -1,22 +1,21 @@
 const express = require('express');
 const router = express.Router();
+const app = require("../app");
 let coffeeRepo, brewerRepo, storeRepo;
 let coffeeData = void 0,
 brewerData = void 0,
 storeData = void 0;
 
-//eslint-disable-next-line no-unused-vars
 const ensureCoffees = function(req, res, next) {
-    coffeeRepo = app.getRepository("CoffeeRepository");//eslint-disable-line no-undef
+    coffeeRepo = app.getRepository("CoffeeRepository");
     coffeeData = coffeeRepo.ensureItems().subscribe(() => {
         next();
     });
 }
 
-//eslint-disable-next-line no-unused-vars
 const ensureBrewers = function(req, res, next) {
     if(req.params.type == "brewers") {
-        brewerRepo = app.getRepository("BrewerRepository");//eslint-disable-line no-undef
+        brewerRepo = app.getRepository("BrewerRepository");
         brewerData = brewerRepo.ensureItems().subscribe(() => {
             next();
         });
@@ -24,15 +23,13 @@ const ensureBrewers = function(req, res, next) {
     else next();
 }
 
-//eslint-disable-next-line no-unused-vars
 const ensureStore = function(req, res, next) {
-    storeRepo = app.getRepository("StoreRepository");//eslint-disable-line no-undef
+    storeRepo = app.getRepository("StoreRepository");
     storeData = storeRepo.ensureItems().subscribe(() => {
         next();
     });
 }
 
-//eslint-disable-next-line no-unused-vars
 const render = function(req, res, next) {
     const type = req.params.type ? req.params.type : "coffees";
 
@@ -48,7 +45,10 @@ const render = function(req, res, next) {
         //Brewer items
         'brewers': (type == "brewers") ? brewerRepo.getAllBrewers(req.query) : [],
         'manufacturers': (type == "brewers") ? brewerRepo.getAllManufacturers() : [],
-    }, (err, html) => { //eslint-disable-line handle-callback-err
+    }, (err, html) => {
+        if(err) {
+            next(err);
+        }
         if(storeData !== void 0) storeData.unsubscribe();
         if(brewerData !== void 0) brewerData.unsubscribe();
         if(coffeeData !== void 0) coffeeData.unsubscribe();

@@ -36,7 +36,7 @@ const ArticleRepository = require('./repositories/article-repository');
 const BrewerRepository = require('./repositories/brewer-repository');
 const StoreRepository = require('./repositories/store-repository');
 
-app.getRepository = function(name){
+this.getRepository = function(name){
   let repo;
 
   for(let index = 0; index < repositories.length; index += 1){
@@ -79,7 +79,7 @@ app.use(function(req, res, next) {
 });
 
 //error handler
-app.use(function(err, req, res, next) {//eslint-disable-line
+app.use(function(err, req, res, next) {
   //set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
