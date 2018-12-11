@@ -8,7 +8,7 @@
     "eslint-local": "./node_modules/.bin/eslint ./",
     "kc-generate": "./node_modules/.bin/kc-generate --projectId=<your project ID> --moduleResolution=CommonJs --codeType=JavaScript"
   },
-  "dependencies": {
+  "devDependencies": {
     "acorn": "^6.0.4",
     "cookie-parser": "~1.4.3",
     "datejs": "^1.0.0-rc3",
@@ -19,9 +19,7 @@
     "kentico-cloud-delivery": "^5.2.1",
     "morgan": "~1.9.0",
     "pug": "^2.0.3",
-    "rxjs": "^6.2.0"
-  },
-  "devDependencies": {
+    "rxjs": "^6.2.0",
     "eslint": "^5.9.0",
     "kentico-cloud-model-generator-utility": "^1.2.0"
   }
