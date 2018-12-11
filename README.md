@@ -43,4 +43,4 @@ https://github.com/Kentico/Home/commits/master/CODE_OF_CONDUCT.md
 
 Kentico Software does not provide support or testing for open source software if not stated otherwise. It is developed by volunteers and maintained by Kentico employees in their free time. The software is distributed as it is without any guarantee. For more information, see the license in each repository before you start using it.
 
-![Analytics](https://kentico-ga-beacon.azurewebsites.net/api/UA-69014260-4/Kentico/cloud-expressjs-app/blob/master/README.md?pixel)
+![Analytics](https://kentico-ga-beacon.azurewebsites.net/api/UA-69014260-4/Kentico/cloud-sample-app-express/blob/master/README.md?pixel)
