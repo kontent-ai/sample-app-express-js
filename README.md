@@ -23,7 +23,7 @@ Full documentation and code samples for the JavaScript SDK can be found [here](h
 
 ### Questions & Answers
 
-Use [Stack Overflow to ask](http://stackoverflow.com/questions/ask?tags=kentico) questions. Make sure you label them with the [Kentico](https://stackoverflow.com/questions/tagged/kentico) tag to make it easy for the community to find them. Besides that, every repository has its own default communication channel. Some use [Slack](https://kentico-community.slack.com), others use [Community forums](https://forums.kenticocloud.com).
+Use [Stack Overflow to ask](https://stackoverflow.com/questions/ask?tags=kentico) questions. Make sure you label them with the [Kentico](https://stackoverflow.com/questions/tagged/kentico) tag to make it easy for the community to find them. Besides that, every repository has its own default communication channel. Some use [Slack](https://kentico-community.slack.com), others use [Community forums](https://forums.kenticocloud.com).
 
 Please don't use GitHub Issues for your questions. They're meant for tracking features and bugs.
 
