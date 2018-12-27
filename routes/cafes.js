@@ -1,30 +1,28 @@
 const express = require('express');
 const router = express.Router();
-const app = require("../app");
-let cafeRepo,
-data = void 0;
+const CafeHelper = require('../helpers/cafe-helper');
+const { zip } = require('rxjs');
+const { map } = require('rxjs/operators');
 
-const ensureCafes = function(req, res, next) {
-    cafeRepo = app.getRepository("CafeRepository");
-    data = cafeRepo.ensureItems().subscribe(() => {
-        next();
+router.get('/cafes', (req, res, next) => {
+    const sub = zip(
+        CafeHelper.getCafesNotInCountry('USA').pipe(map(result => ['partners', result])),
+        CafeHelper.getCafesInCountry('USA').pipe(map(result => ['usa', result.items]))
+    ).subscribe(result => {
+        sub.unsubscribe();
+        res.render('cafes', {
+            'partnerCafes': result.filter(arr => arr[0] == 'partners')[0][1],
+            'americanCafes': result.filter(arr => arr[0] == 'usa')[0][1]
+        }, (err, html) => {
+            if (err) {
+                next(err);
+            }
+            else {
+                res.send(html);
+                res.end();
+            }
+        });
     });
-}
-
-const render = function(req, res, next) {
-    res.render('cafes', {
-        'partnerCafes': cafeRepo.getCafesNotInCountry('USA'),
-        'americanCafes': cafeRepo.getCafesInCountry('USA')
-    }, (err, html) => {
-        if(err) {
-            next(err);
-        }
-        if(data !== void 0) data.unsubscribe();
-        res.send(html);
-        res.end();
-    });
-}
-
-router.get('/cafes', [ensureCafes, render]);
+});
 
 module.exports = router;

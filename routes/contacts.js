@@ -1,29 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const app = require("../app");
-let cafeRepo,
-data = void 0;
+const CafeHelper = require('../helpers/cafe-helper');
 
-const ensureCafes = function(req, res, next) {
-    cafeRepo = app.getRepository("CafeRepository");
-    data = cafeRepo.ensureItems().subscribe(() => {
-        next();
+router.get('/contacts', (req, res, next) => {
+    const sub = CafeHelper.getCafesInCountry('USA').subscribe(result => {
+        sub.unsubscribe();
+        res.render('contacts', {
+            'americanCafes': result.items
+        }, (err, html) => {
+            if (err) {
+                next(err);
+            }
+            else {
+                res.send(html);
+                res.end();
+            }
+        });
     });
-}
-
-const render = function(req, res, next){
-    res.render('contacts', {
-        'americanCafes': cafeRepo.getCafesInCountry('USA')
-      }, (err, html) => {
-        if(err) {
-            next(err);
-        }
-        if(data !== void 0) data.unsubscribe();
-        res.send(html);
-        res.end();
-      });
-}
-
-router.get('/contacts', [ensureCafes, render]);
+});
 
 module.exports = router;

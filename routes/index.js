@@ -1,39 +1,29 @@
 const express = require('express');
 const router = express.Router();
-const app = require("../app");
-let articleRepo, cafeRepo,
-articleData = void 0,
-cafeData = void 0;
+const ArticleHelper = require('../helpers/article-helper');
+const CafeHelper = require('../helpers/cafe-helper');
+const { zip } = require('rxjs');
+const { map } = require('rxjs/operators');
 
-const ensureCafes = function(req, res, next) {
-  cafeRepo = app.getRepository("CafeRepository");
-  cafeData = cafeRepo.ensureItems().subscribe(() => {
-      next();
+router.get('/', (req, res, next) => {
+  const sub = zip(
+    CafeHelper.getCafesInCountry('USA').pipe(map(result => ['cafes', result.items])),
+    ArticleHelper.getAllArticles().pipe(map(result => ['articles', result.items]))
+  ).subscribe(result => {
+    sub.unsubscribe();
+    res.render('index', {
+      'articleList': result.filter(arr => arr[0] == 'articles')[0][1],
+      'cafeList': result.filter(arr => arr[0] == 'cafes')[0][1]
+    }, (err, html) => {
+      if (err) {
+        next(err);
+      }
+      else {
+        res.send(html);
+        res.end();
+      }
+    });
   });
-}
-
-const ensureArticles = function(req, res, next) {
-  articleRepo = app.getRepository("ArticleRepository");
-  articleData = articleRepo.ensureItems().subscribe(() => {
-      next();
-  });
-}
-
-const render = function(req, res, next) {
-  res.render('index', {
-    'articleList': articleRepo.getAllArticles(),
-    'cafeList': cafeRepo.getCafesInCountry('USA')
-  }, (err, html) => {
-    if(err) {
-      next(err);
-    }
-    if(cafeData !== void 0) cafeData.unsubscribe();
-    if(articleData !== void 0) articleData.unsubscribe();
-    res.send(html);
-    res.end();
-  });
-}
-
-router.get('/', [ensureArticles, ensureCafes, render]);
+});
 
 module.exports = router;

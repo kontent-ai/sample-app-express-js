@@ -2,7 +2,7 @@ const linkResolver = require('../resolvers/link-resolver');
 const { ContentItem } = require('kentico-cloud-delivery');
 
 class Article extends ContentItem {
-        constructor() {
+    constructor() {
         super({
             linkResolver: ((link) => linkResolver.resolveContentLink(link)),
             propertyResolver: ((fieldName) => {
@@ -57,7 +57,7 @@ class Article extends ContentItem {
                 if (fieldName === 'url_pattern') {
                     return 'urlPattern';
                 }
-                
+
                 return fieldName;
             })
         });

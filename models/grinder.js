@@ -1,7 +1,7 @@
 const { ContentItem } = require('kentico-cloud-delivery');
 
 class Grinder extends ContentItem {
-        constructor() {
+    constructor() {
         super({
             propertyResolver: ((fieldName) => {
                 if (fieldName === 'metadata__og_description') {
@@ -49,7 +49,7 @@ class Grinder extends ContentItem {
                 if (fieldName === 'metadata__og_image') {
                     return 'metadataOgImage';
                 }
-                
+
                 return fieldName;
             })
         });

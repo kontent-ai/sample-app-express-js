@@ -1,7 +1,7 @@
 const { ContentItem } = require('kentico-cloud-delivery');
 
 class Accessory extends ContentItem {
-        constructor() {
+    constructor() {
         super({
             propertyResolver: ((fieldName) => {
                 if (fieldName === 'metadata__og_description') {
@@ -49,7 +49,7 @@ class Accessory extends ContentItem {
                 if (fieldName === 'product_name') {
                     return 'productName';
                 }
-                
+
                 return fieldName;
             })
         });

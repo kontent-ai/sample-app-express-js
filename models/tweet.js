@@ -2,7 +2,7 @@ const tweetResolver = require('../resolvers/tweet-resolver');
 const { ContentItem } = require('kentico-cloud-delivery');
 
 class Tweet extends ContentItem {
-        constructor() {
+    constructor() {
         super({
             richTextResolver: ((item) => tweetResolver.resolveModularContent(item)),
             propertyResolver: ((fieldName) => {
@@ -12,7 +12,7 @@ class Tweet extends ContentItem {
                 if (fieldName === 'display_options') {
                     return 'displayOptions';
                 }
-                
+
                 return fieldName;
             })
         });

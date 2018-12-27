@@ -6,7 +6,6 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const serverjs = require('./public/scripts/server')
-const repositories = [];
 
 app = express();
 app.use(logger('dev'));
@@ -28,47 +27,6 @@ app.use('/', require('./routes/contacts'));
 app.use('/', require('./routes/store'));
 app.use('/', require('./routes/coffee'));
 app.use('/', require('./routes/brewer'));
-
-//repoistories
-const CoffeeRepository = require('./repositories/coffee-repository');
-const CafeRepository = require('./repositories/cafe-repository');
-const ArticleRepository = require('./repositories/article-repository');
-const BrewerRepository = require('./repositories/brewer-repository');
-const StoreRepository = require('./repositories/store-repository');
-
-this.getRepository = function(name){
-  let repo;
-
-  for(let index = 0; index < repositories.length; index += 1){
-    if(repositories[index].name === name) repo = repositories[index];
-  }
-  if(!repo) {
-    switch(name){
-      case "CafeRepository":
-        repo = new CafeRepository();
-        break;
-      case "ArticleRepository":
-        repo = new ArticleRepository();
-        break;
-      case "CoffeeRepository":
-        repo = new CoffeeRepository();
-        break;
-      case "BrewerRepository":
-        repo = new BrewerRepository();
-        break;
-      case "StoreRepository":
-        repo = new StoreRepository();
-        break;
-      default:
-        break;
-    }
-    if(repo){
-      repositories.push(repo);
-    }
-  }
-
-  return repo;
-};
 
 //register main.js for use in Pug
 app.locals.serverjs = serverjs;

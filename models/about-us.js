@@ -1,7 +1,7 @@
 const KenticoCloud = require('kentico-cloud-delivery');
 
 class AboutUs extends KenticoCloud.ContentItem {
-        constructor() {
+    constructor() {
         super({
             propertyResolver: ((fieldName) => {
                 if (fieldName === 'metadata__og_description') {
@@ -37,7 +37,7 @@ class AboutUs extends KenticoCloud.ContentItem {
                 if (fieldName === 'metadata__og_image') {
                     return 'metadataOgImage';
                 }
-                
+
                 return fieldName;
             })
         });

@@ -1,7 +1,7 @@
 const { ContentItem } = require('kentico-cloud-delivery');
 
 class Brewer extends ContentItem {
-        constructor() {
+    constructor() {
         super({
             propertyResolver: ((fieldName) => {
                 if (fieldName === 'product_name') {
@@ -49,7 +49,7 @@ class Brewer extends ContentItem {
                 if (fieldName === 'metadata__og_image') {
                     return 'metadataOgImage';
                 }
-                
+
                 return fieldName;
             })
         });

@@ -2,7 +2,7 @@ const hostedVideoResolver = require('../resolvers/hosted-video-resolver');
 const { ContentItem } = require('kentico-cloud-delivery');
 
 class HostedVideo extends ContentItem {
-        constructor() {
+    constructor() {
         super({
             richTextResolver: ((item) => hostedVideoResolver.resolveModularContent(item)),
             propertyResolver: ((fieldName) => {
@@ -12,7 +12,7 @@ class HostedVideo extends ContentItem {
                 if (fieldName === 'video_host') {
                     return 'videoHost';
                 }
-                
+
                 return fieldName;
             })
         });
