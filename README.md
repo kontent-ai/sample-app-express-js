@@ -1,7 +1,10 @@
 [![Forums](https://img.shields.io/badge/chat-on%20forums-orange.svg)](https://forums.kenticocloud.com) [![Join the chat at https://kentico-community.slack.com](https://img.shields.io/badge/join-slack-E6186D.svg)](https://kentico-community.slack.com)
 
 # cloud-expressjs-app
-This is an Express JS application meant for use with the Dancing Goat sample project within Kentico Cloud. You can read more about the our JavaScript SDKs here: [https://github.com/Enngage/kentico-cloud-js](https://github.com/Enngage/kentico-cloud-js)
+This is an Express JS application meant for use with the Dancing Goat sample project within Kentico Cloud. This fully featured project contains marketing content for Dancing Goat – an imaginary chain of coffee shops. If you don't have your own Sample Project, any admin of a Kentico Cloud subscription [can generate one](https://app.kenticocloud.com/sample-project-generator).
+
+ You can read more about our [JavaScript SDKs](https://github.com/Kentico/kentico-cloud-js)
+
 
 ### Setup
 
@@ -19,7 +22,7 @@ The application will then be available at localhost:3000 (configurable in /bin/w
 
 ### Documentation
 
-Full documentation and code samples for the JavaScript SDK can be found [here](https://github.com/Kentico/kentico-cloud-js/blob/master/doc/delivery.md).
+Read full documentation and code samples for the [JavaScript Delivery SDK](https://github.com/Kentico/kentico-cloud-js/blob/master/doc/delivery.md).
 
 ### Questions & Answers
 
