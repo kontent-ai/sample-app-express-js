@@ -3,7 +3,7 @@
 # cloud-expressjs-app
 This is an Express JS application meant for use with the Dancing Goat sample project within Kentico Cloud. This fully featured project contains marketing content for Dancing Goat – an imaginary chain of coffee shops. If you don't have your own Sample Project, any admin of a Kentico Cloud subscription [can generate one](https://app.kenticocloud.com/sample-project-generator).
 
- You can read more about our [JavaScript SDKs](https://github.com/Kentico/kentico-cloud-js)
+You can read more about our [JavaScript SDKs](https://github.com/Kentico/kentico-cloud-js)
 
 
 ### Setup
@@ -24,26 +24,8 @@ The application will then be available at localhost:3000 (configurable in /bin/w
 
 Read full documentation and code samples for the [JavaScript Delivery SDK](https://github.com/Kentico/kentico-cloud-js/blob/master/doc/delivery.md).
 
-### Questions & Answers
+## Feedback & Contributing
 
-Use [Stack Overflow to ask](https://stackoverflow.com/questions/ask?tags=kentico) questions. Make sure you label them with the [Kentico](https://stackoverflow.com/questions/tagged/kentico) tag to make it easy for the community to find them. Besides that, every repository has its own default communication channel. Some use [Slack](https://kentico-community.slack.com), others use [Community forums](https://forums.kenticocloud.com).
-
-Please don't use GitHub Issues for your questions. They're meant for tracking features and bugs.
-
-### Code of Conduct
-
-The Kentico team is committed to fostering a welcoming community.
-
-**Our Code of Conduct can be found here**:
-
-https://github.com/Kentico/Home/blob/master/CODE_OF_CONDUCT.md
-
-For a history of updates, see the page history here:
-
-https://github.com/Kentico/Home/commits/master/CODE_OF_CONDUCT.md
-
-### Disclaimer
-
-Kentico Software does not provide support or testing for open source software if not stated otherwise. It is developed by volunteers and maintained by Kentico employees in their free time. The software is distributed as it is without any guarantee. For more information, see the license in each repository before you start using it.
+Check out the [contributing](https://github.com/Kentico/cloud-sample-app-express/blob/master/CONTRIBUTING.md) page to see the best places to file issues, start discussions, and begin contributing.
 
 ![Analytics](https://kentico-ga-beacon.azurewebsites.net/api/UA-69014260-4/Kentico/cloud-sample-app-express/blob/master/README.md?pixel)
