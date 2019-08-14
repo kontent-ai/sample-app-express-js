@@ -7,13 +7,13 @@ class CafeHelper {
         return deliveryClient.items()
             .type('cafe')
             .equalsFilter('elements.country', country)
-            .getObservable();
+            .toObservable();
     }
 
     static getCafesNotInCountry(country) {
         return deliveryClient.items()
             .type('cafe')
-            .getObservable()
+            .toObservable()
             .pipe(map(result => result.items.filter((cafe) => cafe.country.value != country)));
     }
 }

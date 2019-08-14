@@ -6,13 +6,13 @@ class BrewerHelper {
         return deliveryClient.items()
             .type('brewer')
             .equalsFilter('system.codename', codename)
-            .getObservable();
+            .toObservable();
     }
 
     static getAllBrewers() {
         return deliveryClient.items()
             .type('brewer')
-            .getObservable();
+            .toObservable();
     }
 
 }

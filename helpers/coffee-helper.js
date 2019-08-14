@@ -6,13 +6,13 @@ class CoffeeHelper {
         return deliveryClient.items()
             .type('coffee')
             .equalsFilter('system.codename', codename)
-            .getObservable();
+            .toObservable();
     }
 
     static getAllCoffees() {
         return deliveryClient.items()
             .type('coffee')
-            .getObservable();
+            .toObservable();
     }
 }
 

@@ -13,7 +13,7 @@ block content
                         img.img-responsive(src=articleList[0].teaserImage.value[0].url)
                 .row
                     .article-detail-content
-                        != articleList[0].bodyCopy.getHtml()
+                        != articleList[0].bodyCopy.resolveHtml()
     else
         .container
             each article, index in articleList

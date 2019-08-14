@@ -12,7 +12,7 @@ block content
                     img(alt=coffee.productName.value, src=coffee.image.value[0].url)
                 .description
                     div
-                        != coffee.longDescription.getHtml()
+                        != coffee.longDescription.resolveHtml()
                     .product-detail-properties
                         h4 Parameters
                         .row

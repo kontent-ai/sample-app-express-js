@@ -28,13 +28,13 @@ class StoreHelper {
     static getAllProductStatuses() {
         return deliveryClient
             .taxonomy('product_status')
-            .getObservable();
+            .toObservable();
     }
 
     static getAllProcessings() {
         return deliveryClient
             .taxonomy('processing')
-            .getObservable();
+            .toObservable();
     }
 
     static applyCoffeeFilters(items, params, processings, statuses) {
@@ -198,7 +198,7 @@ class StoreHelper {
     static getAllManufacturers() {
         return deliveryClient
             .taxonomy('manufacturer')
-            .getObservable();
+            .toObservable();
     }
 
     static filterProductsByStatus(products, keys) {

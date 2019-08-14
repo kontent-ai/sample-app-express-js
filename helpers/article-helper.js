@@ -6,14 +6,14 @@ class ArticleHelper {
         return deliveryClient.items()
             .type('article')
             .orderParameter('elements.post_date', 1)
-            .getObservable();
+            .toObservable();
     }
 
     static getArticle(id) {
         return deliveryClient.items()
             .type('article')
             .equalsFilter('system.id', id)
-            .getObservable();
+            .toObservable();
     }
 }
 

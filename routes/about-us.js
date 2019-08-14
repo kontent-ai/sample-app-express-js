@@ -8,7 +8,7 @@ router.get('/about-us', (req, res, next) => {
     .queryConfig({
       linkResolver: (link) => linkResolver.resolveContentLink(link)
     })
-    .getObservable()
+    .toObservable()
     .subscribe(result => {
       sub.unsubscribe();
       res.render('about-us', { 'content_item': result.item }, (err, html) => {
