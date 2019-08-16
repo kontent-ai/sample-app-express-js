@@ -1,12 +1,12 @@
 mixin article-sm(article)
     .col-md-3
         .article-tile
-            a(href='/articles/'+article.system.id)
+            a(href='/' +app.locals.currentCulture+ '/articles/'+article.system.id)
                 img.article-tile-image(src=article.teaserImage.value[0].url)
             .article-tile-date
                 =new Date(article.postDate.value).toString('MMMM d')
             .article-tile-content
                 h2.h4
-                    a(href='/articles/'+article.system.id) #{article.title.value}
+                    a(href='/'+app.locals.currentCulture+'/articles/'+article.system.id) #{article.title.value}
                 p.article-tile-text.
                     #{article.summary.value}

@@ -1,0 +1,15 @@
+mixin navigation
+    nav(role='navigation')
+          ul
+            li
+              a(href='/' +app.locals.currentCulture) Home
+            li
+              a(href='/' +app.locals.currentCulture+ '/store') Product Catalog
+            li
+              a(href='/' +app.locals.currentCulture+ '/articles') Articles
+            li
+              a(href='/' +app.locals.currentCulture+ '/about-us') About Us
+            li
+              a(href='/' +app.locals.currentCulture+ '/cafes') Cafes
+            li
+              a(href='/' +app.locals.currentCulture+ '/contacts') Contact

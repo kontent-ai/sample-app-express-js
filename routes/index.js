@@ -5,10 +5,10 @@ const CafeHelper = require('../helpers/cafe-helper');
 const { zip } = require('rxjs');
 const { map } = require('rxjs/operators');
 
-router.get('/', (req, res, next) => {
+router.get('/:lang', (req, res, next) => {
   const sub = zip(
     CafeHelper.getCafesInCountry('USA').pipe(map(result => ['cafes', result.items])),
-    ArticleHelper.getAllArticles().pipe(map(result => ['articles', result.items]))
+    ArticleHelper.getAllArticles(req.params.lang).pipe(map(result => ['articles', result.items]))
   ).subscribe(result => {
     sub.unsubscribe();
     res.render('index', {

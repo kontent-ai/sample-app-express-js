@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const CafeHelper = require('../helpers/cafe-helper');
 
-router.get('/contacts', (req, res, next) => {
+router.get('/:lang/contacts', (req, res, next) => {
     const sub = CafeHelper.getCafesInCountry('USA').subscribe(result => {
         sub.unsubscribe();
         res.render('contacts', {

@@ -5943,13 +5943,14 @@ footer {
   color: #BDBBBB;
 }
 .searchBox .search-box-btn {
+  width: 15%;
   padding: .6rem 1rem;
   float: right;
-  background: url(Images/icon-magnifier.png) no-repeat left;
+  background: url(../images/icon-magnifier.png) no-repeat center;
 }
 .searchBox .search-box-btn:focus,
 .searchBox .search-box-btn:hover {
-  background: #e5e5e5 url(Images/icon-magnifier.png) no-repeat left;
+  background: #e5e5e5 url(../images/icon-magnifier.png) no-repeat center;
   float: right;
 }
 .searchBox input,

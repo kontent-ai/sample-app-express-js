@@ -1,7 +1,7 @@
 mixin product-tile(product)
     .col-md-6.col-lg-4
         article.product-tile
-            a(href='/'+ product.system.type + '/' + product.system.codename)
+            a(href='/' + app.locals.currentCulture + '/' + product.system.type + '/' + product.system.codename)
                 h1.product-heading #{product.productName.value}
                 -let productStatuses = undefined;
                 -if(product.productStatus.value.length > 0)

@@ -4,7 +4,7 @@ const CafeHelper = require('../helpers/cafe-helper');
 const { zip } = require('rxjs');
 const { map } = require('rxjs/operators');
 
-router.get('/cafes', (req, res, next) => {
+router.get('/:lang/cafes', (req, res, next) => {
     const sub = zip(
         CafeHelper.getCafesNotInCountry('USA').pipe(map(result => ['partners', result])),
         CafeHelper.getCafesInCountry('USA').pipe(map(result => ['usa', result.items]))

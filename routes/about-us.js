@@ -3,12 +3,14 @@ const linkResolver = require('../resolvers/link-resolver');
 const express = require('express');
 const router = express.Router();
 
-router.get('/about-us', (req, res, next) => {
+router.get('/:lang/about-us', (req, res, next) => {
   const sub = deliveryClient.item('about_us')
+    .languageParameter(req.params.lang)
+    .depthParameter(2)
     .queryConfig({
       linkResolver: (link) => linkResolver.resolveContentLink(link)
     })
-    .getObservable()
+    .toObservable()
     .subscribe(result => {
       sub.unsubscribe();
       res.render('about-us', { 'content_item': result.item }, (err, html) => {

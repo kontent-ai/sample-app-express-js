@@ -16,14 +16,14 @@ const render = function (req, res, next) {
         case 'coffees':
             obs = zip(
                 StoreHelper.getAllProductStatuses().pipe(map(result => ['statuses', result.taxonomy.terms])),
-                CoffeeHelper.getAllCoffees().pipe(map(result => ['coffees', result.items])),
+                CoffeeHelper.getAllCoffees(req.params.lang).pipe(map(result => ['coffees', result.items])),
                 StoreHelper.getAllProcessings().pipe(map(result => ['processings', result.taxonomy.terms]))
             )
             break;
         case 'brewers':
             obs = zip(
                 StoreHelper.getAllProductStatuses().pipe(map(result => ['statuses', result.taxonomy.terms])),
-                BrewerHelper.getAllBrewers().pipe(map(result => ['brewers', result.items])),
+                BrewerHelper.getAllBrewers(req.params.lang).pipe(map(result => ['brewers', result.items])),
                 StoreHelper.getAllManufacturers().pipe(map(result => ['manufacturers', result.taxonomy.terms]))
             )
             break;
@@ -74,7 +74,7 @@ const render = function (req, res, next) {
     });
 }
 
-router.get('/store', render);
-router.get('/store/:type', render);
+router.get('/:lang/store', render);
+router.get('/:lang/store/:type', render);
 
 module.exports = router;

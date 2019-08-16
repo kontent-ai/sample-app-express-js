@@ -2,17 +2,19 @@ const deliveryClient = require('../delivery');
 
 class CoffeeHelper {
 
-    static getCoffee(codename) {
+    static getCoffee(codename, lang) {
         return deliveryClient.items()
             .type('coffee')
+            .languageParameter(lang)
             .equalsFilter('system.codename', codename)
-            .getObservable();
+            .toObservable();
     }
 
-    static getAllCoffees() {
+    static getAllCoffees(lang) {
         return deliveryClient.items()
             .type('coffee')
-            .getObservable();
+            .languageParameter(lang)
+            .toObservable();
     }
 }
 

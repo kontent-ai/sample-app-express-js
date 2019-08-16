@@ -1,0 +1,24 @@
+mixin lang-selector
+    .additional-menu-buttons.languages
+        .dropdown-header.menu-hover.dropdown-header-mobile
+            .dropdown-desktop.dropdown-mobile
+                -
+                    var cultureName = 'English';
+                    for(var i=0; i<app.locals.supportedLangs.length; i++) {
+                        if(app.locals.currentCulture === app.locals.supportedLangs[i]) {
+                            cultureName = app.locals.languageNames[i];
+                        }
+                    }
+                |#{cultureName}
+                i.icon-chevron-down.dropdown-arrow(id='language-select-btn')
+        nav(role='navigation')
+            ul.dropdown-items-list.dropdown-items-list-mobile(style='display: none; min-width: 108px;')
+                each codename, index in app.locals.supportedLangs
+                    -
+                        var langName = app.locals.languageNames[index];
+                        var finalURL = app.locals.currentURL;
+                        var secondSlash = finalURL.indexOf('/', 1);
+                        finalURL = finalURL.slice(secondSlash, finalURL.length);
+                        finalURL = '/' + codename + finalURL;
+                    li
+                        a(title=langName, href=finalURL) #{langName}
