@@ -9,9 +9,9 @@ You can read more about our [JavaScript SDKs](https://github.com/Kentico/kentico
 ### Setup
 
 1. Clone the repository
-2. Open the **[delivery.js](/delivery.js)** file and set the projectID variable to your sample project's Project ID:
+2. Open the **[config.js](/config.js)** file and set the projectId variable to your sample project's Project ID:
 ```
-const projectId = '<your-project-id-here>';
+module.exports.projectId = ''
 ```
 3. Run the following commands:
 ```
