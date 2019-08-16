@@ -3,9 +3,10 @@ const deliveryClient = require('../delivery');
 class ArticleHelper {
 
     static getAllArticles(lang = '', force = false) {
-        let query =  deliveryClient.items()
+        const query = deliveryClient.items()
             .type('article')
             .orderParameter('elements.post_date', 1);
+
         if(lang !== '') query.languageParameter(lang);
         if(force) query.equalsFilter('system.language', lang);
 

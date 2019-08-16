@@ -12,6 +12,7 @@ const HostedVideo = require('./models/hosted-video');
 const Office = require('./models/office');
 const Tweet = require('./models/tweet');
 const { DeliveryClient, TypeResolver } = require('kentico-cloud-delivery');
+const config = require('./config');
 const typeResolvers = [
   new TypeResolver('about_us', () => new AboutUs()),
   new TypeResolver('accessory', () => new Accessory()),
@@ -29,6 +30,6 @@ const typeResolvers = [
 ];
 
 module.exports = new DeliveryClient({
-  projectId: require('./config').projectId,
+  projectId: config.projectId,
   typeResolvers: typeResolvers
 });

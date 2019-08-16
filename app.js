@@ -34,23 +34,29 @@ app.use(['/:lang/*', '/:lang', '/'], function (req, res, next) {
   //save full URL to response for use in header
   app.locals.currentURL = req.originalUrl;
 
-  let lang = req.params.lang ? req.params.lang.toLowerCase() : '';
-  if(!supportedLangs.includes(lang)) {
-    //prefix not found in route
-    res.redirect('/en-us'+req.originalUrl);
+  const lang = req.params.lang ? req.params.lang.toLowerCase() : '';
+
+  if(supportedLangs.includes(lang)) {
+
+    /*
+     * prefix was found, set culture.
+     * app.set() available in middleware,
+     * app.locals available in views
+     */
+    app.set('currentCulture', lang);
+    app.locals.currentCulture = lang;
+    next();
   }
   else {
-    //prefix was found, set culture
-    app.set('currentCulture', lang); //available in middleware
-    app.locals.currentCulture = lang; //available in views
-    next();
+    //prefix not found in route
+    res.redirect(`/en-us${req.originalUrl}`);
   }
 });
 
 //generate Algolia index
 app.use('/:lang/algolia', function (req, res, next) {
-  let client = algoliasearch(config.algoliaApp, config.algoliaKey);
-  let index = client.initIndex(config.indexName);
+  const client = algoliasearch(config.algoliaApp, config.algoliaKey);
+  const index = client.initIndex(config.indexName);
 
   //set index settings
   index.setSettings({
@@ -75,7 +81,7 @@ app.use('/:lang/algolia', function (req, res, next) {
     //add all articles to index
     result.flat(1).forEach(article => {
       index.addObject({
-          objectID: article.system.id + '/' +article.system.language,
+          objectID: `${article.system.id}/${article.system.language}`,
           title: article.title.value,
           language: article.system.language,
           postDate: new Date(article.postDate.value).toString('dddd, MMMM d, yyyy'),
@@ -86,7 +92,7 @@ app.use('/:lang/algolia', function (req, res, next) {
       });
     });
 
-    res.redirect('/' + req.params.lang);
+    res.redirect(`/${req.params.lang}`);
   });
 });
 

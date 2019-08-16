@@ -9,22 +9,25 @@ const index = client.initIndex(config.indexName);
 router.get('/:lang/search', (req, res, next) => {
 
     const term = req.query.searchtext;
+
     index.search({
-        query: term,
-        filters: 'language:' + app.get('currentCulture')
-    },
-        (err, { hits } = {}) => {
+            query: term,
+            filters: `language:${app.get('currentCulture')}`
+        }, (err, { hits } = {}) => {
             if (err) throw err;
 
-            res.render('search', {'hits': hits, 'term': term}, (err, html) => {
-                if (err) {
-                    next(err);
-                }
-                else {
-                    res.send(html);
-                    res.end();
-                }
-            });
+            res.render('search', {
+                'hits': hits,
+                'term': term
+                }, (err2, html) => {
+                    if (err2) {
+                        next(err2);
+                    }
+                    else {
+                        res.send(html);
+                        res.end();
+                    }
+                });
         });
 });
 

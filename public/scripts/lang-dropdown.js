@@ -1,3 +1,4 @@
+ /*eslint-disable*/
  $(document).ready(function() {
     var toogleDropdown = function($dropdownHeader, $dropdownMenu) {
 
