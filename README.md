@@ -9,16 +9,41 @@ You can read more about our [JavaScript SDKs](https://github.com/Kentico/kentico
 ### Setup
 
 1. Clone the repository
-2. Open the **[config.js](/config.js)** file and set the projectId variable to your sample project's Project ID:
-```
+2. Open the [config.js](/config.js) file and set the projectId variable to your sample project's Project ID:
+
+```js
 module.exports.projectId = ''
 ```
+
 3. Run the following commands:
 ```
 npm install
 npm start
 ```
 The application will then be available at localhost:3000 (configurable in /bin/www).
+
+### Algolia Search Integration
+
+You can test [Algolia](https://www.algolia.com) search functionality on the project's Article content types. Register for an account on Algolia and copy the **App ID** and **Admin API key** from the **API Keys** tab and set the variables in [config.js](/config.js):
+
+```js
+module.exports.algoliaKey = ''
+module.exports.algoliaApp = ''
+```
+
+The application will automatically create, configure, and populate a search index when you visit the **/algolia** route. It will redirect you to the home page when finished, and you should immediately be able to search for articles using the search bar.
+
+To check out the code used to create the index, see [app.js](/app.js):
+
+```js
+//generate Algolia index
+app.use('/:lang/algolia', function (req, res, next) {
+  let client = algoliasearch(config.algoliaApp, config.algoliaKey);
+  let index = client.initIndex(config.indexName);
+  //etc...
+```
+
+To view the search functionality, see [/routes/search.js](/routes/search.js).
 
 ### Documentation
 
