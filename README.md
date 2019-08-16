@@ -33,7 +33,7 @@ module.exports.algoliaApp = ''
 
 The application will automatically create, configure, and populate a search index when you visit the **/algolia** route. It will redirect you to the home page when finished, and you should immediately be able to search for articles using the search bar.
 
-To check out the code used to create the index, see [app.js](/app.js):
+To check out the code used to create the index, see [app.js](https://github.com/Kentico/cloud-sample-app-express/blob/master/app.js#L51):
 
 ```js
 //generate Algolia index
