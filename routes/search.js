@@ -2,13 +2,14 @@ const dotenv = require('dotenv');
 dotenv.config();
 const express = require('express');
 const router = express.Router();
-const config = require('../config');
 const algoliasearch = require('algoliasearch/lite');
-const client = algoliasearch(process.env.algoliaApp, process.env.algoliaKey);
-const index = client.initIndex(process.env.indexName);
 
 router.get('/:lang/search', (req, res, next) => {
-
+    if(process.env.algoliaApp === undefined || process.env.algoliaKey === undefined || process.env.indexName === undefined) {
+        res.send('Algolia search not enabled, please follow the instructions at https://github.com/Kentico/cloud-sample-app-express#algolia-search-integration');
+    }
+    const client = algoliasearch(process.env.algoliaApp, process.env.algoliaKey);
+    const index = client.initIndex(process.env.indexName);
     const term = req.query.searchtext;
 
     index.search({
