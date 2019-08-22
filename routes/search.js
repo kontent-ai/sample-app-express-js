@@ -1,10 +1,11 @@
+const dotenv = require('dotenv');
+dotenv.config();
 const express = require('express');
 const router = express.Router();
-
 const config = require('../config');
 const algoliasearch = require('algoliasearch/lite');
-const client = algoliasearch(config.algoliaApp, config.algoliaKey);
-const index = client.initIndex(config.indexName);
+const client = algoliasearch(process.env.algoliaApp, process.env.algoliaKey);
+const index = client.initIndex(process.env.indexName);
 
 router.get('/:lang/search', (req, res, next) => {
 

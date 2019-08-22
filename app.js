@@ -1,9 +1,12 @@
 /*eslint-disable no-undef, no-implicit-globals*/
 require('datejs');
+const dotenv = require('dotenv');
+dotenv.config();
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 const logger = require('morgan');
 const serverjs = require('./public/scripts/server');
 const supportedLangs = ['en-us', 'es-es'];
@@ -11,33 +14,35 @@ const languageNames = ['English', 'Spanish'];
 const { zip } = require('rxjs');
 const { map } = require('rxjs/operators');
 const algoliasearch = require('algoliasearch/lite');
-const config = require('./config');
 const ArticleHelper = require('./helpers/article-helper');
 
 app = express();
 app.use(logger('dev'));
-app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(bodyParser.raw({type:'application/json'}))
 app.use(express.static(path.join(__dirname, 'public')));
 
 //allow culture data access in views
 app.locals.supportedLangs = supportedLangs;
 app.locals.languageNames = languageNames;
+//allow access in routers
+app.set('supportedLangs', supportedLangs);
 
 //view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+app.use('/', require('./routes/webhook'));
+
 //force language prefix
 app.use(['/:lang/*', '/:lang', '/'], function (req, res, next) {
-  //save full URL to response for use in header
+  //save full URL for use in site header
   app.locals.currentURL = req.originalUrl;
 
   const lang = req.params.lang ? req.params.lang.toLowerCase() : '';
 
   if(supportedLangs.includes(lang)) {
-
     /*
      * prefix was found, set culture.
      * app.set() available in middleware,
@@ -55,8 +60,8 @@ app.use(['/:lang/*', '/:lang', '/'], function (req, res, next) {
 
 //generate Algolia index
 app.use('/:lang/algolia', function (req, res, next) {
-  const client = algoliasearch(config.algoliaApp, config.algoliaKey);
-  const index = client.initIndex(config.indexName);
+  const client = algoliasearch(process.env.algoliaApp, process.env.algoliaKey);
+  const index = client.initIndex(process.env.indexName);
 
   //set index settings
   index.setSettings({
@@ -71,12 +76,8 @@ app.use('/:lang/algolia', function (req, res, next) {
     ]
   });
 
-  const obs = zip(
-    ArticleHelper.getAllArticles('en-us', true).pipe(map(result => result.items)),
-    ArticleHelper.getAllArticles('es-es', true).pipe(map(result => result.items))
-  );
-
-  const sub = obs.subscribe(result => {
+  const observers = supportedLangs.map(lang => ArticleHelper.getAllArticles(lang, true).pipe(map(result => result.items)));
+  const sub = zip(...observers).subscribe(result => {
     sub.unsubscribe();
     //add all articles to index
     result.flat(1).forEach(article => {

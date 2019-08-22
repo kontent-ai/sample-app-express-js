@@ -9,10 +9,10 @@ You can read more about our [JavaScript SDKs](https://github.com/Kentico/kentico
 ### Setup
 
 1. Clone the repository
-2. Open the [config.js](/config.js) file and set the projectId variable to your sample project's Project ID:
+2. Open the `.env` file and set the projectId variable to your sample project's Project ID:
 
-```js
-module.exports.projectId = ''
+```
+projectId=<your project ID>
 ```
 
 3. Run the following commands:
@@ -24,11 +24,11 @@ The application will then be available at localhost:3000 (configurable in /bin/w
 
 ### Algolia Search Integration
 
-You can test [Algolia](https://www.algolia.com) search functionality on the project's Article content types. Register for an account on Algolia and copy the **App ID** and **Admin API key** from the **API Keys** tab and set the variables in [config.js](/config.js):
+You can test [Algolia](https://www.algolia.com) search functionality on the project's Article content types. Register for an account on Algolia and copy the **App ID** and **Admin API key** from the **API Keys** tab and set the variables in `.env`:
 
-```js
-module.exports.algoliaKey = ''
-module.exports.algoliaApp = ''
+```
+algoliaKey=<key>
+algoliaApp=<app name>
 ```
 
 The application will automatically create, configure, and populate a search index when you visit the **/algolia** route. It will redirect you to the home page when finished, and you should immediately be able to search for articles using the search bar.
@@ -38,12 +38,49 @@ To check out the code used to create the index, see [app.js](https://github.com/
 ```js
 //generate Algolia index
 app.use('/:lang/algolia', function (req, res, next) {
-  let client = algoliasearch(config.algoliaApp, config.algoliaKey);
-  let index = client.initIndex(config.indexName);
+  let client = algoliasearch(process.env.algoliaApp, process.env.algoliaKey);
+  let index = client.initIndex(process.env.indexName);
   //etc...
 ```
 
 To view the search functionality, see [/routes/search.js](/routes/search.js).
+
+### Automatic content translation
+
+There is a `/webhook` route that you can use with [workflow webhooks](https://docs.kenticocloud.com/tutorials/develop-apps/integrate/using-webhooks-for-automatic-updates) to automatically submit an English language variant to [Microsoft's Translator Text Cognitive Service](https://docs.microsoft.com/en-us/azure/cognitive-services/translator/translator-info-overview), translate the variant into other supported languages, and create new language variants in Kentico Cloud.
+
+At the moment, this integration only works if you are using 4-letter language code names in Kentico Cloud (e.g. "es-es"). The application's supported languages can be modified in [app.js](https://github.com/Kentico/cloud-sample-app-express/blob/master/app.js#L9):
+
+```js
+const supportedLangs = ['en-us', 'es-es'];
+const languageNames = ['English', 'Spanish'];
+```
+
+First, you need to [create an Azure Cognitive Services account](https://docs.microsoft.com/en-us/azure/cognitive-services/cognitive-services-apis-create-account) for the Translator Text service. Then, add `Key 1` from the **Keys** tab to `.env`:
+
+```
+translationKey=<key>
+```
+
+If you are running the project locally, you can still test webhooks using [ngrok](https://ngrok.com/) (or a similar program). To use ngrok, follow their [setup guide](https://dashboard.ngrok.com/get-started) and in **step 4** use the port number the Express application will run on (3000 by default). When you're done running ngrok, you should see something like the following:
+
+![ngrok](/ngrok-sample.png)
+
+Copy the URL from the **Forwarding** section and paste it into a new Kentico Cloud webhook's **URL address** with the /webhook path appended:
+
+![webhook](/webhook.png)
+
+While you're there, add a workflow step to **Workflow steps of content items to watch** and remove any other events. This is the workflow step that will trigger the webhook, once any language variant is placed in that step.
+
+Also, copy the **Secret** and add it to `.env`, then grab the Content Management API key from the **API keys** tab:
+
+```
+contentManagementKey=<CM API key>
+...
+webhookSecret=<secret>
+```
+
+Run your Express application, then move an English language variant into the workflow step you selected in the webhook. You should see some debugging information in the console when the webhook is consumed, then you will find your new language variants in the **Draft** step!
 
 ### Documentation
 
