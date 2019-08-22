@@ -9,17 +9,19 @@ You can read more about our [JavaScript SDKs](https://github.com/Kentico/kentico
 ### Setup
 
 1. Clone the repository
-2. Create a `.env` file on the root and set the projectId variable to your sample project's Project ID:
+2. Create a `.env` file on the root and set the `projectId` variable to your sample project's Project ID:
 
 ```
 projectId=<your project ID>
 ```
 
 3. Run the following commands:
+
 ```
 npm install
 npm start
 ```
+
 The application will then be available at localhost:3000 (configurable in /bin/www).
 
 ### Algolia Search Integration
