@@ -9,7 +9,7 @@ You can read more about our [JavaScript SDKs](https://github.com/Kentico/kentico
 ### Setup
 
 1. Clone the repository
-2. Open the `.env` file and set the projectId variable to your sample project's Project ID:
+2. Create a `.env` file on the root and set the projectId variable to your sample project's Project ID:
 
 ```
 projectId=<your project ID>
@@ -24,11 +24,12 @@ The application will then be available at localhost:3000 (configurable in /bin/w
 
 ### Algolia Search Integration
 
-You can test [Algolia](https://www.algolia.com) search functionality on the project's Article content types. Register for an account on Algolia and copy the **App ID** and **Admin API key** from the **API Keys** tab and set the variables in `.env`:
+You can test [Algolia](https://www.algolia.com) search functionality on the project's Article content types. Register for an account on Algolia and copy the **App ID** and **Admin API key** from the **API Keys** tab and set the variables in `.env`. Also create an `indexName` with any name you'd like:
 
 ```
 algoliaKey=<key>
 algoliaApp=<app name>
+indexName=dancing_goat
 ```
 
 The application will automatically create, configure, and populate a search index when you visit the **/algolia** route. It will redirect you to the home page when finished, and you should immediately be able to search for articles using the search bar.
@@ -76,7 +77,6 @@ Also, copy the **Secret** and add it to `.env`, then grab the Content Management
 
 ```
 contentManagementKey=<CM API key>
-...
 webhookSecret=<secret>
 ```
 
