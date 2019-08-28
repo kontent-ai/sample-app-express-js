@@ -63,18 +63,21 @@ const processWebHook = function(message) {
 
 const upsertLanguageVariant = function(targetLangCode, updatedVariant, contentItem, type) {
     //get the IDs of text elements
-    const textElementIDs = type.elements.filter(e => e.type === 'text').map(e => e.id);
+    const textElementIDs = type.elements.filter(e => e.type === 'text' || e.type === 'rich_text').map(e => e.id);
     const translateObservables = [];
 
     //copy elements from variant that triggered webhook
     updatedVariant.data.elements.forEach(e => {
         if(textElementIDs.includes(e.element.id)) {
+            console.log('pushing');
+            console.dir(e);
             translateObservables.push(
                 Axios.request({
                     method: 'POST',
                     params: {
                         from: 'en-us',
-                        to: targetLangCode
+                        to: targetLangCode,
+                        textType: 'html'
                     },
                     url: endpoint,
                     
@@ -83,7 +86,6 @@ const upsertLanguageVariant = function(targetLangCode, updatedVariant, contentIt
                         'Content-type': 'application/json'
                     },
                     data: [{
-                        'something else': 1,
                         'text': e.value
                     }]
                 })
@@ -98,7 +100,10 @@ const upsertLanguageVariant = function(targetLangCode, updatedVariant, contentIt
         //set new values- translated elements values are stored in [[]] with id/value pair
         updatedVariant.data.elements.forEach(e => {
             const match = result.filter(arr => arr[0] == e.element.id);
-            if(match.length > 0) e.value = match[0][1];
+            if(match.length > 0) {
+                let text = match[0][1];
+                if(match.length > 0) e.value = text.replace(/<br>/g, '<br/>');
+            }
         });
 
         cmClient.upsertLanguageVariant()
