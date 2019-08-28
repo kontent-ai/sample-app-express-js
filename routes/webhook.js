@@ -69,8 +69,6 @@ const upsertLanguageVariant = function(targetLangCode, updatedVariant, contentIt
     //copy elements from variant that triggered webhook
     updatedVariant.data.elements.forEach(e => {
         if(textElementIDs.includes(e.element.id)) {
-            console.log('pushing');
-            console.dir(e);
             translateObservables.push(
                 Axios.request({
                     method: 'POST',
