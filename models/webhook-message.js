@@ -1,6 +1,5 @@
 const dotenv = require('dotenv');
 dotenv.config();
-const config = require('../config');
 const crypto = require('crypto');
 
 class WebHookMessage {
