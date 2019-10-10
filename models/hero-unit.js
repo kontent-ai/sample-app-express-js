@@ -1,4 +1,4 @@
-const { ContentItem } = require('kentico-cloud-delivery');
+const { ContentItem } = require('@kentico/kontent-delivery');
 
 class HeroUnit extends ContentItem {
     constructor() {

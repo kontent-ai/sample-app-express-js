@@ -16,11 +16,13 @@
     "express": "~4.16.0",
     "global": "^4.3.2",
     "http-errors": "~1.7.1",
-    "kentico-cloud-delivery": "^6.0.0",
     "morgan": "~1.9.0",
     "pug": "^2.0.3",
     "rxjs": "^6.2.0",
     "eslint": "^5.9.0",
     "kentico-cloud-model-generator-utility": "^1.2.0"
+  },
+  "dependencies": {
+    "@kentico/kontent-delivery": "^7.0.1"
   }
 }
