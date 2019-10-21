@@ -3,7 +3,7 @@ mixin lang-selector
         .dropdown-header.menu-hover.dropdown-header-mobile
             .dropdown-desktop.dropdown-mobile
                 -
-                    var cultureName = 'English';
+                    var cultureName = app.locals.languageNames[i];
                     for(var i=0; i<app.locals.supportedLangs.length; i++) {
                         if(app.locals.currentCulture === app.locals.supportedLangs[i]) {
                             cultureName = app.locals.languageNames[i];
@@ -19,6 +19,7 @@ mixin lang-selector
                         var finalURL = app.locals.currentURL;
                         var secondSlash = finalURL.indexOf('/', 1);
                         finalURL = finalURL.slice(secondSlash, finalURL.length);
+                        if(secondSlash < 0) finalURL = '';
                         finalURL = '/' + codename + finalURL;
                     li
                         a(title=langName, href=finalURL) #{langName}

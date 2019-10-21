@@ -9,7 +9,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
 const serverjs = require('./public/scripts/server');
-const supportedLangs = ['en-us', 'es-es'];
+const supportedLangs = ['en-US', 'es-ES'];
 const languageNames = ['English', 'Spanish'];
 const { zip } = require('rxjs');
 const { map } = require('rxjs/operators');
@@ -40,7 +40,7 @@ app.use(['/:lang/*', '/:lang', '/'], function (req, res, next) {
   //save full URL for use in site header
   app.locals.currentURL = req.originalUrl;
 
-  const lang = req.params.lang ? req.params.lang.toLowerCase() : '';
+  const lang = req.params.lang ? req.params.lang : '';
 
   if(supportedLangs.includes(lang)) {
     /*
@@ -53,8 +53,8 @@ app.use(['/:lang/*', '/:lang', '/'], function (req, res, next) {
     next();
   }
   else {
-    //prefix not found in route
-    res.redirect(`/en-us${req.originalUrl}`);
+    //prefix not found in route- use default (first in list)
+    res.redirect(`/${supportedLangs[0]}${req.originalUrl}`);
   }
 });
 

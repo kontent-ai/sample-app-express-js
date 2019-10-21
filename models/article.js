@@ -1,5 +1,5 @@
 const linkResolver = require('../resolvers/link-resolver');
-const { ContentItem } = require('kentico-cloud-delivery');
+const { ContentItem } = require('@kentico/kontent-delivery');
 
 class Article extends ContentItem {
     constructor() {

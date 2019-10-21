@@ -1,4 +1,4 @@
-const KenticoCloud = require('kentico-cloud-delivery');
+const KenticoCloud = require('@kentico/kontent-delivery');
 
 class AboutUs extends KenticoCloud.ContentItem {
     constructor() {
