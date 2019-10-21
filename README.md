@@ -24,7 +24,7 @@ npm start
 
 The application will then be available at localhost:3000 (configurable in /bin/www).
 
-:warning: Due to the optional webhook integration, we've hard-coded the language codes available to the application in [app.js](https://github.com/Kentico/kontent-expressjs-app/blob/master/app.js#L9). If necessary, you can update the languages there to match the code names in Kontent:
+:warning: Due to the optional webhook integration, we've hard-coded the language codes available to the application in [app.js](https://github.com/Kentico/kontent-expressjs-app/blob/master/app.js#L12). If necessary, you can update the languages there to match the code names in Kontent:
 
 ```js
 const supportedLangs = ['en-US', 'es-ES'];
@@ -45,7 +45,7 @@ indexName=dancing_goat
 
 The application will automatically create, configure, and populate a search index when you visit the **/algolia** route. It will redirect you to the home page when finished, and you should immediately be able to search for articles using the search bar.
 
-To check out the code used to create the index, see [app.js](https://github.com/Kentico/kontent-expressjs-app/blob/master/app.js#L51):
+To check out the code used to create the index, see [app.js](https://github.com/Kentico/kontent-expressjs-app/blob/master/app.js#L61):
 
 ```js
 //generate Algolia index
@@ -61,7 +61,7 @@ To view the search functionality, see [/routes/search.js](/routes/search.js).
 
 There is a `/webhook` route that you can use with [workflow webhooks](https://docs.kontent.ai/tutorials/develop-apps/integrate/using-webhooks-for-automatic-updates) to automatically submit an English language variant to [Microsoft's Translator Text Cognitive Service](https://docs.microsoft.com/en-us/azure/cognitive-services/translator/translator-info-overview), translate the variant into other supported languages, and create new language variants in Kontent.
 
-At the moment, this integration only works if you are using 4-letter language code names in Kontent (e.g. "es-es"). The application's supported languages can be modified in [app.js](https://github.com/Kentico/kontent-expressjs-app/blob/master/app.js#L9).
+At the moment, this integration only works if you are using 4-letter language code names in Kontent (e.g. "es-es"). The application's supported languages can be modified in [app.js](https://github.com/Kentico/kontent-expressjs-app/blob/master/app.js#L12).
 
 First, you need to [create an Azure Cognitive Services account](https://docs.microsoft.com/en-us/azure/cognitive-services/cognitive-services-apis-create-account) for the Translator Text service. Then, add `Key 1` from the **Keys** tab to `.env`:
 
