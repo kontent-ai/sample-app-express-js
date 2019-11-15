@@ -1,6 +1,6 @@
 [![Stack Overflow](https://img.shields.io/badge/Stack%20Overflow-ASK%20NOW-FE7A16.svg?logo=stackoverflow&logoColor=white)](https://stackoverflow.com/tags/kentico-kontent)
 
-# kontent-expressjs-app
+# kontent-sample-app-expressjs
 This is an Express JS application meant for use with the Dancing Goat sample project within Kentico Kontent. This fully featured project contains marketing content for Dancing Goat – an imaginary chain of coffee shops. If you don't have your own Sample Project, any admin of a Kontent subscription [can generate one](https://app.kontent.ai/sample-project-generator).
 
 You can read more about our [JavaScript SDKs](https://github.com/Kentico/kontent-delivery-sdk-js)
