@@ -1,4 +1,64 @@
 /*eslint-disable*/
+
+//Push notifications
+const publicVapidKey = 'BDRkdCmrfqQ6F-PhAA1AN68jJqHQWARNyxSWFOh1YMpKgju6tHG_dLVxJTgLTXfkXqYFL1VTfcDitw1k4n34IZ8';
+
+if ('serviceWorker' in navigator) {
+    run().catch(error => console.error(error));
+}
+
+async function subscribeForPush(reg) {
+    await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
+    })
+    .then(function(sub) {
+        fetch('/subscribe', {
+            method: 'POST',
+            body: JSON.stringify(sub),
+            headers: {
+                'content-type': 'application/json'
+            }
+        });
+    });
+}
+
+async function run() {
+  let port = window.location.port ? ':' + window.location.port : '';
+  await navigator.serviceWorker
+    .register(`${location.protocol}//${window.location.hostname}${port}/worker.js`, {scope: '/'})
+    .then(function(reg) {
+        var serviceWorker;
+        if (reg.installing) {
+            serviceWorker = reg.installing;
+        } else if (reg.waiting) {
+            serviceWorker = reg.waiting;
+        } else if (reg.active) {
+            serviceWorker = reg.active;
+        }
+
+        if (serviceWorker) {
+            if (serviceWorker.state == "activated") {
+                subscribeForPush(reg);
+            }
+            serviceWorker.addEventListener("statechange", function(e) {
+                if (e.target.state == "activated") {
+                    subscribeForPush(reg);
+                }
+            });
+        }
+    });
+}
+
+function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding)
+        .replace(/\-/g, '+')
+        .replace(/_/g, '/');
+    const rawData = window.atob(base64);
+    return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)));
+  }
+
 /**
  * Removes a query string parameter from the url.
  * @param {string} url The current URL

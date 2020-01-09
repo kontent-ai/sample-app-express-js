@@ -22,6 +22,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(bodyParser.raw({type:'application/json'}))
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(__dirname));
 
 //allow culture data access in views
 app.locals.supportedLangs = supportedLangs;
@@ -34,6 +35,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 app.use('/', require('./routes/webhook'));
+app.use('/', require('./routes/push'));
+app.use('/', require('./routes/subscribe'));
 
 //force language prefix
 app.use(['/:lang/*', '/:lang', '/'], function (req, res, next) {
