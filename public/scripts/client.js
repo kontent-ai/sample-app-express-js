@@ -1,18 +1,45 @@
 /*eslint-disable*/
-
 //Push notifications
 const publicVapidKey = 'BDRkdCmrfqQ6F-PhAA1AN68jJqHQWARNyxSWFOh1YMpKgju6tHG_dLVxJTgLTXfkXqYFL1VTfcDitw1k4n34IZ8';
+
+const run = async() => {
+    await navigator.serviceWorker
+      .register(`/worker.js`, {scope: '/'})
+      .then(waitRegistration);
+}
+
+const waitRegistration = (reg) => {
+    var serviceWorker;
+    if (reg.installing) {
+        serviceWorker = reg.installing;
+    } else if (reg.waiting) {
+        serviceWorker = reg.waiting;
+    } else if (reg.active) {
+        serviceWorker = reg.active;
+    }
+
+    if (serviceWorker) {
+        if (serviceWorker.state == "activated") {
+            subscribeForPush(reg);
+        }
+        serviceWorker.addEventListener("statechange", function(e) {
+            if (e.target.state == "activated") {
+                subscribeForPush(reg);
+            }
+        });
+    }
+}
 
 if ('serviceWorker' in navigator) {
     run().catch(error => console.error(error));
 }
 
-async function subscribeForPush(reg) {
+const subscribeForPush = async (reg) => {
     await reg.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
     })
-    .then(function(sub) {
+    .then((sub) => {
         fetch('/subscribe', {
             method: 'POST',
             body: JSON.stringify(sub),
@@ -23,41 +50,14 @@ async function subscribeForPush(reg) {
     });
 }
 
-async function run() {
-  let port = window.location.port ? ':' + window.location.port : '';
-  await navigator.serviceWorker
-    .register(`${location.protocol}//${window.location.hostname}${port}/worker.js`, {scope: '/'})
-    .then(function(reg) {
-        var serviceWorker;
-        if (reg.installing) {
-            serviceWorker = reg.installing;
-        } else if (reg.waiting) {
-            serviceWorker = reg.waiting;
-        } else if (reg.active) {
-            serviceWorker = reg.active;
-        }
-
-        if (serviceWorker) {
-            if (serviceWorker.state == "activated") {
-                subscribeForPush(reg);
-            }
-            serviceWorker.addEventListener("statechange", function(e) {
-                if (e.target.state == "activated") {
-                    subscribeForPush(reg);
-                }
-            });
-        }
-    });
-}
-
-function urlBase64ToUint8Array(base64String) {
+const urlBase64ToUint8Array = (base64String) => {
     const padding = '='.repeat((4 - base64String.length % 4) % 4);
     const base64 = (base64String + padding)
         .replace(/\-/g, '+')
         .replace(/_/g, '/');
     const rawData = window.atob(base64);
     return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)));
-  }
+}
 
 /**
  * Removes a query string parameter from the url.
@@ -65,7 +65,7 @@ function urlBase64ToUint8Array(base64String) {
  * @param {string} parameter The query string parameter to be removed
  * @returns {string} Updated URL 
  */
-const removeURLParameter = function(url, parameter) {
+const removeURLParameter = (url, parameter) => {
     const urlparts = url.split('?'); 
       
     if (urlparts.length >= 2) {
@@ -92,7 +92,7 @@ const removeURLParameter = function(url, parameter) {
  * @param {string} value The value to set for the parameter
  * @returns {string} Updated URL 
  */
-const updateQueryStringParameter = function(uri, key, value) {
+const updateQueryStringParameter = (uri, key, value) => {
     const re = new RegExp(`([?&])${key}=.*?(&|#|$)`, "iu");
 
     if (uri.match(re)) {
@@ -116,7 +116,7 @@ const updateQueryStringParameter = function(uri, key, value) {
  * @param {string} url The current URL
  * @returns {void}
  */
-const filterChanged = function(sender, url) {
+const filterChanged = (sender, url) => {
     if(sender.checked) {
         url = updateQueryStringParameter(url, sender.id, 1);
     }

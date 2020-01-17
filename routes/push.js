@@ -23,10 +23,9 @@ router.post('/push', (req, res) => {
   }
 });
 
-let updatedVariant;
-
 const processWebHook = (message) => {
     const updatedVariantLangID = message.items[0].language;
+    let updatedVariant;
 
     const getLanguageVariant = cmClient
                 .viewLanguageVariant()
@@ -59,9 +58,12 @@ const processWebHook = (message) => {
 
 
 const sendPush = function(variant, type) {
+  //Get the GUIDs of each element to locate them in the variant
   const titleID = type.elements.filter(e => e.codename === 'title').map(e => e.id)[0],
   bodyID = type.elements.filter(e => e.codename === 'body').map(e => e.id)[0],
   iconID = type.elements.filter(e => e.codename === 'icon').map(e => e.id)[0],
+  vibrateID = type.elements.filter(e => e.codename === 'vibrate').map(e => e.id)[0],
+  urlID = type.elements.filter(e => e.codename === 'url').map(e => e.id)[0],
   assetID = variant.data.elements.filter(e => e.element.id === iconID)[0].value[0].id;
 
   //Get asset URL
@@ -69,7 +71,9 @@ const sendPush = function(variant, type) {
     const payload = JSON.stringify({
       title: variant.data.elements.filter(e => e.element.id === titleID)[0].value,
       body: variant.data.elements.filter(e => e.element.id === bodyID)[0].value,
-      icon: result.rawData.url
+      icon: result.rawData.url,
+      vibrate: (variant.data.elements.filter(e => e.element.id === vibrateID)[0].value.length > 0),
+      url: variant.data.elements.filter(e => e.element.id === urlID)[0].value
     });
   
     webpush.setVapidDetails('mailto:support@kentico.com', publicVapidKey, privateVapidKey);
@@ -85,6 +89,7 @@ const sendPush = function(variant, type) {
             auth: row.auth
           }
         };
+
         webpush.sendNotification(sub, payload).catch(response => {
           if(response.statusCode === 410) {
             //Subscription expired or removed- delete from db
