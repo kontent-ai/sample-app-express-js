@@ -4,7 +4,7 @@ const publicVapidKey = 'BDRkdCmrfqQ6F-PhAA1AN68jJqHQWARNyxSWFOh1YMpKgju6tHG_dLVx
 
 const run = async() => {
     await navigator.serviceWorker
-      .register(`/worker.js`, {scope: '/'})
+      .register(`/scripts/worker.js`, {scope: '/scripts/'})
       .then(waitRegistration);
 }
 
