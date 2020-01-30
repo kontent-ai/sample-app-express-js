@@ -10,7 +10,7 @@ const { mergeMap } = require('rxjs/operators');
 const publicVapidKey = process.env.vapidPublicKey;
 const privateVapidKey = process.env.vapidPrivateKey;
 
-router.post('/push', (req, res) => {
+router.post('/push_cm', (req, res) => {
   const message = new PushMessage(req);
   if(message.hasValidSignature()) {
     processWebHook(message);

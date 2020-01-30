@@ -7,11 +7,11 @@ class PushMessage {
         const json = JSON.parse(req.body);
 
         this.items = json['data']['items'];
-        this.projectId = json['message']['project_id'];
         this.webhookType = json['message']['type'];
         this.operation = json['message']['operation'];
         this.body = req.body;
         this.signature = req.headers['x-kc-signature'];
+        this.projectId = req.headers['x-kc-message-project-id'];
     }
 
     hasValidSignature() {
