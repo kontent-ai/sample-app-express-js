@@ -25,7 +25,10 @@ router.post('/push', (req, res) => {
 const processWebHook = (message) => {
     const updatedVariantContentID = message.items[0].id;
     const deliveryClient = new DeliveryClient({
-      projectId: message.projectId
+      projectId: message.projectId,
+      globalQueryConfig:  {
+        waitForLoadingNewContent: true
+      }
     });
 
     const sub = deliveryClient.items()
