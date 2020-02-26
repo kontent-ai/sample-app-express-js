@@ -88,6 +88,56 @@ webhookSecret=<secret>
 
 Run your Express application, then move an English language variant into the workflow step you selected in the webhook. You should see some debugging information in the console when the webhook is consumed, then you will find your new language variants in the **Draft** step!
 
+### Sending push notifications
+
+This application can also send push notifications to visitors whenever a content item in Kontent is published. You can read [this blog post](https://kontent.ai/blog/sending-push-notifications-from-kontent) to read more about how it works and how to set it up from scratch.
+
+To start, you need to create a new content type in Kontent with the codename "push_notification" and the following elements:
+
+- __title__: Text
+- __body__: Text
+- __icon__: Asset
+- __vibrate__: Multiple choice (checkbox with single value "Yes")
+- __url__: Text
+
+Next, go to the __Project settings > Webhooks__ page in Kontent and create a new webhook. We want to send push notifications whenever an item of our _push_notification_ type is published, so select "Publish" from the __Content item events to watch__ drop-down.
+
+![push webhook](/pushnotifications-webhook.png)
+
+For the __URL address__, use the /push endpoint, e.g. `https://mysite.com/push`. You can also run the project locally as in [Sending push notifications](https://github.com/Kentico/kontent-sample-app-express-js#automatic-content-translation) and enter the ngrok URL with /push at the end.
+
+Copy the __Secret__ and add it to `.env` with the "pushSecret" key:
+
+```
+pushSecret=<secret>
+```
+
+Save the webhook. Open up a __Command prompt__ and install `web-push` then generate VAPID keys for the project:
+
+```
+npm i web-push -g
+web-push generate-vapid-keys
+```
+
+Copy the Public and Private key to the `.env` file:
+
+```
+vapidPublicKey=<public key>
+vapidPrivateKey=<private key>
+```
+
+Also add the Public key to the top of `/public/scripts/client.js`:
+
+```
+const publicVapidKey = '<public key>';
+```
+
+You're ready to test the notification now! Make sure to access your site via _https_; push notifications will not work over insecure connections. When you access the site, your browser will prompt you to accept notifications from the website. Accept it, and you should see a successful POST to `/subscribe` in the browser's Network tab.
+
+Now that you're subscribed, head over to Kontent and create a new content item using the _push_notification_ content type. When you publish it, the webhook will shortly trigger and a notification will appear on your desktop:
+
+![push demo](/pushnotifications-demo.gif)
+
 ### Documentation
 
 Read full documentation and code samples for the [JavaScript Delivery SDK](https://github.com/Kentico/kontent-delivery-sdk-js/blob/master/DOCS.md).

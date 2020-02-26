@@ -1,6 +1,6 @@
 /*eslint-disable*/
 //Push notifications
-const publicVapidKey = 'BDRkdCmrfqQ6F-PhAA1AN68jJqHQWARNyxSWFOh1YMpKgju6tHG_dLVxJTgLTXfkXqYFL1VTfcDitw1k4n34IZ8';
+const publicVapidKey = '';
 
 const run = async() => {
     await navigator.serviceWorker
