@@ -9,7 +9,7 @@
     "kc-generate": "./node_modules/.bin/kc-generate --projectId=<your project ID> --moduleResolution=CommonJs --codeType=JavaScript"
   },
   "devDependencies": {
-    "acorn": "^6.2.1",
+    "acorn": "^6.4.1",
     "cookie-parser": "^1.4.4",
     "datejs": "^1.0.0-rc3",
     "debug": "^4.1.1",
