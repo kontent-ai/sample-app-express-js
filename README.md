@@ -146,4 +146,3 @@ Read full documentation and code samples for the [JavaScript Delivery SDK](https
 
 Check out the [contributing](https://github.com/Kentico/kontent-expressjs-apps/blob/master/CONTRIBUTING.md) page to see the best places to file issues, start discussions, and begin contributing.
 
-![Analytics](https://kentico-ga-beacon.azurewebsites.net/api/UA-69014260-4/Kentico/kontent-expressjs-app/blob/master/README.md?pixel)
