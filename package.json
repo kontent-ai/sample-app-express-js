@@ -20,7 +20,7 @@
     "http-errors": "^1.7.3",
     "kentico-cloud-model-generator-utility": "^2.1.0",
     "morgan": "~1.9.0",
-    "pug": "^2.0.4",
+    "pug": "^3.0.1",
     "rxjs": "^6.5.4"
   },
   "dependencies": {
