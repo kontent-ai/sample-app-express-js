@@ -109,7 +109,7 @@ Next, go to the __Project settings > Webhooks__ page in Kontent and create a new
 
 ![push webhook](/assets/pushnotifications-webhook.png)
 
-For the __URL address__, use the /push endpoint, e.g. `https://mysite.com/push`. You can also run the project locally as in [Sending push notifications](https://github.com/Kentico/kontent-sample-app-express-js#automatic-content-translation) and enter the ngrok URL with /push at the end.
+For the __URL address__, use the /push endpoint, e.g. `https://mysite.com/push`. You can also run the project locally as in the [Automatic content translation](https://github.com/Kentico/kontent-sample-app-express-js#automatic-content-translation) section and enter the ngrok URL with /push at the end.
 
 Copy the __Secret__ and add it to `.env` with the "pushSecret" key:
 
