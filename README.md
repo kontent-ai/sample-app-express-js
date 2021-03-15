@@ -76,11 +76,11 @@ translationRegion=westus2
 
 If you are running the project locally, you can still test webhooks using [ngrok](https://ngrok.com/) (or a similar program). To use ngrok, follow their [setup guide](https://dashboard.ngrok.com/get-started) and in **step 4** use the port number the Express application will run on (3000 by default). When you're done running ngrok, you should see something like the following:
 
-![ngrok](/ngrok-sample.png)
+![ngrok](/assets/ngrok-sample.png)
 
 Copy the URL from the **Forwarding** section and paste it into a new Kontent webhook's **URL address** with the /webhook path appended:
 
-![webhook](/webhook.png)
+![webhook](/assets/webhook.png)
 
 While you're there, add a workflow step to **Workflow steps of content items to watch** and remove any other events. This is the workflow step that will trigger the webhook, once any language variant is placed in that step.
 
@@ -107,7 +107,7 @@ To start, you need to create a new content type in Kontent with the codename "pu
 
 Next, go to the __Project settings > Webhooks__ page in Kontent and create a new webhook. We want to send push notifications whenever an item of our _push_notification_ type is published, so select "Publish" from the __Content item events to watch__ drop-down.
 
-![push webhook](/pushnotifications-webhook.png)
+![push webhook](/assets/pushnotifications-webhook.png)
 
 For the __URL address__, use the /push endpoint, e.g. `https://mysite.com/push`. You can also run the project locally as in [Sending push notifications](https://github.com/Kentico/kontent-sample-app-express-js#automatic-content-translation) and enter the ngrok URL with /push at the end.
 
@@ -141,7 +141,7 @@ You're ready to test the notification now! Make sure to access your site via _ht
 
 Now that you're subscribed, head over to Kontent and create a new content item using the _push_notification_ content type. When you publish it, the webhook will shortly trigger and a notification will appear on your desktop:
 
-![push demo](/pushnotifications-demo.gif)
+![push demo](/assets/pushnotifications-demo.gif)
 
 ### Documentation
 
