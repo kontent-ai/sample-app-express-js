@@ -68,6 +68,11 @@ First, you need to [create an Azure Cognitive Services account](https://docs.mic
 ```
 translationKey=<key>
 ```
+Depending on how your translation service is configured in Azure, you may also need to add the service's region to the `.env`, e.g.:
+
+```
+translationRegion=westus2
+```
 
 If you are running the project locally, you can still test webhooks using [ngrok](https://ngrok.com/) (or a similar program). To use ngrok, follow their [setup guide](https://dashboard.ngrok.com/get-started) and in **step 4** use the port number the Express application will run on (3000 by default). When you're done running ngrok, you should see something like the following:
 

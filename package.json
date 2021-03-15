@@ -9,7 +9,7 @@
     "kc-generate": "./node_modules/.bin/kc-generate --projectId=<your project ID> --moduleResolution=CommonJs --codeType=JavaScript"
   },
   "devDependencies": {
-    "acorn": "^6.2.1",
+    "acorn": "^6.4.2",
     "cookie-parser": "^1.4.4",
     "datejs": "^1.0.0-rc3",
     "debug": "^4.1.1",
@@ -20,14 +20,14 @@
     "http-errors": "^1.7.3",
     "kentico-cloud-model-generator-utility": "^2.1.0",
     "morgan": "~1.9.0",
-    "pug": "^2.0.4",
+    "pug": "^3.0.2",
     "rxjs": "^6.5.4"
   },
   "dependencies": {
-    "@kentico/kontent-delivery": "^7.2.0",
-    "@kentico/kontent-management": "^0.3.9",
+    "@kentico/kontent-delivery": "^10.3.0",
+    "@kentico/kontent-management": "^0.4.8",
     "algoliasearch": "^3.33.0",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "axios-observable": "^1.1.2",
     "body-parser": "^1.19.0",
     "dotenv": "^8.1.0",
