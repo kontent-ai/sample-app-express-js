@@ -65,13 +65,13 @@ const processWebHook = (message) => {
         if (type.codename === 'article') {
 
             app.get('supportedLangs').forEach(targetLangCode => {
-                if (targetLangCode !== 'en-US') upsertLanguageVariant(targetLangCode, updatedVariant, contentItem, type);
+                if (targetLangCode !== 'en-US') prepareVariant(targetLangCode, updatedVariant, contentItem, type);
             });
         }
     });
 };
 
-const upsertLanguageVariant = (targetLangCode, updatedVariant, contentItem, type) => {
+const prepareVariant = (targetLangCode, updatedVariant, contentItem, type) => {
     //get the IDs of text elements
     const textElementIDs = type.elements.filter(e => e.type === 'text' || e.type === 'rich_text').map(e => e.id);
     const slugElementIds = type.elements.filter(e => e.type === 'url_slug').map(e => e.id);
@@ -81,7 +81,7 @@ const upsertLanguageVariant = (targetLangCode, updatedVariant, contentItem, type
         'Ocp-Apim-Subscription-Key': process.env.translationKey,
         'Content-type': 'application/json'
     };
-    if(process.env.translationRegion) {
+    if (process.env.translationRegion) {
         headers['Ocp-Apim-Subscription-Region'] = process.env.translationRegion;
     }
 
@@ -154,19 +154,28 @@ const upsertLanguageVariant = (targetLangCode, updatedVariant, contentItem, type
                     obs = of({});
                 }
 
-                //run the upsert
+                //run the upsert after obs completes
                 obs.subscribe(result => {
-                    cmClient.upsertLanguageVariant()
-                        .byItemId(contentItem.id)
-                        .byLanguageCodename(targetLangCode)
-                        .withData((builder) => updatedVariant.data.elements)
-                        .toObservable()
-                        .subscribe(result => {
-                            console.log(`language ${result.data.language.id}: ${result.debug.response.status}`);
-                        });
+                    upsertVariant(contentItem.id, targetLangCode, updatedVariant.data.elements);
                 });
+            }, error => {
+                if (error.errorCode === 103) {
+                    //variant doesn't exist, proceed with upsert
+                    upsertVariant(contentItem.id, targetLangCode, updatedVariant.data.elements);
+                }
             });
     });
+}
+
+const upsertVariant = (itemId, lang, elements) => {
+    cmClient.upsertLanguageVariant()
+        .byItemId(itemId)
+        .byLanguageCodename(lang)
+        .withData((builder) => elements)
+        .toObservable()
+        .subscribe(result => {
+            console.log(`language ${result.data.language.id}: ${result.debug.response.status}`);
+        });
 }
 
 module.exports = router;
