@@ -59,7 +59,7 @@ To view the search functionality, see [/routes/search.js](/routes/search.js).
 
 ### Automatic content translation
 
-There is a `/webhook` route that you can use with [workflow webhooks](https://docs.kontent.ai/tutorials/develop-apps/integrate/using-webhooks-for-automatic-updates) to automatically submit an English language variant to [Microsoft's Translator Text Cognitive Service](https://docs.microsoft.com/en-us/azure/cognitive-services/translator/translator-info-overview), translate the variant into other supported languages, and create new language variants in Kontent.
+There is a `/webhook` route that you can use with [workflow webhooks](https://kontent.ai/learn/tutorials/develop-apps/integrate/webhooks) to automatically submit an English language variant to [Microsoft's Translator Text Cognitive Service](https://docs.microsoft.com/en-us/azure/cognitive-services/translator/translator-info-overview), translate the variant into other supported languages, and create new language variants in Kontent.
 
 At the moment, this integration only works if you are using 4-letter language code names in Kontent (e.g. "es-es"). The application's supported languages can be modified in [app.js](https://github.com/Kentico/kontent-expressjs-app/blob/master/app.js#L12).
 
@@ -145,7 +145,7 @@ Now that you're subscribed, head over to Kontent and create a new content item u
 
 ### Documentation
 
-Read full documentation and code samples for the [JavaScript Delivery SDK](https://github.com/Kentico/kontent-delivery-sdk-js/blob/master/DOCS.md).
+Read full documentation and code samples for the [JavaScript Delivery SDK](https://github.com/Kentico/kontent-delivery-sdk-js/#readme).
 
 ## Feedback & Contributing
 
