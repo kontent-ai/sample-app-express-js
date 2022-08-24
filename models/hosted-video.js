@@ -1,5 +1,5 @@
 const hostedVideoResolver = require('../resolvers/hosted-video-resolver');
-const { ContentItem } = require('@kentico/kontent-delivery');
+const { ContentItem } = require('@kontent-ai/delivery-sdk');
 
 class HostedVideo extends ContentItem {
     constructor() {

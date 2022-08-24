@@ -1,5 +1,5 @@
 const tweetResolver = require('../resolvers/tweet-resolver');
-const { ContentItem } = require('@kentico/kontent-delivery');
+const { ContentItem } = require('@kontent-ai/delivery-sdk');
 
 class Tweet extends ContentItem {
     constructor() {

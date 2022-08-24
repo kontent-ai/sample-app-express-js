@@ -6,9 +6,10 @@
     "start": "node ./bin/www",
     "publish": "npm run eslint-local",
     "eslint-local": "./node_modules/.bin/eslint ./",
-    "kc-generate": "./node_modules/.bin/kc-generate --projectId=<your project ID> --moduleResolution=CommonJs --codeType=JavaScript"
+    "kontent-generate": "npx kontent-generate --projectId=3016cfc2-49d6-00f5-72aa-7ef6c7af98f7 --elementResolver=camelCase --apiKey=ew0KICAiYWxnIjogIkhTMjU2IiwNCiAgInR5cCI6ICJKV1QiDQp9.ew0KICAianRpIjogIjczYzE2ZDE4MWU2NzQ5M2JhZTNiMDgzOGFhZWI3Njk3IiwNCiAgImlhdCI6ICIxNjYxMzQ1MzUxIiwNCiAgImV4cCI6ICIyMDA2OTQ1MzUxIiwNCiAgInZlciI6ICIyLjEuMCIsDQogICJ1aWQiOiAiTnRqZ3BlbGk5YVJtc2drdThmWHlCRm91QTUyYjNaa1piUHA2MnVjdk5FSSIsDQogICJwcm9qZWN0X2lkIjogIjMwMTZjZmMyNDlkNjAwZjU3MmFhN2VmNmM3YWY5OGY3IiwNCiAgImF1ZCI6ICJtYW5hZ2Uua2VudGljb2Nsb3VkLmNvbSINCn0.fzWV1K9o-YqHx5U4SsDveOHc_zFfxRbV8NPqOuOXtpE"
   },
   "devDependencies": {
+    "@kontent-ai/model-generator": "^5.4.1",
     "acorn": "^6.4.2",
     "cookie-parser": "^1.4.4",
     "datejs": "^1.0.0-rc3",
@@ -21,17 +22,17 @@
     "kentico-cloud-model-generator-utility": "^2.1.0",
     "morgan": "~1.9.0",
     "pug": "^3.0.2",
-    "rxjs": "^6.5.4"
+    "rxjs": "^7.5.6"
   },
   "dependencies": {
-    "@kentico/kontent-delivery": "^10.3.0",
-    "@kentico/kontent-management": "^0.4.8",
-    "algoliasearch": "^3.33.0",
-    "axios": "^0.21.1",
-    "axios-observable": "^1.1.2",
+    "@kontent-ai/delivery-sdk": "^12.0.2",
+    "@kontent-ai/management-sdk": "^3.1.0",
+    "algoliasearch": "^4.14.2",
+    "axios": "^0.27.2",
+    "axios-observable": "^1.5.0",
     "body-parser": "^1.19.0",
     "dotenv": "^8.1.0",
-    "sqlite3": "^4.1.1",
+    "sqlite3": "^5.0.11",
     "web-push": "^3.4.3"
   }
 }

@@ -5,7 +5,7 @@ const router = express.Router();
 const PushMessage = require('../models/push-message');
 const webpush = require('web-push');
 const AppDAO = require('../dao');
-const { DeliveryClient } = require('@kentico/kontent-delivery');
+const { DeliveryClient } = require('@kontent-ai/delivery-sdk');
 const publicVapidKey = process.env.vapidPublicKey;
 const privateVapidKey = process.env.vapidPrivateKey;
 
