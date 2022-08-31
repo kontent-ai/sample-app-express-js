@@ -1,8 +1,8 @@
-const dotenv = require('dotenv');
-dotenv.config();
-const express = require('express');
-const router = express.Router();
-const algoliasearch = require('algoliasearch/lite');
+import { config } from 'dotenv';
+config();
+import { Router } from 'express';
+const router = Router();
+import algoliasearch from 'algoliasearch/lite';
 
 router.get('/:lang/search', (req, res, next) => {
     if(process.env.algoliaApp === undefined || process.env.algoliaKey === undefined || process.env.indexName === undefined) {
@@ -33,4 +33,4 @@ router.get('/:lang/search', (req, res, next) => {
         });
 });
 
-module.exports = router;
+export default router;

@@ -1,9 +1,9 @@
-const deliveryClient = require('../delivery');
+import { items } from '../delivery';
 
 class ArticleHelper {
 
     static getAllArticles(lang = '', force = false) {
-        const query = deliveryClient.items()
+        const query = items()
             .type('article')
             .orderParameter('elements.post_date', 1);
 
@@ -14,7 +14,7 @@ class ArticleHelper {
     }
 
     static getArticle(id, lang) {
-        return deliveryClient.items()
+        return items()
             .type('article')
             .languageParameter(lang)
             .equalsFilter('system.id', id)
@@ -22,4 +22,4 @@ class ArticleHelper {
     }
 }
 
-module.exports = ArticleHelper;
+export default ArticleHelper;

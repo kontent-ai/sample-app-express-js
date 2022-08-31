@@ -1,14 +1,14 @@
-const deliveryClient = require('../delivery');
-const linkResolver = require('../resolvers/link-resolver');
-const express = require('express');
-const router = express.Router();
+import { item } from '../delivery';
+import { resolveContentLink } from '../resolvers/link-resolver';
+import { Router } from 'express';
+const router = Router();
 
 router.get('/:lang/about-us', (req, res, next) => {
-  const sub = deliveryClient.item('about_us')
+  const sub = item('about_us')
     .languageParameter(req.params.lang)
     .depthParameter(2)
     .queryConfig({
-      linkResolver: (link) => linkResolver.resolveContentLink(link)
+      linkResolver: (link) => resolveContentLink(link)
     })
     .toObservable()
     .subscribe(result => {
@@ -25,4 +25,4 @@ router.get('/:lang/about-us', (req, res, next) => {
     });
 });
 
-module.exports = router;
+export default router;

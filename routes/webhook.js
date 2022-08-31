@@ -1,13 +1,13 @@
-const dotenv = require('dotenv');
-dotenv.config();
-const express = require('express');
-const router = express.Router();
-const WebHookMessage = require('../models/webhook-message');
-const cmClient = require('../contentmanagement');
-const Axios = require('axios-observable').Axios;
-const { zip, of } = require('rxjs');
-const { map } = require('rxjs/operators');
-const { mergeMap } = require('rxjs/operators');
+import { config } from 'dotenv';
+config();
+import { Router } from 'express';
+const router = Router();
+import WebHookMessage from '../models/webhook-message';
+import { listWorkflowSteps, viewLanguageVariant, viewContentItem, viewContentType, createNewVersionOfLanguageVariant, changeWorkflowStepOfLanguageVariant, upsertLanguageVariant } from '../contentmanagement';
+import { Axios } from 'axios-observable';
+import { zip, of } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { mergeMap } from 'rxjs/operators';
 const endpoint = 'https://api.cognitive.microsofttranslator.com/translate?api-version=3.0';
 
 router.post('/webhook', (req, res, next) => {
@@ -26,7 +26,7 @@ router.post('/webhook', (req, res, next) => {
 let updatedVariant, contentItem, publishedStepId, draftStepId;
 
 const processWebHook = (message) => {
-    cmClient.listWorkflowSteps().toObservable().subscribe((response) => {
+    listWorkflowSteps().toObservable().subscribe((response) => {
         for (const step of response.data) {
             if (step.name === 'Published') {
                 publishedStepId = step.id;
@@ -38,22 +38,19 @@ const processWebHook = (message) => {
     });
     const updatedVariantLangID = message.items[0].language.id;
 
-    const getLanguageVariant = cmClient
-        .viewLanguageVariant()
+    const getLanguageVariant = viewLanguageVariant()
         .byItemId(message.items[0].item.id)
         .byLanguageId(updatedVariantLangID)
         .toObservable();
     const getContentItem = result => {
         updatedVariant = result;
-        return cmClient
-            .viewContentItem()
+        return viewContentItem()
             .byItemId(result.data.item.id)
             .toObservable();
     };
     const getContentType = result => {
         contentItem = result.data;
-        return cmClient
-            .viewContentType()
+        return viewContentType()
             .byTypeId(result.data.type.id)
             .toObservable()
     };
@@ -128,7 +125,7 @@ const prepareVariant = (targetLangCode, updatedVariant, contentItem, type) => {
         }
 
         //check if published, create new version or move to Draft step
-        const innerSub = cmClient.viewLanguageVariant()
+        const innerSub = viewLanguageVariant()
             .byItemId(contentItem.id)
             .byLanguageCodename(targetLangCode)
             .toObservable()
@@ -138,13 +135,13 @@ const prepareVariant = (targetLangCode, updatedVariant, contentItem, type) => {
                 const variant = result.data;
                 let obs;
                 if (variant.workflowStep.id === publishedStepId) {
-                    obs = cmClient.createNewVersionOfLanguageVariant()
+                    obs = createNewVersionOfLanguageVariant()
                         .byItemId(contentItem.id)
                         .byLanguageCodename(targetLangCode)
                         .toObservable();
                 }
                 else if (variant.workflowStep.id !== draftStepId) {
-                    obs = cmClient.changeWorkflowStepOfLanguageVariant()
+                    obs = changeWorkflowStepOfLanguageVariant()
                         .byItemId(contentItem.id)
                         .byLanguageCodename(targetLangCode)
                         .byWorkflowStepId(draftStepId)
@@ -168,7 +165,7 @@ const prepareVariant = (targetLangCode, updatedVariant, contentItem, type) => {
 }
 
 const upsertVariant = (itemId, lang, elements) => {
-    cmClient.upsertLanguageVariant()
+    upsertLanguageVariant()
         .byItemId(itemId)
         .byLanguageCodename(lang)
         .withData((builder) => elements)
@@ -178,4 +175,4 @@ const upsertVariant = (itemId, lang, elements) => {
         });
 }
 
-module.exports = router;
+export default router;

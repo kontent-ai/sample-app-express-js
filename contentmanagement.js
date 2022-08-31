@@ -1,8 +1,8 @@
-const dotenv = require('dotenv');
-dotenv.config();
-const { ManagementClient } = require('@kentico/kontent-management');
+import { config } from 'dotenv';
+config();
+import { ManagementClient } from '@kentico/kontent-management';
 
-module.exports = new ManagementClient({
+export default new ManagementClient({
     projectId: process.env.projectId,
     apiKey: process.env.contentManagementKey
 });

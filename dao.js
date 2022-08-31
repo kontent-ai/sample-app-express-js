@@ -1,10 +1,10 @@
-const sqlite3 = require('sqlite3')
-const dotenv = require('dotenv');
-dotenv.config();
+import { Database } from 'sqlite3';
+import { config } from 'dotenv';
+config();
 
 class AppDAO {
   constructor() {
-    this.db = new sqlite3.Database(process.env.dbPath, (err) => {
+    this.db = new Database(process.env.dbPath, (err) => {
       if (err) {
         console.log('Could not connect to database:', err)
       } else {
@@ -66,4 +66,4 @@ class AppDAO {
   }
 }
 
-module.exports = AppDAO
+export default AppDAO

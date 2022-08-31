@@ -1,12 +1,13 @@
-const dotenv = require('dotenv');
-dotenv.config();
-const express = require('express');
-const router = express.Router();
-const PushMessage = require('../models/push-message');
-const webpush = require('web-push');
-const AppDAO = require('../dao');
-const cmClient = require('../contentmanagement');
-const { mergeMap } = require('rxjs/operators');
+import { config } from 'dotenv';
+import PushMessage from '../models/push-message';
+import { setVapidDetails, sendNotification } from 'web-push';
+import AppDAO from '../dao';
+import { viewLanguageVariant, viewContentItem, viewContentType, viewAsset } from '../contentmanagement';
+import { mergeMap } from 'rxjs/operators';
+import { Router } from 'express';
+
+config();
+const router = Router();
 const publicVapidKey = process.env.vapidPublicKey;
 const privateVapidKey = process.env.vapidPrivateKey;
 
@@ -27,21 +28,18 @@ const processWebHook = (message) => {
     const updatedVariantLangID = message.items[0].language;
     let updatedVariant;
 
-    const getLanguageVariant = cmClient
-                .viewLanguageVariant()
+    const getLanguageVariant = viewLanguageVariant()
                 .byItemId(message.items[0].id)
                 .byLanguageCodename(updatedVariantLangID)
                 .toObservable();
     const getContentItem = result => {
         updatedVariant = result;
-        return cmClient
-                .viewContentItem()
+        return viewContentItem()
                 .byItemId(result.data.item.id)
                 .toObservable();
     };
     const getContentType = result => {
-        return cmClient
-                .viewContentType()
+        return viewContentType()
                 .byTypeId(result.data.type.id)
                 .toObservable()
     };
@@ -67,7 +65,7 @@ const sendPush = function(variant, type) {
   assetID = variant.data.elements.filter(e => e.element.id === iconID)[0].value[0].id;
 
   //Get asset URL
-  cmClient.viewAsset().byAssetId(assetID).toObservable().subscribe(result => {
+  viewAsset().byAssetId(assetID).toObservable().subscribe(result => {
     const payload = JSON.stringify({
       title: variant.data.elements.filter(e => e.element.id === titleID)[0].value,
       body: variant.data.elements.filter(e => e.element.id === bodyID)[0].value,
@@ -76,7 +74,7 @@ const sendPush = function(variant, type) {
       url: variant.data.elements.filter(e => e.element.id === urlID)[0].value
     });
   
-    webpush.setVapidDetails('mailto:support@kentico.com', publicVapidKey, privateVapidKey);
+    setVapidDetails('mailto:support@kentico.com', publicVapidKey, privateVapidKey);
     const dao = new AppDAO();
     dao.getAllSubscriptions().then((rows) => {
   
@@ -90,7 +88,7 @@ const sendPush = function(variant, type) {
           }
         };
 
-        webpush.sendNotification(sub, payload).catch(response => {
+        sendNotification(sub, payload).catch(response => {
           if(response.statusCode === 410) {
             //Subscription expired or removed- delete from db
             dao.deleteSubscription(sub);
@@ -102,4 +100,4 @@ const sendPush = function(variant, type) {
   })
 }
     
-module.exports = router;
+export default router;

@@ -1,4 +1,4 @@
-const deliveryClient = require('../delivery');
+import { taxonomy } from '../delivery';
 
 class StoreHelper {
 
@@ -26,14 +26,12 @@ class StoreHelper {
     }
 
     static getAllProductStatuses() {
-        return deliveryClient
-            .taxonomy('product_status')
+        return taxonomy('product_status')
             .toObservable();
     }
 
     static getAllProcessings() {
-        return deliveryClient
-            .taxonomy('processing')
+        return taxonomy('processing')
             .toObservable();
     }
 
@@ -196,8 +194,7 @@ class StoreHelper {
     }
 
     static getAllManufacturers() {
-        return deliveryClient
-            .taxonomy('manufacturer')
+        return taxonomy('manufacturer')
             .toObservable();
     }
 
@@ -225,4 +222,4 @@ class StoreHelper {
     }
 }
 
-module.exports = StoreHelper;
+export default StoreHelper;

@@ -1,19 +1,19 @@
-const dotenv = require('dotenv');
-dotenv.config();
-const AboutUs = require('./models/about-us');
-const Accessory = require('./models/accessory');
-const Article = require('./models/article');
-const Brewer = require('./models/brewer');
-const Cafe = require('./models/cafe');
-const Coffee = require('./models/coffee');
-const FactAboutUs = require('./models/fact-about-us');
-const Grinder = require('./models/grinder');
-const HeroUnit = require('./models/hero-unit');
-const Home = require('./models/home');
-const HostedVideo = require('./models/hosted-video');
-const Office = require('./models/office');
-const Tweet = require('./models/tweet');
-const { DeliveryClient, TypeResolver } = require('@kontent-ai/delivery-sdk');
+import { config } from 'dotenv';
+config();
+import AboutUs from './models/about-us';
+import Accessory from './models/accessory';
+import Article from './models/article';
+import Brewer from './models/brewer';
+import Cafe from './models/cafe';
+import Coffee from './models/coffee';
+import FactAboutUs from './models/fact-about-us';
+import Grinder from './models/grinder';
+import HeroUnit from './models/hero-unit';
+import Home from './models/home';
+import HostedVideo from './models/hosted-video';
+import Office from './models/office';
+import Tweet from './models/tweet';
+import { DeliveryClient, TypeResolver } from '@kontent-ai/delivery-sdk';
 const typeResolvers = [
   new TypeResolver('about_us', () => new AboutUs()),
   new TypeResolver('accessory', () => new Accessory()),
@@ -30,7 +30,7 @@ const typeResolvers = [
   new TypeResolver('tweet', () => new Tweet())
 ];
 
-module.exports = new DeliveryClient({
+export default new DeliveryClient({
   projectId: process.env.projectId,
   typeResolvers: typeResolvers
 });

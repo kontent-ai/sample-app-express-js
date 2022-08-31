@@ -1,9 +1,9 @@
-const express = require('express');
-const router = express.Router();
-const ArticleHelper = require('../helpers/article-helper');
+import { Router } from 'express';
+import { getAllArticles, getArticle } from '../helpers/article-helper';
+const router = Router();
 
 router.get('/:lang/articles', (req, res, next) => {
-    const sub = ArticleHelper.getAllArticles(req.params.lang).subscribe(result => {
+    const sub = getAllArticles(req.params.lang).subscribe(result => {
         sub.unsubscribe();
         res.render('articles', { 'articleList': result.items }, (err, html) => {
             if (err) {
@@ -16,7 +16,7 @@ router.get('/:lang/articles', (req, res, next) => {
 });
 
 router.get('/:lang/articles/:id', (req, res, next) => {
-    const sub = ArticleHelper.getArticle(req.params.id, req.params.lang).subscribe(result => {
+    const sub = getArticle(req.params.id, req.params.lang).subscribe(result => {
         sub.unsubscribe();
         res.render('articles', { 'articleList': result.items }, (err, html) => {
             if (err) {
@@ -28,4 +28,4 @@ router.get('/:lang/articles/:id', (req, res, next) => {
     });
 });
 
-module.exports = router;
+export default router;

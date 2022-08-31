@@ -1,14 +1,14 @@
-const express = require('express');
-const router = express.Router();
-const ArticleHelper = require('../helpers/article-helper');
-const CafeHelper = require('../helpers/cafe-helper');
-const { zip } = require('rxjs');
-const { map } = require('rxjs/operators');
+import { getAllArticles } from '../helpers/article-helper';
+import { getCafesInCountry } from '../helpers/cafe-helper';
+import { zip } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Router } from 'express';
+const router = Router();
 
 router.get('/:lang', (req, res, next) => {
   const sub = zip(
-    CafeHelper.getCafesInCountry('USA').pipe(map(result => ['cafes', result.items])),
-    ArticleHelper.getAllArticles(req.params.lang).pipe(map(result => ['articles', result.items]))
+    getCafesInCountry('USA').pipe(map(result => ['cafes', result.items])),
+    getAllArticles(req.params.lang).pipe(map(result => ['articles', result.items]))
   ).subscribe(result => {
     sub.unsubscribe();
     res.render('index', {
@@ -26,4 +26,4 @@ router.get('/:lang', (req, res, next) => {
   });
 });
 
-module.exports = router;
+export default router;

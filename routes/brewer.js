@@ -1,9 +1,9 @@
-const express = require('express');
-const router = express.Router();
-const BrewerHelper = require('../helpers/brewer-helper');
+import { getBrewer } from '../helpers/brewer-helper';
+import { Router } from 'express';
+const router = Router();
 
 router.get('/:lang/brewer/:codename', (req, res, next) => {
-    const sub = BrewerHelper.getBrewer(req.params.codename, req.params.lang).subscribe(result => {
+    const sub = getBrewer(req.params.codename, req.params.lang).subscribe(result => {
         sub.unsubscribe();
         res.render('brewer', { 'brewer': result.firstItem }, (err, html) => {
             if (err) {
@@ -17,4 +17,4 @@ router.get('/:lang/brewer/:codename', (req, res, next) => {
     });
 });
 
-module.exports = router;
+export default router;

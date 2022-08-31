@@ -1,10 +1,10 @@
-const express = require('express');
-const router = express.Router();
-const BrewerHelper = require('../helpers/brewer-helper');
-const CoffeeHelper = require('../helpers/coffee-helper');
-const StoreHelper = require('../helpers/store-helper');
-const { zip } = require('rxjs');
-const { map } = require('rxjs/operators');
+import { Router } from 'express';
+const router = Router();
+import { getAllBrewers } from '../helpers/brewer-helper';
+import { getAllCoffees } from '../helpers/coffee-helper';
+import { getAllProductStatuses, getAllProcessings, getAllManufacturers, applyCoffeeFilters, applyBrewerFilters, PRICE_RANGES } from '../helpers/store-helper';
+import { zip } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 const render = function (req, res, next) {
     const type = req.params.type ? req.params.type : 'coffees';
@@ -15,16 +15,16 @@ const render = function (req, res, next) {
         default:
         case 'coffees':
             obs = zip(
-                StoreHelper.getAllProductStatuses().pipe(map(result => ['statuses', result.taxonomy.terms])),
-                CoffeeHelper.getAllCoffees(req.params.lang).pipe(map(result => ['coffees', result.items])),
-                StoreHelper.getAllProcessings().pipe(map(result => ['processings', result.taxonomy.terms]))
+                getAllProductStatuses().pipe(map(result => ['statuses', result.taxonomy.terms])),
+                getAllCoffees(req.params.lang).pipe(map(result => ['coffees', result.items])),
+                getAllProcessings().pipe(map(result => ['processings', result.taxonomy.terms]))
             )
             break;
         case 'brewers':
             obs = zip(
-                StoreHelper.getAllProductStatuses().pipe(map(result => ['statuses', result.taxonomy.terms])),
-                BrewerHelper.getAllBrewers(req.params.lang).pipe(map(result => ['brewers', result.items])),
-                StoreHelper.getAllManufacturers().pipe(map(result => ['manufacturers', result.taxonomy.terms]))
+                getAllProductStatuses().pipe(map(result => ['statuses', result.taxonomy.terms])),
+                getAllBrewers(req.params.lang).pipe(map(result => ['brewers', result.items])),
+                getAllManufacturers().pipe(map(result => ['manufacturers', result.taxonomy.terms]))
             )
             break;
     }
@@ -40,12 +40,12 @@ const render = function (req, res, next) {
             case 'coffees':
                 [[, processings]] = result.filter(arr => arr[0] == 'processings');
                 [[, coffees]] = result.filter(arr => arr[0] == 'coffees');
-                coffees = StoreHelper.applyCoffeeFilters(coffees, req.query, processings, statuses);
+                coffees = applyCoffeeFilters(coffees, req.query, processings, statuses);
                 break;
             case 'brewers':
                 [[, manufacturers]] = result.filter(arr => arr[0] == 'manufacturers');
                 [[, brewers]] = result.filter(arr => arr[0] == 'brewers');
-                brewers = StoreHelper.applyBrewerFilters(brewers, req.query, manufacturers, statuses);
+                brewers = applyBrewerFilters(brewers, req.query, manufacturers, statuses);
                 break;
         }
 
@@ -55,7 +55,7 @@ const render = function (req, res, next) {
             //req is needed in Pug to get URL
             'req': req,
             'productStatuses': statuses,
-            'priceRanges': StoreHelper.PRICE_RANGES,
+            'priceRanges': PRICE_RANGES,
             //Coffee items
             'processings': (type == 'coffees') ? processings : [],
             'coffees': (type == 'coffees') ? coffees : [],
@@ -77,4 +77,4 @@ const render = function (req, res, next) {
 router.get('/:lang/store', render);
 router.get('/:lang/store/:type', render);
 
-module.exports = router;
+export default router;

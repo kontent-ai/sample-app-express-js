@@ -1,27 +1,27 @@
 /*eslint-disable no-undef, no-implicit-globals*/
-require('datejs');
-const dotenv = require('dotenv');
-dotenv.config();
-const createError = require('http-errors');
-const express = require('express');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
-const logger = require('morgan');
-const serverjs = require('./public/scripts/server');
+import 'datejs';
+import { config } from 'dotenv';
+config();
+import createError from 'http-errors';
+import express, { urlencoded } from 'express';
+import { join } from 'path';
+import cookieParser from 'cookie-parser';
+import { raw } from 'body-parser';
+import logger from 'morgan';
+import serverjs from './public/scripts/server';
 const supportedLangs = ['en-US', 'es-ES'];
 const languageNames = ['English', 'Spanish'];
-const { zip } = require('rxjs');
-const { map } = require('rxjs/operators');
-const algoliasearch = require('algoliasearch/lite');
-const ArticleHelper = require('./helpers/article-helper');
+import { zip } from 'rxjs';
+import { map } from 'rxjs/operators';
+import algoliasearch from 'algoliasearch/lite';
+import { getAllArticles } from './helpers/article-helper';
 
 app = express();
 app.use(logger('dev'));
-app.use(express.urlencoded({ extended: false }));
+app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(bodyParser.raw({type:'application/json'}))
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(raw({type:'application/json'}))
+app.use(express.static(join(__dirname, 'public')));
 
 //allow culture data access in views
 app.locals.supportedLangs = supportedLangs;
@@ -30,7 +30,7 @@ app.locals.languageNames = languageNames;
 app.set('supportedLangs', supportedLangs);
 
 //view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 app.use('/', require('./routes/webhook'));
@@ -79,7 +79,7 @@ app.use('/:lang/algolia', function (req, res, next) {
     ]
   });
 
-  const observers = supportedLangs.map(lang => ArticleHelper.getAllArticles(lang, true).pipe(map(result => result.items)));
+  const observers = supportedLangs.map(lang => getAllArticles(lang, true).pipe(map(result => result.items)));
   const sub = zip(...observers).subscribe(result => {
     sub.unsubscribe();
     //add all articles to index
@@ -130,4 +130,4 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+export default app;

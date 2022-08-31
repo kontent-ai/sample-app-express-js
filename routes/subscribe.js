@@ -1,6 +1,6 @@
-const AppDAO = require('../dao');
-const express = require('express');
-const router = express.Router();
+import AppDAO from '../dao';
+import { Router } from 'express';
+const router = Router();
 
 router.post('/subscribe', (req, res, next) => {
     let json = JSON.parse(req.body);
@@ -18,4 +18,4 @@ router.post('/subscribe', (req, res, next) => {
     });
 });
 
-module.exports = router;
+export default router;

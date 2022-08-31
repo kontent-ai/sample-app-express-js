@@ -1,13 +1,13 @@
-const express = require('express');
-const router = express.Router();
-const CafeHelper = require('../helpers/cafe-helper');
-const { zip } = require('rxjs');
-const { map } = require('rxjs/operators');
+import { getCafesNotInCountry, getCafesInCountry } from '../helpers/cafe-helper';
+import { zip } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Router } from 'express';
+const router = Router();
 
 router.get('/:lang/cafes', (req, res, next) => {
     const sub = zip(
-        CafeHelper.getCafesNotInCountry('USA').pipe(map(result => ['partners', result])),
-        CafeHelper.getCafesInCountry('USA').pipe(map(result => ['usa', result.items]))
+        getCafesNotInCountry('USA').pipe(map(result => ['partners', result])),
+        getCafesInCountry('USA').pipe(map(result => ['usa', result.items]))
     ).subscribe(result => {
         sub.unsubscribe();
         res.render('cafes', {
@@ -25,4 +25,4 @@ router.get('/:lang/cafes', (req, res, next) => {
     });
 });
 
-module.exports = router;
+export default router;

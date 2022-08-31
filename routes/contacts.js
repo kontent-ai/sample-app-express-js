@@ -1,9 +1,9 @@
-const express = require('express');
-const router = express.Router();
-const CafeHelper = require('../helpers/cafe-helper');
+import { getCafesInCountry } from '../helpers/cafe-helper';
+import { Router } from 'express';
+const router = Router();
 
 router.get('/:lang/contacts', (req, res, next) => {
-    const sub = CafeHelper.getCafesInCountry('USA').subscribe(result => {
+    const sub = getCafesInCountry('USA').subscribe(result => {
         sub.unsubscribe();
         res.render('contacts', {
             'americanCafes': result.items
@@ -19,4 +19,4 @@ router.get('/:lang/contacts', (req, res, next) => {
     });
 });
 
-module.exports = router;
+export default router;

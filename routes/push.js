@@ -1,11 +1,11 @@
-const dotenv = require('dotenv');
-dotenv.config();
-const express = require('express');
-const router = express.Router();
-const PushMessage = require('../models/push-message');
-const webpush = require('web-push');
-const AppDAO = require('../dao');
-const { DeliveryClient } = require('@kontent-ai/delivery-sdk');
+import { config } from 'dotenv';
+config();
+import { Router } from 'express';
+const router = Router();
+import PushMessage from '../models/push-message';
+import { setVapidDetails, sendNotification } from 'web-push';
+import AppDAO from '../dao';
+import { DeliveryClient } from '@kontent-ai/delivery-sdk';
 const publicVapidKey = process.env.vapidPublicKey;
 const privateVapidKey = process.env.vapidPrivateKey;
 
@@ -52,7 +52,7 @@ const sendPush = function(item) {
     url: item.url.value
   });
 
-  webpush.setVapidDetails('mailto:support@kentico.com', publicVapidKey, privateVapidKey);
+  setVapidDetails('mailto:support@kentico.com', publicVapidKey, privateVapidKey);
   const dao = new AppDAO();
   dao.getAllSubscriptions().then((rows) => {
 
@@ -66,7 +66,7 @@ const sendPush = function(item) {
         }
       };
 
-      webpush.sendNotification(sub, payload).catch(response => {
+      sendNotification(sub, payload).catch(response => {
         if(response.statusCode === 410) {
           //Subscription expired or removed- delete from db
           dao.deleteSubscription(sub);
@@ -77,4 +77,4 @@ const sendPush = function(item) {
   });
 }
     
-module.exports = router;
+export default router;

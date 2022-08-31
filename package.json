@@ -10,6 +10,7 @@
   },
   "devDependencies": {
     "@kontent-ai/model-generator": "^5.4.1",
+    "@types/express": "^4.17.13",
     "acorn": "^6.4.2",
     "cookie-parser": "^1.4.4",
     "datejs": "^1.0.0-rc3",

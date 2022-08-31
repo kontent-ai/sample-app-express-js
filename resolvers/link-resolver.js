@@ -1,4 +1,4 @@
-module.exports.resolveContentLink = function (link, language) {
+export function resolveContentLink (link, language) {
   let resultLink;
 
   switch (link.type) {

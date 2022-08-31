@@ -1,9 +1,9 @@
-const deliveryClient = require('../delivery');
+import { items } from '../delivery';
 
 class CoffeeHelper {
 
     static getCoffee(codename, lang) {
-        return deliveryClient.items()
+        return items()
             .type('coffee')
             .languageParameter(lang)
             .equalsFilter('system.codename', codename)
@@ -11,11 +11,11 @@ class CoffeeHelper {
     }
 
     static getAllCoffees(lang) {
-        return deliveryClient.items()
+        return items()
             .type('coffee')
             .languageParameter(lang)
             .toObservable();
     }
 }
 
-module.exports = CoffeeHelper;
+export default CoffeeHelper;
