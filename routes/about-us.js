@@ -1,10 +1,10 @@
-import { item } from '../delivery';
-import { resolveContentLink } from '../resolvers/link-resolver';
+import client from '../delivery.js';
+import { resolveContentLink } from '../resolvers/link-resolver.js';
 import { Router } from 'express';
 const router = Router();
 
 router.get('/:lang/about-us', (req, res, next) => {
-  const sub = item('about_us')
+  const sub = client.item('about_us')
     .languageParameter(req.params.lang)
     .depthParameter(2)
     .queryConfig({

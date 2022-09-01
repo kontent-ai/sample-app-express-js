@@ -1,13 +1,14 @@
-import { config } from 'dotenv';
-config();
-import { Router } from 'express';
-const router = Router();
-import WebHookMessage from '../models/webhook-message';
-import { listWorkflowSteps, viewLanguageVariant, viewContentItem, viewContentType, createNewVersionOfLanguageVariant, changeWorkflowStepOfLanguageVariant, upsertLanguageVariant } from '../contentmanagement';
+import WebHookMessage from '../models/webhook-message.js';
+import * as client from '../contentmanagement.js';
 import { Axios } from 'axios-observable';
 import { zip, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { mergeMap } from 'rxjs/operators';
+import { config } from 'dotenv';
+import { Router } from 'express';
+config();
+
+const router = Router();
 const endpoint = 'https://api.cognitive.microsofttranslator.com/translate?api-version=3.0';
 
 router.post('/webhook', (req, res, next) => {
@@ -38,19 +39,19 @@ const processWebHook = (message) => {
     });
     const updatedVariantLangID = message.items[0].language.id;
 
-    const getLanguageVariant = viewLanguageVariant()
+    const getLanguageVariant = client.viewLanguageVariant()
         .byItemId(message.items[0].item.id)
         .byLanguageId(updatedVariantLangID)
         .toObservable();
     const getContentItem = result => {
         updatedVariant = result;
-        return viewContentItem()
+        return client.viewContentItem()
             .byItemId(result.data.item.id)
             .toObservable();
     };
     const getContentType = result => {
         contentItem = result.data;
-        return viewContentType()
+        return client.viewContentType()
             .byTypeId(result.data.type.id)
             .toObservable()
     };
@@ -125,7 +126,7 @@ const prepareVariant = (targetLangCode, updatedVariant, contentItem, type) => {
         }
 
         //check if published, create new version or move to Draft step
-        const innerSub = viewLanguageVariant()
+        const innerSub = client.viewLanguageVariant()
             .byItemId(contentItem.id)
             .byLanguageCodename(targetLangCode)
             .toObservable()
@@ -135,13 +136,13 @@ const prepareVariant = (targetLangCode, updatedVariant, contentItem, type) => {
                 const variant = result.data;
                 let obs;
                 if (variant.workflowStep.id === publishedStepId) {
-                    obs = createNewVersionOfLanguageVariant()
+                    obs = client.createNewVersionOfLanguageVariant()
                         .byItemId(contentItem.id)
                         .byLanguageCodename(targetLangCode)
                         .toObservable();
                 }
                 else if (variant.workflowStep.id !== draftStepId) {
-                    obs = changeWorkflowStepOfLanguageVariant()
+                    obs = client.changeWorkflowStepOfLanguageVariant()
                         .byItemId(contentItem.id)
                         .byLanguageCodename(targetLangCode)
                         .byWorkflowStepId(draftStepId)
@@ -165,7 +166,7 @@ const prepareVariant = (targetLangCode, updatedVariant, contentItem, type) => {
 }
 
 const upsertVariant = (itemId, lang, elements) => {
-    upsertLanguageVariant()
+    client.upsertLanguageVariant()
         .byItemId(itemId)
         .byLanguageCodename(lang)
         .withData((builder) => elements)

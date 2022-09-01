@@ -1,4 +1,4 @@
-import { items } from '../delivery';
+import items from '../delivery.js';
 import { map } from 'rxjs/operators';
 
 class CafeHelper {

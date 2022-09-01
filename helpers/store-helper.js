@@ -1,4 +1,4 @@
-import { taxonomy } from '../delivery';
+import taxonomy from '../delivery.js';
 
 class StoreHelper {
 

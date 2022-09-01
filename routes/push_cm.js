@@ -1,5 +1,5 @@
 import { config } from 'dotenv';
-import PushMessage from '../models/push-message';
+import PushMessage from '../models/push-message.js';
 import { setVapidDetails, sendNotification } from 'web-push';
 import AppDAO from '../dao';
 import { viewLanguageVariant, viewContentItem, viewContentType, viewAsset } from '../contentmanagement';

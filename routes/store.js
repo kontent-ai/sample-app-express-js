@@ -1,10 +1,12 @@
 import { Router } from 'express';
 const router = Router();
-import { getAllBrewers } from '../helpers/brewer-helper';
-import { getAllCoffees } from '../helpers/coffee-helper';
-import { getAllProductStatuses, getAllProcessings, getAllManufacturers, applyCoffeeFilters, applyBrewerFilters, PRICE_RANGES } from '../helpers/store-helper';
+import getAllBrewers from '../helpers/brewer-helper.js';
+import getAllCoffees from '../helpers/coffee-helper.js';
+import storeHelper from '../helpers/store-helper.js';
 import { zip } from 'rxjs';
 import { map } from 'rxjs/operators';
+
+const { getAllProductStatuses, getAllProcessings, getAllManufacturers, applyCoffeeFilters, applyBrewerFilters, PRICE_RANGES } = storeHelper;
 
 const render = function (req, res, next) {
     const type = req.params.type ? req.params.type : 'coffees';

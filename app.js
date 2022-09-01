@@ -1,26 +1,45 @@
 /*eslint-disable no-undef, no-implicit-globals*/
-import 'datejs';
+//import 'datejs';
 import { config } from 'dotenv';
 config();
 import createError from 'http-errors';
 import express, { urlencoded } from 'express';
 import { join } from 'path';
 import cookieParser from 'cookie-parser';
-import { raw } from 'body-parser';
+import BodyParser from 'body-parser';
 import logger from 'morgan';
-import serverjs from './public/scripts/server';
+//import serverjs from './public/scripts/server.js';
 const supportedLangs = ['en-US', 'es-ES'];
 const languageNames = ['English', 'Spanish'];
 import { zip } from 'rxjs';
 import { map } from 'rxjs/operators';
-import algoliasearch from 'algoliasearch/lite';
-import { getAllArticles } from './helpers/article-helper';
+import algoliasearch from 'algoliasearch/lite.js';
+import ArticleHelper from './helpers/article-helper.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import webhook from './routes/webhook.js';
+import push from './routes/push.js';
+import subscribe from './routes/subscribe.js';
+import index from './routes/index.js';
+import cafes from './routes/cafes.js';
+import articles from './routes/articles.js';
+import aboutUs from './routes/about-us.js';
+import contacts from './routes/contacts.js';
+import store from './routes/store.js';
+import coffee from './routes/coffee.js';
+import brewer from './routes/brewer.js';
+import search from './routes/search.js';
 
-app = express();
+const { raw } = BodyParser;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
+const app = express();
 app.use(logger('dev'));
 app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(raw({type:'application/json'}))
+app.use(raw({type:'application/json'}));
 app.use(express.static(join(__dirname, 'public')));
 
 //allow culture data access in views
@@ -33,9 +52,9 @@ app.set('supportedLangs', supportedLangs);
 app.set('views', join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-app.use('/', require('./routes/webhook'));
-app.use('/', require('./routes/push'));
-app.use('/', require('./routes/subscribe'));
+app.use('/', webhook);
+app.use('/', push);
+app.use('/', subscribe);
 
 //force language prefix
 app.use(['/:lang/*', '/:lang', '/'], function (req, res, next) {
@@ -79,7 +98,7 @@ app.use('/:lang/algolia', function (req, res, next) {
     ]
   });
 
-  const observers = supportedLangs.map(lang => getAllArticles(lang, true).pipe(map(result => result.items)));
+  const observers = supportedLangs.map(lang => ArticleHelper.getAllArticles(lang, true).pipe(map(result => result.items)));
   const sub = zip(...observers).subscribe(result => {
     sub.unsubscribe();
     //add all articles to index
@@ -101,18 +120,18 @@ app.use('/:lang/algolia', function (req, res, next) {
 });
 
 //routes
-app.use('/', require('./routes/index'));
-app.use('/', require('./routes/cafes'));
-app.use('/', require('./routes/articles'));
-app.use('/', require('./routes/about-us'));
-app.use('/', require('./routes/contacts'));
-app.use('/', require('./routes/store'));
-app.use('/', require('./routes/coffee'));
-app.use('/', require('./routes/brewer'));
-app.use('/', require('./routes/search'));
+app.use('/', index);
+app.use('/', cafes);
+app.use('/', articles);
+app.use('/', aboutUs);
+app.use('/', contacts);
+app.use('/', store);
+app.use('/', coffee);
+app.use('/', brewer);
+app.use('/', search);
 
 //register main.js for use in Pug
-app.locals.serverjs = serverjs;
+//app.locals.serverjs = serverjs;
 
 //catch 404 and forward to error handler
 app.use(function(req, res, next) {

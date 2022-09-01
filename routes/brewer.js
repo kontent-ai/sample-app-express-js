@@ -1,5 +1,6 @@
-import { getBrewer } from '../helpers/brewer-helper';
+import brewerHelper from '../helpers/brewer-helper.js';
 import { Router } from 'express';
+const { getBrewer } = brewerHelper;
 const router = Router();
 
 router.get('/:lang/brewer/:codename', (req, res, next) => {

@@ -1,4 +1,4 @@
-import AppDAO from '../dao';
+import AppDAO from '../dao.js';
 import { Router } from 'express';
 const router = Router();
 

@@ -1,5 +1,5 @@
-import { getAllArticles } from '../helpers/article-helper';
-import { getCafesInCountry } from '../helpers/cafe-helper';
+import getAllArticles from '../helpers/article-helper.js';
+import getCafesInCountry from '../helpers/cafe-helper.js';
 import { zip } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from 'express';

@@ -1,5 +1,3 @@
-import { items } from '../delivery';
-
 class ArticleHelper {
 
     static getAllArticles(lang = '', force = false) {

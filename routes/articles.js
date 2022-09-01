@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { getAllArticles, getArticle } from '../helpers/article-helper';
+import articleHelper from '../helpers/article-helper.js';
+const { getAllArticles, getArticle } = articleHelper;
 const router = Router();
 
 router.get('/:lang/articles', (req, res, next) => {

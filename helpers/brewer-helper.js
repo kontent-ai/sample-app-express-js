@@ -1,4 +1,4 @@
-import { items } from '../delivery';
+import items from '../delivery.js';
 
 class BrewerHelper {
 

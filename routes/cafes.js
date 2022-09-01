@@ -1,8 +1,9 @@
-import { getCafesNotInCountry, getCafesInCountry } from '../helpers/cafe-helper';
+import cafeHelper from '../helpers/cafe-helper.js';
 import { zip } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from 'express';
 const router = Router();
+const { getCafesNotInCountry, getCafesInCountry } = cafeHelper;
 
 router.get('/:lang/cafes', (req, res, next) => {
     const sub = zip(

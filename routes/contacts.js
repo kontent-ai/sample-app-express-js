@@ -1,4 +1,4 @@
-import { getCafesInCountry } from '../helpers/cafe-helper';
+import getCafesInCountry from '../helpers/cafe-helper.js';
 import { Router } from 'express';
 const router = Router();
 

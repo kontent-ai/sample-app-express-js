@@ -1,5 +1,6 @@
-import { getCoffee } from '../helpers/coffee-helper';
+import coffeHelper from '../helpers/coffee-helper.js';
 import { Router } from 'express';
+const { getCoffee } = coffeHelper;
 const router = Router();
 
 router.get('/:lang/coffee/:codename', (req, res, next) => {
