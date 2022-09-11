@@ -1,20 +1,21 @@
-import items from '../delivery.js';
+import client from '../delivery.js';
+import { from } from 'rxjs';
 
 class BrewerHelper {
 
     static getBrewer(codename, lang) {
-        return items()
+        return from(client.items()
             .type('brewer')
             .languageParameter(lang)
             .equalsFilter('system.codename', codename)
-            .toObservable();
+            .toPromise());
     }
 
     static getAllBrewers(lang) {
-        return items()
+        return from(client.items()
             .type('brewer')
             .languageParameter(lang)
-            .toObservable();
+            .toPromise());
     }
 
 }

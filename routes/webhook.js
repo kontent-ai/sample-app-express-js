@@ -1,11 +1,12 @@
 import WebHookMessage from '../models/webhook-message.js';
-import * as client from '../contentmanagement.js';
+import  client from '../contentmanagement.js';
 import { Axios } from 'axios-observable';
 import { zip, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { mergeMap } from 'rxjs/operators';
 import { config } from 'dotenv';
 import { Router } from 'express';
+import { from } from 'rxjs';
 config();
 
 const router = Router();
@@ -39,21 +40,22 @@ const processWebHook = (message) => {
     });
     const updatedVariantLangID = message.items[0].language.id;
 
-    const getLanguageVariant = client.viewLanguageVariant()
+    const getLanguageVariant = from(client.viewLanguageVariant()
         .byItemId(message.items[0].item.id)
         .byLanguageId(updatedVariantLangID)
-        .toObservable();
+        .toPromise())
+        
     const getContentItem = result => {
         updatedVariant = result;
-        return client.viewContentItem()
+        return from(client.viewContentItem()
             .byItemId(result.data.item.id)
-            .toObservable();
+            .toPromise());
     };
     const getContentType = result => {
         contentItem = result.data;
-        return client.viewContentType()
+        return from(client.viewContentType()
             .byTypeId(result.data.type.id)
-            .toObservable()
+            .toPromise())
     };
 
     const obs = getLanguageVariant.pipe(mergeMap(getContentItem)).pipe(mergeMap(getContentType));
@@ -170,8 +172,8 @@ const upsertVariant = (itemId, lang, elements) => {
         .byItemId(itemId)
         .byLanguageCodename(lang)
         .withData((builder) => elements)
-        .toObservable()
-        .subscribe(result => {
+        .toPromise()
+        .then(result => {
             console.log(`language ${result.data.language.id}: ${result.debug.response.status}`);
         });
 }

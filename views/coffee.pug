@@ -5,11 +5,11 @@ block content
         .row
             .col-md-12
                 header
-                    h2 #{coffee.productName.value}
+                    h2 #{coffee.elements.productName.value}
         .row-fluid
             .col-lg-7.col-md-6
                 figure.image
-                    img(alt=coffee.productName.value, src=coffee.image.value[0].url)
+                    img(alt=coffee.elements.productName.value, src=coffee.elements.image.value[0].url)
                 .description
                     div
                         != coffee.longDescription.resolveHtml()
@@ -17,10 +17,10 @@ block content
                         h4 Parameters
                         .row
                             dt.col-xs-12.col-sm-4 Farm
-                            dd.col-xs-12.col-sm-8 #{coffee.farm.value}
+                            dd.col-xs-12.col-sm-8 #{coffee.elements.farm.value}
                             dt.col-xs-12.col-sm-4 Variety
-                            dd.col-xs-12.col-sm-8 #{coffee.variety.value}
+                            dd.col-xs-12.col-sm-8 #{coffee.elements.variety.value}
                             dt.col-xs-12.col-sm-4 Processing
-                            dd.col-xs-12.col-sm-8 #{coffee.processing.value[0].name}
+                            dd.col-xs-12.col-sm-8 #{coffee.elements.processing.value[0].name}
                             dt.col-xs-12.col-sm-4 Altitude
-                            dd.col-xs-12.col-sm-8 #{coffee.altitude.value} feet
+                            dd.col-xs-12.col-sm-8 #{coffee.elements.altitude.value} feet

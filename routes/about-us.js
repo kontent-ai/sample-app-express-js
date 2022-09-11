@@ -1,19 +1,21 @@
 import client from '../delivery.js';
 import { resolveContentLink } from '../resolvers/link-resolver.js';
 import { Router } from 'express';
+import { from } from 'rxjs';
 const router = Router();
 
 router.get('/:lang/about-us', (req, res, next) => {
-  const sub = client.item('about_us')
+  const sub = from(client.item('about_us')
     .languageParameter(req.params.lang)
     .depthParameter(2)
     .queryConfig({
       linkResolver: (link) => resolveContentLink(link)
     })
-    .toObservable()
+    .toPromise())
     .subscribe(result => {
       sub.unsubscribe();
-      res.render('about-us', { 'content_item': result.item }, (err, html) => {
+      console.log(result.data.item.elements.facts)
+      res.render('about-us', { 'content_item': result.data.item }, (err, html) => {
         if (err) {
           next(err);
         }

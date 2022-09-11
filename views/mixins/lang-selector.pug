@@ -3,20 +3,20 @@ mixin lang-selector
         .dropdown-header.menu-hover.dropdown-header-mobile
             .dropdown-desktop.dropdown-mobile
                 -
-                    var cultureName = app.locals.languageNames[i];
-                    for(var i=0; i<app.locals.supportedLangs.length; i++) {
-                        if(app.locals.currentCulture === app.locals.supportedLangs[i]) {
-                            cultureName = app.locals.languageNames[i];
+                    var cultureName = languageNames[i];
+                    for(var i=0; i<supportedLangs.length; i++) {
+                        if(currentCulture === supportedLangs[i]) {
+                            cultureName = languageNames[i];
                         }
                     }
                 |#{cultureName}
                 i.icon-chevron-down.dropdown-arrow(id='language-select-btn')
         nav(role='navigation')
             ul.dropdown-items-list.dropdown-items-list-mobile(style='display: none; min-width: 108px;')
-                each codename, index in app.locals.supportedLangs
+                each codename, index in supportedLangs
                     -
-                        var langName = app.locals.languageNames[index];
-                        var finalURL = app.locals.currentURL;
+                        var langName = languageNames[index];
+                        var finalURL = currentURL;
                         var secondSlash = finalURL.indexOf('/', 1);
                         finalURL = finalURL.slice(secondSlash, finalURL.length);
                         if(secondSlash < 0) finalURL = '';

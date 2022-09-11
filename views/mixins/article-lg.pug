@@ -1,13 +1,13 @@
 mixin article-lg(article)
     .article-tile.article-tile-large
         .col-md-12.col-lg-6
-            a(href=`/${app.locals.currentCulture}/articles/${article.system.id}`)
-                img.article-tile-image(src=article.teaserImage.value[0].url)
+            a(href=`/${currentCulture}/articles/${article.system.id}`)
+                img.article-tile-image(src=article.elements.teaserImage.value[0].url)
         .col-md-12.col-lg-6
             .article-tile-date
-                =new Date(article.postDate.value).toString('MMMM d')
+                =new Date(article.elements.postDate.value).toString('MMMM d')
             .article-tile-content
                 h2
-                    a(href=`/${app.locals.currentCulture}/articles/${article.system.id}`) #{article.title.value}
+                    a(href=`/${currentCulture}/articles/${article.system.id}`) #{article.elements.title.value}
                 p.article-tile-text.lead-paragraph.
-                    #{article.summary.value}
+                    #{article.elements.summary.value}

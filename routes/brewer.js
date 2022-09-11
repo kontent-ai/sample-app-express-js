@@ -6,7 +6,7 @@ const router = Router();
 router.get('/:lang/brewer/:codename', (req, res, next) => {
     const sub = getBrewer(req.params.codename, req.params.lang).subscribe(result => {
         sub.unsubscribe();
-        res.render('brewer', { 'brewer': result.firstItem }, (err, html) => {
+        res.render('brewer', { 'brewer': result.data.items[0] }, (err, html) => {
             if (err) {
                 next(err);
             }

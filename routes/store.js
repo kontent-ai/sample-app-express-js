@@ -1,11 +1,13 @@
 import { Router } from 'express';
 const router = Router();
-import getAllBrewers from '../helpers/brewer-helper.js';
-import getAllCoffees from '../helpers/coffee-helper.js';
+import brewerHelper from '../helpers/brewer-helper.js';
+import coffeeHelper from '../helpers/coffee-helper.js';
 import storeHelper from '../helpers/store-helper.js';
 import { zip } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+const { getAllBrewers } = brewerHelper;
+const { getAllCoffees } = coffeeHelper;
 const { getAllProductStatuses, getAllProcessings, getAllManufacturers, applyCoffeeFilters, applyBrewerFilters, PRICE_RANGES } = storeHelper;
 
 const render = function (req, res, next) {
@@ -17,16 +19,16 @@ const render = function (req, res, next) {
         default:
         case 'coffees':
             obs = zip(
-                getAllProductStatuses().pipe(map(result => ['statuses', result.taxonomy.terms])),
-                getAllCoffees(req.params.lang).pipe(map(result => ['coffees', result.items])),
-                getAllProcessings().pipe(map(result => ['processings', result.taxonomy.terms]))
+                getAllProductStatuses().pipe(map(result => ['statuses', result.data.taxonomy.terms])),
+                getAllCoffees(req.params.lang).pipe(map(result => ['coffees', result.data.items])),
+                getAllProcessings().pipe(map(result => ['processings', result.data.taxonomy.terms]))
             )
             break;
         case 'brewers':
             obs = zip(
-                getAllProductStatuses().pipe(map(result => ['statuses', result.taxonomy.terms])),
-                getAllBrewers(req.params.lang).pipe(map(result => ['brewers', result.items])),
-                getAllManufacturers().pipe(map(result => ['manufacturers', result.taxonomy.terms]))
+                getAllProductStatuses().pipe(map(result => ['statuses', result.data.taxonomy.terms])),
+                getAllBrewers(req.params.lang).pipe(map(result => ['brewers', result.data.items])),
+                getAllManufacturers().pipe(map(result => ['manufacturers', result.data.taxonomy.terms]))
             )
             break;
     }

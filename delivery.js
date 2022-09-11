@@ -1,10 +1,10 @@
 import { config } from 'dotenv';
-import delivery from '@kontent-ai/delivery-sdk';
+import delivery, { camelCasePropertyNameResolver } from '@kontent-ai/delivery-sdk';
 
-const { DeliveryClient, TypeResolver } = delivery;
+const { DeliveryClient } = delivery;
 config();
 
 export default new DeliveryClient({
   projectId: process.env.projectId,
-  typeResolvers: typeResolvers
+  propertyNameResolver: camelCasePropertyNameResolver
 });

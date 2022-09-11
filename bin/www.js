@@ -5,7 +5,9 @@
  */
 
 import app from '../app.js';
-var debug = require('debug')('cloud-sample-app-express:server');
+import Debug from 'debug';
+const debug = Debug('cloud-sample-app-express:server');
+// var debug = require('debug')('cloud-sample-app-express:server');
 import { createServer } from 'http';
 
 /**

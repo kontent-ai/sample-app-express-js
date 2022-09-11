@@ -8,7 +8,7 @@ import { join } from 'path';
 import cookieParser from 'cookie-parser';
 import BodyParser from 'body-parser';
 import logger from 'morgan';
-//import serverjs from './public/scripts/server.js';
+import { formatPrice } from './public/scripts/server.js';
 const supportedLangs = ['en-US', 'es-ES'];
 const languageNames = ['English', 'Spanish'];
 import { zip } from 'rxjs';
@@ -105,13 +105,13 @@ app.use('/:lang/algolia', function (req, res, next) {
     result.flat(1).forEach(article => {
       index.addObject({
           objectID: `${article.system.id}/${article.system.language}`,
-          title: article.title.value,
+          title: article.elements.title.value,
           language: article.system.language,
-          postDate: new Date(article.postDate.value).toString('dddd, MMMM d, yyyy'),
-          bodyCopy: article.bodyCopy.resolveHtml(),
-          summary: article.summary.value,
-          teaserImage: article.teaserImage.value[0].url,
-          type: article.system.type
+          postDate: new Date(article.elements.postDate.value).toString('dddd, MMMM d, yyyy'),
+          bodyCopy: article.elements.bodyCopy.resolveHtml(),
+          summary: article.elements.summary.value,
+          teaserImage: article.elements.teaserImage.value[0].url,
+          type: article.elements.system.type
       });
     });
 
@@ -131,7 +131,7 @@ app.use('/', brewer);
 app.use('/', search);
 
 //register main.js for use in Pug
-//app.locals.serverjs = serverjs;
+app.locals.formatPrice = formatPrice;
 
 //catch 404 and forward to error handler
 app.use(function(req, res, next) {

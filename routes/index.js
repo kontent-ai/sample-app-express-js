@@ -1,14 +1,17 @@
-import getAllArticles from '../helpers/article-helper.js';
-import getCafesInCountry from '../helpers/cafe-helper.js';
+import articleHelper from '../helpers/article-helper.js';
+import cafeHelper from '../helpers/cafe-helper.js';
 import { zip } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from 'express';
+
+const { getCafesInCountry } = cafeHelper;
+const { getAllArticles } = articleHelper;
 const router = Router();
 
 router.get('/:lang', (req, res, next) => {
   const sub = zip(
-    getCafesInCountry('USA').pipe(map(result => ['cafes', result.items])),
-    getAllArticles(req.params.lang).pipe(map(result => ['articles', result.items]))
+    getCafesInCountry('USA').pipe(map(result => ['cafes', result.data.items])),
+    getAllArticles(req.params.lang).pipe(map(result => ['articles', result.data.items]))
   ).subscribe(result => {
     sub.unsubscribe();
     res.render('index', {

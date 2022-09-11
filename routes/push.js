@@ -1,4 +1,5 @@
 import { config } from 'dotenv';
+import { from } from 'rxjs';
 config();
 import { Router } from 'express';
 const router = Router();
@@ -33,13 +34,13 @@ const processWebHook = (message) => {
       }
     });
 
-    const sub = deliveryClient.items()
+    const sub = from(deliveryClient.items()
                               .equalsFilter('system.id', updatedVariantContentID)
-                              .toObservable()
+                              .toPromise())
                               .subscribe(result => {
                                 sub.unsubscribe();
-                                if(result.items.length > 0 && result.items[0].system.type == 'push_notification') {
-                                  sendPush(result.items[0]);
+                                if(result.data.items.length > 0 && result.data.items[0].system.type == 'push_notification') {
+                                  sendPush(result.data.items[0]);
                                 }
                               });
 };

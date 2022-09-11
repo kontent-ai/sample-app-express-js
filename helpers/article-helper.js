@@ -1,22 +1,25 @@
+import client from '../delivery.js';
+import { from } from 'rxjs';
+
 class ArticleHelper {
 
     static getAllArticles(lang = '', force = false) {
-        const query = items()
+        const query = client.items()
             .type('article')
-            .orderParameter('elements.post_date', 1);
+            .orderParameter('elements.post_date', 'asc');
 
         if(lang !== '') query.languageParameter(lang);
         if(force) query.equalsFilter('system.language', lang);
 
-        return query.toObservable();
+        return from(query.toPromise());
     }
 
     static getArticle(id, lang) {
-        return items()
+        return from(client.items()
             .type('article')
             .languageParameter(lang)
             .equalsFilter('system.id', id)
-            .toObservable();
+            .toPromise());
     }
 }
 

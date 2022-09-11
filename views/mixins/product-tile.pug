@@ -1,15 +1,15 @@
 mixin product-tile(product)
     .col-md-6.col-lg-4
         article.product-tile
-            a(href=`/${app.locals.currentCulture}/${product.system.type}/${product.system.codename}`)
-                h1.product-heading #{product.productName.value}
+            a(href=`/${currentCulture}/${product.system.type}/${product.system.codename}`)
+                h1.product-heading #{product.elements.productName.value}
                 -let productStatuses = undefined;
-                -if(product.productStatus.value.length > 0)
-                    -productStatuses = product.productStatus.value.map((x) => x.name).join(", ");
+                -if(product.elements.productStatus.value.length > 0)
+                    -productStatuses = product.elements.productStatus.value.map((x) => x.name).join(", ");
                 -if(productStatuses)
                     span.product-tile-status #{productStatuses}
                 figure.product-tile-image
-                    img(src=product.image.value[0].url, title='')
+                    img(src=product.elements.image.value[0].url, title='')
                 .product-tile-info
                     span.product-tile-price 
-                        =serverjs.formatPrice(product.price.value, 'en-US')
+                        =formatPrice(product.elements.price.value, 'en-US')

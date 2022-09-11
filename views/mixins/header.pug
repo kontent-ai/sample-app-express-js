@@ -13,6 +13,6 @@ mixin header
           h1.logo
             a.logo-link(href="/") Dancing Goat
         .col-xs-12.col-md-7.col-lg-4
-          form.searchBox(id='searchForm', action=`/${app.locals.currentCulture}/Search`, method='get', style='display: inline-block')
+          form.searchBox(id='searchForm', action=`/${currentCulture}/Search`, method='get', style='display: inline-block')
             input.search-box-watermark(type='text', name='searchtext', id='searchtext', placeholder='Search')
             input.search-box-btn(type='submit', value='')

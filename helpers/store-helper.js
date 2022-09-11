@@ -1,4 +1,5 @@
-import taxonomy from '../delivery.js';
+import client from '../delivery.js';
+import { from } from 'rxjs';
 
 class StoreHelper {
 
@@ -26,13 +27,13 @@ class StoreHelper {
     }
 
     static getAllProductStatuses() {
-        return taxonomy('product_status')
-            .toObservable();
+        return from(client.taxonomy('product_status')
+            .toPromise());
     }
 
     static getAllProcessings() {
-        return taxonomy('processing')
-            .toObservable();
+        return from(client.taxonomy('processing')
+            .toPromise());
     }
 
     static applyCoffeeFilters(items, params, processings, statuses) {
@@ -76,8 +77,8 @@ class StoreHelper {
 
             for (let key = 0; key < keys.length; key += 1) {
                 if (!match) {
-                    for (let manu = 0; manu < brewer.manufacturer.value.length; manu += 1) {
-                        if (brewer.manufacturer.value[manu].codename == keys[key]) {
+                    for (let manu = 0; manu < brewer.elements.manufacturer.value.length; manu += 1) {
+                        if (brewer.elements.manufacturer.value[manu].codename == keys[key]) {
                             match = true;
                             result.push(brewer);
                             break;
@@ -112,8 +113,8 @@ class StoreHelper {
 
             for (let key = 0; key < keys.length; key += 1) {
                 if (!match) {
-                    for (let proc = 0; proc < coffee.processing.value.length; proc += 1) {
-                        if (coffee.processing.value[proc].codename == keys[key]) {
+                    for (let proc = 0; proc < coffee.elements.processing.value.length; proc += 1) {
+                        if (coffee.elements.processing.value[proc].codename == keys[key]) {
                             match = true;
                             result.push(coffee);
                             break;
@@ -194,8 +195,8 @@ class StoreHelper {
     }
 
     static getAllManufacturers() {
-        return taxonomy('manufacturer')
-            .toObservable();
+        return from(client.taxonomy('manufacturer')
+            .toPromise());
     }
 
     static filterProductsByStatus(products, keys) {
