@@ -1,22 +1,22 @@
 import { createRichTextHtmlResolver } from '@kontent-ai/delivery-sdk';
 import { nodeParser } from '@kontent-ai/delivery-node-parser';
 
-export const resolveRichText = (element, linkedItems) => createRichTextHtmlResolver(nodeParser).resolveRichText({
+const resolveRichText = (element) => createRichTextHtmlResolver(nodeParser).resolveRichText({
     element,
-    linkedItems,
+    linkedItems: element.linkedItems,
     urlResolver: (linkId, linkText, link) => {
         switch (link.type) {
             case "article":
                 return {
-                    linkUrl: `/articles/${link.linkId}`
+                    linkUrl: `/articles/${linkId}`
                 }
             case "coffee":
                 return {
-                    linkUrl: `/articles/${link.linkId}`
+                    linkUrl: `/articles/${linkId}`
                 }
             case "brewer":
                 return {
-                    linkUrl: `/articles/${link.linkId}`
+                    linkUrl: `/articles/${linkId}`
                 }
             default:
                 return { linkUrl: ""}
@@ -56,9 +56,14 @@ export const resolveRichText = (element, linkedItems) => createRichTextHtmlResol
         }
 
         else if ((contentItem && contentItem.system.type === 'tweet')) {
-            console.log("tweet")
             return {
-                contentItemHtml: `<div><blockquote class="twitter-tweet" data-theme="${contentItem.elements.theme.value[0].codename}" ${contentItem.elements.displayOptions.value.some(e => e.codename === "hide_thread") ? "data-conversation=hidden" : ''} ${contentItem.elements.displayOptions.value.some(e => e.codename === "hide_media") ? "data-conversation=none" : ''}><a href="${contentItem.elements.tweetLink.value}"></a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div>`
+                contentItemHtml: `<div>
+                <blockquote class="twitter-tweet" data-theme="${contentItem.elements.theme.value[0].codename}" ${contentItem.elements.displayOptions.value.some(e => e.codename === "hide_thread") ? "data-conversation=hidden" : ''} ${contentItem.elements.displayOptions.value.some(e => e.codename === "hide_media") ? "data-conversation=none" : ''}>
+                <a href="${contentItem.elements.tweetLink.value}"></a>
+                </blockquote> 
+                <script async src="https://platform.twitter.com/widgets.js" charset="utf-8">
+                </script>
+                </div>`
             }
         }
 
@@ -67,4 +72,15 @@ export const resolveRichText = (element, linkedItems) => createRichTextHtmlResol
         };
     }
 });
+
+export const resolveRichTextItem = (item) => {
+    for (const codename in item.elements) {
+        if (item.elements[codename].type === 'rich_text') {
+            item.elements[codename].value = resolveRichText(item.elements[codename]).html;
+        }
+        else if (item.elements[codename].type === 'modular_content') {
+            item.elements[codename].linkedItems.forEach(item => resolveRichTextItem(item));
+        }
+    }
+}
 

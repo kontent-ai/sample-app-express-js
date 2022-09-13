@@ -5,4 +5,4 @@ block content
     -var onleft = true
     each fact, index in content_item.elements.facts.linkedItems
         -onleft = !onleft
-        +image-tile(fact.elements.title.value, fact.elements.description.resolveHtml(), fact.elements.image.value[0].url, onleft)
+        +image-tile(fact.elements.title.value, fact.elements.description.value, fact.elements.image.value[0].url, onleft)

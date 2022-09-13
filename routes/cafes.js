@@ -6,7 +6,6 @@ const router = Router();
 const { getCafesNotInCountry, getCafesInCountry } = cafeHelper;
 
 router.get('/:lang/cafes', (req, res, next) => {
-    getCafesInCountry('USA').subscribe(c => console.log(c));
     const sub = zip(
         getCafesNotInCountry('USA').pipe(map(result => ['partners', result])),
         getCafesInCountry('USA').pipe(map(result => ['usa', result.data.items]))
