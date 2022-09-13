@@ -20,8 +20,9 @@ router.get('/:lang/articles', async (req, res, next) => {
 });
 
 router.get('/:lang/articles/:id', async (req, res, next) => {
+    let resolvedCodenames = [];
     const response = await getArticle(req.params.id, req.params.lang).catch(next);
-    resolveRichTextItem(response.data.items[0]);
+    resolveRichTextItem(response.data.items[0], resolvedCodenames);
 
     res.render('articles', { 'articleList': response.data.items }, (err, html) => {
         if (err) {

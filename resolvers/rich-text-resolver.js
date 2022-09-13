@@ -73,13 +73,14 @@ const resolveRichText = (element) => createRichTextHtmlResolver(nodeParser).reso
     }
 });
 
-export const resolveRichTextItem = (item) => {
+export const resolveRichTextItem = (item, resolvedCodenames) => {
     for (const codename in item.elements) {
         if (item.elements[codename].type === 'rich_text') {
             item.elements[codename].value = resolveRichText(item.elements[codename]).html;
         }
-        else if (item.elements[codename].type === 'modular_content') {
-            item.elements[codename].linkedItems.forEach(item => resolveRichTextItem(item));
+        else if (item.elements[codename].type === 'modular_content' && !resolvedCodenames.includes(item.system.codename)) {
+                resolvedCodenames.push(item.system.codename);
+                item.elements[codename].linkedItems.forEach(item => resolveRichTextItem(item, resolvedCodenames));
         }
     }
 }
