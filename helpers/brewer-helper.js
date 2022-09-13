@@ -1,21 +1,20 @@
 import client from '../delivery.js';
-import { from } from 'rxjs';
 
 class BrewerHelper {
 
-    static getBrewer(codename, lang) {
-        return from(client.items()
+    static async getBrewer(codename, lang) {
+        return await client.items()
             .type('brewer')
             .languageParameter(lang)
             .equalsFilter('system.codename', codename)
-            .toPromise());
+            .toPromise();
     }
 
-    static getAllBrewers(lang) {
-        return from(client.items()
+    static async getAllBrewers(lang) {
+        return await client.items()
             .type('brewer')
             .languageParameter(lang)
-            .toPromise());
+            .toPromise();
     }
 
 }

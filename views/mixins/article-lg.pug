@@ -5,7 +5,7 @@ mixin article-lg(article)
                 img.article-tile-image(src=article.elements.teaserImage.value[0].url)
         .col-md-12.col-lg-6
             .article-tile-date
-                =new Date(article.elements.postDate.value).toString('MMMM d')
+                =new Date(article.elements.postDate.value).toDateString()
             .article-tile-content
                 h2
                     a(href=`/${currentCulture}/articles/${article.system.id}`) #{article.elements.title.value}

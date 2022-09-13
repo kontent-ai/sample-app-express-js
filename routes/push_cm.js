@@ -7,9 +7,9 @@ import { mergeMap } from 'rxjs/operators';
 import { Router } from 'express';
 
 config();
-const router = Router();
 const publicVapidKey = process.env.vapidPublicKey;
 const privateVapidKey = process.env.vapidPrivateKey;
+const router = Router();
 
 router.post('/push_cm', (req, res) => {
   const message = new PushMessage(req);

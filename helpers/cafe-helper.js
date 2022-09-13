@@ -1,21 +1,19 @@
 import client from '../delivery.js';
-import { map } from 'rxjs/operators';
-import { from } from 'rxjs';
 
 class CafeHelper {
 
-    static getCafesInCountry(country) {
-        return from(client.items()
+    static async getCafesInCountry(country) {
+        return await client.items()
             .type('cafe')
             .equalsFilter('elements.country', country)
-            .toPromise());
+            .toPromise();
     }
 
-    static getCafesNotInCountry(country) {
-        return from(client.items()
+    static async getCafesNotInCountry(country) {
+        return await client.items()
             .type('cafe')
-            .toPromise())
-            .pipe(map(result => result.data.items.filter((cafe) => cafe.elements.country.value != country)));
+            .toPromise()
+            .then(result => result.data.items.filter((cafe) => cafe.elements.country.value != country));
     }
 }
 

@@ -1,9 +1,8 @@
 import client from '../delivery.js';
-import { from } from 'rxjs';
 
 class ArticleHelper {
 
-    static getAllArticles(lang = '', force = false) {
+    static async getAllArticles(lang = '', force = false) {
         const query = client.items()
             .type('article')
             .orderParameter('elements.post_date', 'asc');
@@ -11,15 +10,15 @@ class ArticleHelper {
         if(lang !== '') query.languageParameter(lang);
         if(force) query.equalsFilter('system.language', lang);
 
-        return from(query.toPromise());
+        return await query.toPromise();
     }
 
-    static getArticle(id, lang) {
-        return from(client.items()
+    static async getArticle(id, lang) {
+        return await client.items()
             .type('article')
             .languageParameter(lang)
             .equalsFilter('system.id', id)
-            .toPromise());
+            .toPromise();
     }
 }
 

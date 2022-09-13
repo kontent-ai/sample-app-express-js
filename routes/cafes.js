@@ -1,28 +1,23 @@
 import cafeHelper from '../helpers/cafe-helper.js';
-import { zip } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { Router } from 'express';
-const router = Router();
-const { getCafesNotInCountry, getCafesInCountry } = cafeHelper;
 
-router.get('/:lang/cafes', (req, res, next) => {
-    const sub = zip(
-        getCafesNotInCountry('USA').pipe(map(result => ['partners', result])),
-        getCafesInCountry('USA').pipe(map(result => ['usa', result.data.items]))
-    ).subscribe(result => {
-        sub.unsubscribe();
-        res.render('cafes', {
-            'partnerCafes': result.filter(arr => arr[0] == 'partners')[0][1],
-            'americanCafes': result.filter(arr => arr[0] == 'usa')[0][1]
-        }, (err, html) => {
-            if (err) {
-                next(err);
-            }
-            else {
-                res.send(html);
-                res.end();
-            }
-        });
+const { getCafesNotInCountry, getCafesInCountry } = cafeHelper;
+const router = Router();
+
+router.get('/:lang/cafes', async (req, res, next) => {
+    const cafes = await Promise.all([getCafesInCountry('USA').then(result => ['usa', result.data.items]).catch(next), getCafesNotInCountry('USA').then(result => ['partners', result]).catch(next)]);
+
+    res.render('cafes', {
+        'partnerCafes': cafes.filter(arr => arr[0] == 'partners')[0][1],
+        'americanCafes': cafes.filter(arr => arr[0] == 'usa')[0][1]
+    }, (err, html) => {
+        if (err) {
+            next(err);
+        }
+        else {
+            res.send(html);
+            res.end();
+        }
     });
 });
 

@@ -1,8 +1,9 @@
 import { config } from 'dotenv';
-config();
 import { Router } from 'express';
-const router = Router();
 import algoliasearch from 'algoliasearch/lite.js';
+
+config();
+const router = Router();
 
 router.get('/:lang/search', (req, res, next) => {
     if(process.env.algoliaApp === undefined || process.env.algoliaKey === undefined || process.env.indexName === undefined) {

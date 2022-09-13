@@ -26,14 +26,14 @@ class StoreHelper {
         ];
     }
 
-    static getAllProductStatuses() {
-        return from(client.taxonomy('product_status')
-            .toPromise());
+    static async getAllProductStatuses() {
+        return await client.taxonomy('product_status')
+            .toPromise();
     }
 
-    static getAllProcessings() {
-        return from(client.taxonomy('processing')
-            .toPromise());
+    static async getAllProcessings() {
+        return await client.taxonomy('processing')
+            .toPromise();
     }
 
     static applyCoffeeFilters(items, params, processings, statuses) {
@@ -167,7 +167,7 @@ class StoreHelper {
                     const range = StoreHelper.PRICE_RANGES.find(rng => rng.id === keys[key]);
 
                     if (range) {
-                        if (prod.price.value <= range.max && prod.price.value >= range.min) {
+                        if (prod.elements.price.value <= range.max && prod.elements.price.value >= range.min) {
                             match = true;
                             result.push(prod);
                             break;
@@ -194,9 +194,9 @@ class StoreHelper {
         return ret;
     }
 
-    static getAllManufacturers() {
-        return from(client.taxonomy('manufacturer')
-            .toPromise());
+    static async getAllManufacturers() {
+        return await client.taxonomy('manufacturer')
+            .toPromise();
     }
 
     static filterProductsByStatus(products, keys) {
@@ -204,7 +204,7 @@ class StoreHelper {
 
         products.forEach(prod => {
             let match = false;
-            const statuses = prod.productStatus.value.map((status) => status.codename);
+            const statuses = prod.elements.productStatus.value.map((status) => status.codename);
 
             for (let key = 0; key < keys.length; key += 1) {
                 if (!match) {

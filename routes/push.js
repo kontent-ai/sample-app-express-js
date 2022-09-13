@@ -1,16 +1,16 @@
 import { config } from 'dotenv';
 import { from } from 'rxjs';
-config();
 import { Router } from 'express';
-const router = Router();
 import PushMessage from '../models/push-message.js';
 import webPush from 'web-push';
 import AppDAO from '../dao.js';
 import { DeliveryClient } from '@kontent-ai/delivery-sdk';
+
+config();
 const publicVapidKey = process.env.vapidPublicKey;
 const privateVapidKey = process.env.vapidPrivateKey;
-
 const { setVapidDetails, sendNotification } = webPush;
+const router = Router();
 
 router.post('/push', (req, res) => {
   const message = new PushMessage(req);

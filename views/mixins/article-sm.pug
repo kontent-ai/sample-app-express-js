@@ -4,7 +4,7 @@ mixin article-sm(article)
             a(href=`/${currentCulture}/articles/${article.system.id}`)
                 img.article-tile-image(src=article.elements.teaserImage.value[0].url)
             .article-tile-date
-                =new Date(article.elements.postDate.value).toString('MMMM d')
+                =new Date(article.elements.postDate.value).toDateString()
             .article-tile-content
                 h2.h4
                     a(href=`/${currentCulture}/articles/${article.system.id}`) #{article.elements.title.value}
