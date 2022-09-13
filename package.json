@@ -7,22 +7,21 @@
     "start": "node ./bin/www",
     "publish": "npm run eslint-local",
     "eslint-local": "./node_modules/.bin/eslint ./",
-    "kontent-generate": "npx kontent-generate --projectId=3016cfc2-49d6-00f5-72aa-7ef6c7af98f7 --elementResolver=camelCase --apiKey=ew0KICAiYWxnIjogIkhTMjU2IiwNCiAgInR5cCI6ICJKV1QiDQp9.ew0KICAianRpIjogIjczYzE2ZDE4MWU2NzQ5M2JhZTNiMDgzOGFhZWI3Njk3IiwNCiAgImlhdCI6ICIxNjYxMzQ1MzUxIiwNCiAgImV4cCI6ICIyMDA2OTQ1MzUxIiwNCiAgInZlciI6ICIyLjEuMCIsDQogICJ1aWQiOiAiTnRqZ3BlbGk5YVJtc2drdThmWHlCRm91QTUyYjNaa1piUHA2MnVjdk5FSSIsDQogICJwcm9qZWN0X2lkIjogIjMwMTZjZmMyNDlkNjAwZjU3MmFhN2VmNmM3YWY5OGY3IiwNCiAgImF1ZCI6ICJtYW5hZ2Uua2VudGljb2Nsb3VkLmNvbSINCn0.fzWV1K9o-YqHx5U4SsDveOHc_zFfxRbV8NPqOuOXtpE"
+    "kontent-generate": "npx kontent-generate --<project id> --elementResolver=camelCase --apiKey=ew0KICAiYWxnIjogIkhTMjU2IiwNCiAgInR5cCI6ICJKV1QiDQp9.ew0KICAianRpIjogIjczYzE2ZDE4MWU2NzQ5M2JhZTNiMDgzOGFhZWI3Njk3IiwNCiAgImlhdCI6ICIxNjYxMzQ1MzUxIiwNCiAgImV4cCI6ICIyMDA2OTQ1MzUxIiwNCiAgInZlciI6ICIyLjEuMCIsDQogICJ1aWQiOiAiTnRqZ3BlbGk5YVJtc2drdThmWHlCRm91QTUyYjNaa1piUHA2MnVjdk5FSSIsDQogICJwcm9qZWN0X2lkIjogIjMwMTZjZmMyNDlkNjAwZjU3MmFhN2VmNmM3YWY5OGY3IiwNCiAgImF1ZCI6ICJtYW5hZ2Uua2VudGljb2Nsb3VkLmNvbSINCn0.fzWV1K9o-YqHx5U4SsDveOHc_zFfxRbV8NPqOuOXtpE"
   },
   "devDependencies": {
     "@kontent-ai/model-generator": "^5.4.1",
     "@types/express": "^4.17.13",
-    "acorn": "^6.4.2",
-    "cookie-parser": "^1.4.4",
+    "acorn": "^8.8.0",
+    "cookie-parser": "^1.4.6",
     "datejs": "^1.0.0-rc3",
-    "debug": "^4.1.1",
-    "eslint": "^5.16.0",
-    "eslint-utils": ">=1.4.1",
-    "express": "~4.16.0",
+    "debug": "^4.3.4",
+    "eslint": "^8.23.1",
+    "eslint-utils": "^3.0.0",
+    "express": "~4.18.1",
     "global": "^4.4.0",
-    "http-errors": "^1.7.3",
-    "kentico-cloud-model-generator-utility": "^2.1.0",
-    "morgan": "~1.9.0",
+    "http-errors": "^2.0.0",
+    "morgan": "~1.10.0",
     "pug": "^3.0.2",
     "rxjs": "^7.5.6"
   },
@@ -34,8 +33,8 @@
     "axios": "^0.27.2",
     "axios-observable": "^1.5.0",
     "body-parser": "^1.19.0",
-    "dotenv": "^8.1.0",
+    "dotenv": "^16.0.2",
     "sqlite3": "^5.0.11",
-    "web-push": "^3.4.3"
+    "web-push": "^3.5.0"
   }
 }

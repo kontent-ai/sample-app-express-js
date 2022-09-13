@@ -1,9 +1,9 @@
-[![Stack Overflow](https://img.shields.io/badge/Stack%20Overflow-ASK%20NOW-FE7A16.svg?logo=stackoverflow&logoColor=white)](https://stackoverflow.com/tags/kentico-kontent)
+[![Stack Overflow](https://img.shields.io/badge/Stack%20Overflow-ASK%20NOW-FE7A16.svg?logo=stackoverflow&logoColor=white)](https://stackoverflow.com/tags/kontent-ai)
 
 # kontent-sample-app-expressjs
-This is an Express JS application meant for use with the Dancing Goat sample project within Kentico Kontent. This fully featured project contains marketing content for Dancing Goat – an imaginary chain of coffee shops. If you don't have your own Sample Project, any admin of a Kontent subscription [can generate one](https://app.kontent.ai/sample-project-generator).
+This is an Express JS application meant for use with the Dancing Goat sample project within Kontent.ai. This fully featured project contains marketing content for Dancing Goat – an imaginary chain of coffee shops. If you don't have your own Sample Project, any admin of a Kontent subscription [can generate one](https://app.kontent.ai/sample-project-generator).
 
-You can read more about our [JavaScript SDKs](https://github.com/Kentico/kontent-delivery-sdk-js)
+You can read more about our [JavaScript SDKs](https://github.com/kontent-ai/kontent-delivery-sdk-js)
 
 
 ### Setup
@@ -24,7 +24,7 @@ npm start
 
 The application will then be available at localhost:3000 (configurable in /bin/www).
 
-:warning: Due to the optional webhook integration, we've hard-coded the language codes available to the application in [app.js](https://github.com/Kentico/kontent-expressjs-app/blob/master/app.js#L12). If necessary, you can update the languages there to match the code names in Kontent:
+:warning: Due to the optional webhook integration, we've hard-coded the language codes available to the application in [app.js](https://github.com/kontent-ai/kontent-expressjs-app/blob/master/app.js#L12). If necessary, you can update the languages there to match the code names in Kontent:
 
 ```js
 const supportedLangs = ['en-US', 'es-ES'];
@@ -45,7 +45,7 @@ indexName=dancing_goat
 
 The application will automatically create, configure, and populate a search index when you visit the **/algolia** route. It will redirect you to the home page when finished, and you should immediately be able to search for articles using the search bar.
 
-To check out the code used to create the index, see [app.js](https://github.com/Kentico/kontent-expressjs-app/blob/master/app.js#L61):
+To check out the code used to create the index, see [app.js](https://github.com/kontent-ai/sample-app-express-js/blob/master/app.js#L61):
 
 ```js
 //generate Algolia index
@@ -61,7 +61,7 @@ To view the search functionality, see [/routes/search.js](/routes/search.js).
 
 There is a `/webhook` route that you can use with [workflow webhooks](https://docs.kontent.ai/tutorials/develop-apps/integrate/using-webhooks-for-automatic-updates) to automatically submit an English language variant to [Microsoft's Translator Text Cognitive Service](https://docs.microsoft.com/en-us/azure/cognitive-services/translator/translator-info-overview), translate the variant into other supported languages, and create new language variants in Kontent.
 
-At the moment, this integration only works if you are using 4-letter language code names in Kontent (e.g. "es-es"). The application's supported languages can be modified in [app.js](https://github.com/Kentico/kontent-expressjs-app/blob/master/app.js#L12).
+At the moment, this integration only works if you are using 4-letter language code names in Kontent (e.g. "es-es"). The application's supported languages can be modified in [app.js](https://github.com/kontent-ai/sample-app-express/blob/master/app.js#L12).
 
 First, you need to [create an Azure Cognitive Services account](https://docs.microsoft.com/en-us/azure/cognitive-services/cognitive-services-apis-create-account) for the Translator Text service. Then, add `Key 1` from the **Keys** tab to `.env`:
 
@@ -109,7 +109,7 @@ Next, go to the __Project settings > Webhooks__ page in Kontent and create a new
 
 ![push webhook](/assets/pushnotifications-webhook.png)
 
-For the __URL address__, use the /push endpoint, e.g. `https://mysite.com/push`. You can also run the project locally as in the [Automatic content translation](https://github.com/Kentico/kontent-sample-app-express-js#automatic-content-translation) section and enter the ngrok URL with /push at the end.
+For the __URL address__, use the /push endpoint, e.g. `https://mysite.com/push`. You can also run the project locally as in the [Automatic content translation](https://github.com/kontent-ai/kontent-sample-app-express-js#automatic-content-translation) section and enter the ngrok URL with /push at the end.
 
 Copy the __Secret__ and add it to `.env` with the "pushSecret" key:
 
@@ -145,9 +145,9 @@ Now that you're subscribed, head over to Kontent and create a new content item u
 
 ### Documentation
 
-Read full documentation and code samples for the [JavaScript Delivery SDK](https://github.com/Kentico/kontent-delivery-sdk-js/blob/master/DOCS.md).
+Read full documentation and code samples for the [JavaScript Delivery SDK](https://github.com/kontent-ai/kontent-delivery-sdk-js/blob/master/DOCS.md).
 
 ## Feedback & Contributing
 
-Check out the [contributing](https://github.com/Kentico/kontent-expressjs-apps/blob/master/CONTRIBUTING.md) page to see the best places to file issues, start discussions, and begin contributing.
+Check out the [contributing](https://github.com/kontent-ai/kontent-expressjs-apps/blob/master/CONTRIBUTING.md) page to see the best places to file issues, start discussions, and begin contributing.
 

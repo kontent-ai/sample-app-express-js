@@ -55,7 +55,7 @@ const sendPush = function(item) {
     url: item.url.value
   });
 
-  setVapidDetails('mailto:support@kentico.com', publicVapidKey, privateVapidKey);
+  setVapidDetails('mailto:support@kontent-ai.com', publicVapidKey, privateVapidKey);
   const dao = new AppDAO();
   dao.getAllSubscriptions().then((rows) => {
 
