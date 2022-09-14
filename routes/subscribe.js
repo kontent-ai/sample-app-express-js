@@ -14,7 +14,7 @@ router.post('/subscribe', (req, res, next) => {
     dao.ensureTable().then(() => {
         dao.insertSubscription(sub).then((response) => {
             res.status(201).json(response);
-        });
+        }).catch(next);
     });
 });
 

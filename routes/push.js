@@ -1,5 +1,4 @@
 import { config } from 'dotenv';
-import { from } from 'rxjs';
 import { Router } from 'express';
 import PushMessage from '../models/push-message.js';
 import webPush from 'web-push';
@@ -29,36 +28,34 @@ const processWebHook = (message) => {
     const updatedVariantContentID = message.items[0].id;
     const deliveryClient = new DeliveryClient({
       projectId: message.projectId,
-      globalQueryConfig:  {
+      defaultQueryConfig:  {
         waitForLoadingNewContent: true
       }
     });
 
-    const sub = from(deliveryClient.items()
-                              .equalsFilter('system.id', updatedVariantContentID)
-                              .toPromise())
-                              .subscribe(result => {
-                                sub.unsubscribe();
-                                if(result.data.items.length > 0 && result.data.items[0].system.type == 'push_notification') {
-                                  sendPush(result.data.items[0]);
-                                }
-                              });
+    deliveryClient.items()
+                  .equalsFilter('system.id', updatedVariantContentID)
+                  .toPromise()
+                  .then(result => {
+                    if(result.data.items.length > 0 && result.data.items[0].system.type == 'push_notification') {
+                      sendPush(result.data.items[0]);
+                    }
+                  });
 };
 
 
 const sendPush = function(item) {
   const payload = JSON.stringify({
-    title: item.title.value,
-    body: item.body.value,
-    icon: item.icon.value[0].url,
-    vibrate: item.vibrate.value.length > 0,
-    url: item.url.value
+    title: item.elements.title.value,
+    body: item.elements.body.value,
+    icon: item.elements.icon.value[0].url,
+    vibrate: item.elements.vibrate.value.length > 0,
+    url: item.elements.url.value
   });
 
-  setVapidDetails('mailto:support@kontent-ai.com', publicVapidKey, privateVapidKey);
+  setVapidDetails('mailto:support@kontent.ai', publicVapidKey, privateVapidKey);
   const dao = new AppDAO();
   dao.getAllSubscriptions().then((rows) => {
-
     rows.forEach((row) => {
       //Row contains sub data in flat structure, but webpush expects {endpoint,keys{auth,p256dh}}
       let sub = {

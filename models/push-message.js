@@ -15,10 +15,15 @@ class PushMessage {
     }
 
     hasValidSignature() {
-        const computedSignature = createHmac('sha256', process.env.pushSecret)
-            .update(this.body)
-            .digest();
-        return timingSafeEqual(Buffer.from(this.signature, 'base64'), computedSignature);
+        try {
+            const computedSignature = createHmac('sha256', process.env.pushSecret)
+                .update(this.body)
+                .digest();
+            return timingSafeEqual(Buffer.from(this.signature, 'base64'), computedSignature);
+        }
+        catch(error) {
+            console.log(error)
+        }
     }
 }
 
