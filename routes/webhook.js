@@ -1,12 +1,9 @@
 import WebHookMessage from '../models/webhook-message.js';
 import  client from '../contentmanagement.js';
-import { Axios } from 'axios-observable';
-import { zip, of } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { mergeMap } from 'rxjs/operators';
+import axios from 'axios';
 import { config } from 'dotenv';
 import { Router } from 'express';
-import { from } from 'rxjs';
+import app from '../app.js';
 config();
 
 const router = Router();
@@ -27,8 +24,8 @@ router.post('/webhook', (req, res, next) => {
 
 let updatedVariant, contentItem, publishedStepId, draftStepId;
 
-const processWebHook = (message) => {
-    listWorkflowSteps().toObservable().subscribe((response) => {
+const processWebHook = async (message) => {
+    client.listWorkflowSteps().toPromise().then((response) => {
         for (const step of response.data) {
             if (step.name === 'Published') {
                 publishedStepId = step.id;
@@ -40,42 +37,37 @@ const processWebHook = (message) => {
     });
     const updatedVariantLangID = message.items[0].language.id;
 
-    const getLanguageVariant = from(client.viewLanguageVariant()
+    const getLanguageVariant = client.viewLanguageVariant()
         .byItemId(message.items[0].item.id)
         .byLanguageId(updatedVariantLangID)
-        .toPromise())
+        .toPromise()
         
-    const getContentItem = result => {
+    const getContentItem = async (result) => {
         updatedVariant = result;
-        return from(client.viewContentItem()
+        return await client.viewContentItem()
             .byItemId(result.data.item.id)
-            .toPromise());
+            .toPromise();
     };
-    const getContentType = result => {
+    const getContentType = async result => {
         contentItem = result.data;
-        return from(client.viewContentType()
+        return await client.viewContentType()
             .byTypeId(result.data.type.id)
-            .toPromise())
+            .toPromise()
     };
-
-    const obs = getLanguageVariant.pipe(mergeMap(getContentItem)).pipe(mergeMap(getContentType));
-    const sub = obs.subscribe(result => {
-        sub.unsubscribe();
-        const type = result.data;
+    
+    const type = (await (getLanguageVariant.then(result => getContentItem(result)).then(result => getContentType(result)))).data;
         if (type.codename === 'article') {
-
             app.get('supportedLangs').forEach(targetLangCode => {
                 if (targetLangCode !== 'en-US') prepareVariant(targetLangCode, updatedVariant, contentItem, type);
             });
         }
-    });
 };
 
 const prepareVariant = (targetLangCode, updatedVariant, contentItem, type) => {
     //get the IDs of text elements
     const textElementIDs = type.elements.filter(e => e.type === 'text' || e.type === 'rich_text').map(e => e.id);
     const slugElementIds = type.elements.filter(e => e.type === 'url_slug').map(e => e.id);
-    const translateObservables = [];
+    const itemsToTranslate = [];
 
     const headers = {
         'Ocp-Apim-Subscription-Key': process.env.translationKey,
@@ -88,8 +80,8 @@ const prepareVariant = (targetLangCode, updatedVariant, contentItem, type) => {
     //copy elements from variant that triggered webhook
     updatedVariant.data.elements.forEach(e => {
         if (textElementIDs.includes(e.element.id)) {
-            translateObservables.push(
-                Axios.request({
+            itemsToTranslate.push(
+                axios(endpoint,{
                     method: 'POST',
                     params: {
                         from: 'en-us',
@@ -103,13 +95,12 @@ const prepareVariant = (targetLangCode, updatedVariant, contentItem, type) => {
                         'text': e.value
                     }]
                 })
-                    .pipe(map(result => [e.element.id, result.data[0].translations[0].text]))
+                .then(result => [e.element.id, result.data[0].translations[0].text])
             );
         }
     });
-
-    const sub = zip(...translateObservables).subscribe(result => {
-        sub.unsubscribe();
+    
+    Promise.all(itemsToTranslate).then(result => {
 
         //set new values- translated elements values are stored in [[]] with id/value pair
         updatedVariant.data.elements.forEach(e => {
@@ -128,43 +119,33 @@ const prepareVariant = (targetLangCode, updatedVariant, contentItem, type) => {
         }
 
         //check if published, create new version or move to Draft step
-        const innerSub = client.viewLanguageVariant()
+        client.viewLanguageVariant()
             .byItemId(contentItem.id)
             .byLanguageCodename(targetLangCode)
-            .toObservable()
-            .subscribe(result => {
-                innerSub.unsubscribe();
-
+            .toPromise()
+            .then(result => {
                 const variant = result.data;
-                let obs;
                 if (variant.workflowStep.id === publishedStepId) {
-                    obs = client.createNewVersionOfLanguageVariant()
+                    client.createNewVersionOfLanguageVariant()
                         .byItemId(contentItem.id)
                         .byLanguageCodename(targetLangCode)
-                        .toObservable();
                 }
                 else if (variant.workflowStep.id !== draftStepId) {
-                    obs = client.changeWorkflowStepOfLanguageVariant()
+                    client.changeWorkflowStepOfLanguageVariant()
                         .byItemId(contentItem.id)
                         .byLanguageCodename(targetLangCode)
                         .byWorkflowStepId(draftStepId)
-                        .toObservable();
-                }
-                else {
-                    obs = of({});
                 }
 
-                //run the upsert after obs completes
-                obs.subscribe(result => {
-                    upsertVariant(contentItem.id, targetLangCode, updatedVariant.data.elements);
-                });
-            }, error => {
+                upsertVariant(contentItem.id, targetLangCode, updatedVariant.data.elements);
+            })
+            .catch(error => {
                 if (error.errorCode === 103) {
                     //variant doesn't exist, proceed with upsert
                     upsertVariant(contentItem.id, targetLangCode, updatedVariant.data.elements);
                 }
-            });
-    });
+            })
+        });
 }
 
 const upsertVariant = (itemId, lang, elements) => {
