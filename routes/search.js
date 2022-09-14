@@ -1,7 +1,6 @@
 import { config } from 'dotenv';
 import { Router } from 'express';
 import algoliasearch from 'algoliasearch/lite.js';
-import app from '../app.js';
 
 config();
 const router = Router();
@@ -13,13 +12,8 @@ router.get('/:lang/search', (req, res, next) => {
     const client = algoliasearch(process.env.algoliaApp, process.env.algoliaKey);
     const index = client.initIndex(process.env.indexName);
     const term = req.query.searchtext;
-
-    index.search({
-            query: term,
-            filters: `language:${app.get('currentCulture')}`
-        }, (err, { hits } = {}) => {
-            if (err) throw err;
-
+    
+    index.search(term).then(({ hits }) => {
             res.render('search', {
                 'hits': hits,
                 'term': term
@@ -31,8 +25,8 @@ router.get('/:lang/search', (req, res, next) => {
                         res.send(html);
                         res.end();
                     }
-                });
+                });              
         });
-});
+    });
 
 export default router;

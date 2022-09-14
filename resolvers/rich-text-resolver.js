@@ -1,7 +1,7 @@
 import { createRichTextHtmlResolver } from '@kontent-ai/delivery-sdk';
 import { nodeParser } from '@kontent-ai/delivery-node-parser';
 
-const resolveRichText = (element) => createRichTextHtmlResolver(nodeParser).resolveRichText({
+export const resolveRichText = (element) => createRichTextHtmlResolver(nodeParser).resolveRichText({
     element,
     linkedItems: element.linkedItems,
     urlResolver: (linkId, linkText, link) => {

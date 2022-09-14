@@ -1,5 +1,4 @@
 /*eslint-disable no-undef, no-implicit-globals*/
-//import 'datejs';
 import { config } from 'dotenv';
 config();
 import createError from 'http-errors';
@@ -11,8 +10,6 @@ import logger from 'morgan';
 import { formatPrice } from './public/scripts/server.js';
 const supportedLangs = ['en-US', 'es-ES'];
 const languageNames = ['English', 'Spanish'];
-import { zip } from 'rxjs';
-import { map } from 'rxjs/operators';
 import algoliasearch from 'algoliasearch/lite.js';
 import ArticleHelper from './helpers/article-helper.js';
 import path from 'path';
@@ -29,6 +26,7 @@ import store from './routes/store.js';
 import coffee from './routes/coffee.js';
 import brewer from './routes/brewer.js';
 import search from './routes/search.js';
+import { resolveRichText } from './resolvers/rich-text-resolver.js'
 
 const { raw } = BodyParser;
 const __filename = fileURLToPath(import.meta.url);
@@ -81,37 +79,36 @@ app.use(['/:lang/*', '/:lang', '/'], function (req, res, next) {
 });
 
 //generate Algolia index
-app.use('/:lang/algolia', function (req, res, next) {
+app.use('/:lang/algolia', (req, res, next) => {
   const client = algoliasearch(process.env.algoliaApp, process.env.algoliaKey);
   const index = client.initIndex(process.env.indexName);
 
   //set index settings
   index.setSettings({
-    attributesForFaceting: [
+    'attributesForFaceting': [
       'language',
       'type'
     ],
-    typoTolerance: false,
-    searchableAttributes: [
+    'typoTolerance': false,
+    'searchableAttributes': [
       'bodyCopy',
       'summary',
     ]
   });
 
-  const observers = supportedLangs.map(lang => ArticleHelper.getAllArticles(lang, true).pipe(map(result => result.items)));
-  const sub = zip(...observers).subscribe(result => {
-    sub.unsubscribe();
+  const allArticles = supportedLangs.map(lang => ArticleHelper.getAllArticles(lang, true).then(result => result.data.items));
+  Promise.all(allArticles).then(result => {
     //add all articles to index
     result.flat(1).forEach(article => {
-      index.addObject({
+      index.saveObject({
           objectID: `${article.system.id}/${article.system.language}`,
           title: article.elements.title.value,
           language: article.system.language,
           postDate: new Date(article.elements.postDate.value).toString('dddd, MMMM d, yyyy'),
-          bodyCopy: article.elements.bodyCopy.resolveHtml(),
+          bodyCopy: resolveRichText(article.elements.bodyCopy),
           summary: article.elements.summary.value,
           teaserImage: article.elements.teaserImage.value[0].url,
-          type: article.elements.system.type
+          type: article.system.type
       });
     });
 
