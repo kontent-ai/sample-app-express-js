@@ -16,6 +16,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import webhook from './routes/webhook.js';
 import push from './routes/push.js';
+import push_cm from './routes/push_cm.js'
 import subscribe from './routes/subscribe.js';
 import index from './routes/index.js';
 import cafes from './routes/cafes.js';
@@ -52,6 +53,7 @@ app.set('view engine', 'pug');
 
 app.use('/', webhook);
 app.use('/', push);
+app.use('/', push_cm)
 app.use('/', subscribe);
 
 //force language prefix

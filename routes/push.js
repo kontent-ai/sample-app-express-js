@@ -8,7 +8,6 @@ import { DeliveryClient } from '@kontent-ai/delivery-sdk';
 config();
 const publicVapidKey = process.env.vapidPublicKey;
 const privateVapidKey = process.env.vapidPrivateKey;
-const { setVapidDetails, sendNotification } = webPush;
 const router = Router();
 
 router.post('/push', (req, res) => {
@@ -53,7 +52,7 @@ const sendPush = function(item) {
     url: item.elements.url.value
   });
 
-  setVapidDetails('mailto:support@kontent.ai', publicVapidKey, privateVapidKey);
+  webPush.setVapidDetails('mailto:address@localhost.local', publicVapidKey, privateVapidKey);
   const dao = new AppDAO();
   dao.getAllSubscriptions().then((rows) => {
     rows.forEach((row) => {
@@ -66,7 +65,7 @@ const sendPush = function(item) {
         }
       };
 
-      sendNotification(sub, payload).catch(response => {
+      webPush.sendNotification(sub, payload).catch(response => {
         if(response.statusCode === 410) {
           //Subscription expired or removed- delete from db
           dao.deleteSubscription(sub);

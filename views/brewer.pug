@@ -12,7 +12,7 @@ block content
                     img(alt=brewer.elements.productName.value, src=brewer.elements.image.value[0].url)
                 .description
                     div
-                        != brewer.elements.longDescription.resolveHtml()
+                        != brewer.elements.longDescription
                     .product-detail-properties
                         h4 Parameters
                         .row
