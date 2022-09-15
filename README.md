@@ -1,4 +1,5 @@
 [![Stack Overflow](https://img.shields.io/badge/Stack%20Overflow-ASK%20NOW-FE7A16.svg?logo=stackoverflow&logoColor=white)](https://stackoverflow.com/tags/kontent-ai)
+[![Discord](https://img.shields.io/discord/821885171984891914?label=Discord&logo=Discord&logoColor=white)](https://discord.gg/SKCxwPtevJ)
 
 # sample-app-express-js
 This is an Express JS application meant for use with the Dancing Goat sample project within Kontent.ai. This fully featured project contains marketing content for Dancing Goat – an imaginary chain of coffee shops. If you don't have your own Sample Project, any admin of a Kontent.ai subscription [can generate one](https://app.kontent.ai/sample-project-generator).
@@ -142,10 +143,10 @@ const publicVapidKey = '<public key>';
 The application uses SQLite database to store push notification subscriptions. Make sure to specify dbPath in the `.env` file, e.g.:
 
 ```
-const dbPath = subs.sqlite';
+const dbPath = subs.sqlite;
 ```
 
-The database will be created automatically on first subsribe attempt.
+The database will be created automatically on first subscribe attempt.
 
 You're ready to test the notification now! Make sure to access your site via _https_; push notifications will not work over insecure connections. When you access the site, your browser will prompt you to accept notifications from the website. Accept it, and you should see a successful POST to `/subscribe` in the browser's Network tab.
 
@@ -155,9 +156,9 @@ Now that you're subscribed, head over to Kontent.ai and create a new content ite
 
 ### Documentation
 
-Read full documentation and code samples for the [JavaScript Delivery SDK](https://github.com/kontent-ai/kontent-delivery-sdk-js/blob/master/DOCS.md).
+Read full documentation and code samples for the [JavaScript Delivery SDK](https://github.com/kontent-ai/delivery-sdk-js/blob/master/DOCS.md).
 
 ## Feedback & Contributing
 
-Check out the [contributing](https://github.com/kontent-ai/kontent-expressjs-apps/blob/master/CONTRIBUTING.md) page to see the best places to file issues, start discussions, and begin contributing.
+Check out the [contributing](https://github.com/kontent-ai/sample-app-express-js/blob/master/CONTRIBUTING.md) page to see the best places to file issues, start discussions, and begin contributing.
 
