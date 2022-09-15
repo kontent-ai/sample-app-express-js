@@ -3,7 +3,7 @@
 # kontent-sample-app-expressjs
 This is an Express JS application meant for use with the Dancing Goat sample project within Kontent.ai. This fully featured project contains marketing content for Dancing Goat – an imaginary chain of coffee shops. If you don't have your own Sample Project, any admin of a Kontent subscription [can generate one](https://app.kontent.ai/sample-project-generator).
 
-You can read more about our [JavaScript SDKs](https://github.com/kontent-ai/kontent-delivery-sdk-js)
+You can read more about our [JavaScript SDKs](https://github.com/kontent-ai/delivery-sdk-js)
 
 
 ### Setup
@@ -24,7 +24,7 @@ npm start
 
 The application will then be available at localhost:3000 (configurable in /bin/www).
 
-:warning: Due to the optional webhook integration, we've hard-coded the language codes available to the application in [app.js](https://github.com/kontent-ai/kontent-expressjs-app/blob/master/app.js#L12). If necessary, you can update the languages there to match the code names in Kontent:
+:warning: Due to the optional webhook integration, we've hard-coded the language codes available to the application in [app.js](https://github.com/kontent-ai/sample-app-express-js/blob/master/app.js#L12). If necessary, you can update the languages there to match the code names in Kontent:
 
 ```js
 const supportedLangs = ['en-US', 'es-ES'];
@@ -74,7 +74,7 @@ Depending on how your translation service is configured in Azure, you may also n
 translationRegion=westus2
 ```
 
-If you are running the project locally, you can still test webhooks using [ngrok](https://ngrok.com/) (or a similar program). To use ngrok, follow their [setup guide](https://dashboard.ngrok.com/get-started) and in **step 4** use the port number the Express application will run on (3000 by default). When you're done running ngrok, you should see something like the following:
+If you are running the project locally, you can still test webhooks using [ngrok](https://ngrok.com/) (or a similar program). To use ngrok, follow their [setup guide](https://ngrok.com/docs/getting-started) and in **step 4** use the port number the Express application will run on (3000 by default). When you're done running ngrok, you should see something like the following:
 
 ![ngrok](/assets/ngrok-sample.png)
 
@@ -95,7 +95,7 @@ Run your Express application, then move an English language variant into the wor
 
 ### Sending push notifications
 
-This application can also send push notifications to visitors whenever a content item in Kontent is published. You can read [this blog post](https://kontent.ai/blog/sending-push-notifications-from-kontent) to read more about how it works and how to set it up from scratch.
+This application can also send push notifications to visitors whenever a content item in Kontent.ai is published. You can read [this blog post](https://kontent.ai/blog/sending-push-notifications-from-kontent) to read more about how it works and how to set it up from scratch.
 
 To start, you need to create a new content type in Kontent with the codename "push_notification" and the following elements:
 
@@ -110,6 +110,8 @@ Next, go to the __Project settings > Webhooks__ page in Kontent and create a new
 ![push webhook](/assets/pushnotifications-webhook.png)
 
 For the __URL address__, use the /push endpoint, e.g. `https://mysite.com/push`. You can also run the project locally as in the [Automatic content translation](https://github.com/kontent-ai/kontent-sample-app-express-js#automatic-content-translation) section and enter the ngrok URL with /push at the end.
+
+> **NOTE:**  Management API webhook triggers are supported as well. Use /push_cm endpoint instead.
 
 Copy the __Secret__ and add it to `.env` with the "pushSecret" key:
 
@@ -136,6 +138,14 @@ Also add the Public key to the top of `/public/scripts/client.js`:
 ```
 const publicVapidKey = '<public key>';
 ```
+
+The application uses SQLite database to store push notification subscriptions. Make sure to specify dbPath in the `.env` file, e.g.:
+
+```
+const dbPath = subs.sqlite';
+```
+
+The database will be created automatically on first subsribe attempt.
 
 You're ready to test the notification now! Make sure to access your site via _https_; push notifications will not work over insecure connections. When you access the site, your browser will prompt you to accept notifications from the website. Accept it, and you should see a successful POST to `/subscribe` in the browser's Network tab.
 
