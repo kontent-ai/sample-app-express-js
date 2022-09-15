@@ -12,7 +12,7 @@ router.get('/:lang/search', (req, res, next) => {
     const client = algoliasearch(process.env.algoliaApp, process.env.algoliaKey);
     const index = client.initIndex(process.env.indexName);
     const term = req.query.searchtext;
-    
+
     index.search(term).then(({ hits }) => {
             res.render('search', {
                 'hits': hits,
@@ -20,12 +20,11 @@ router.get('/:lang/search', (req, res, next) => {
                 }, (err2, html) => {
                     if (err2) {
                         next(err2);
-                    }
-                    else {
+                    } else {
                         res.send(html);
                         res.end();
                     }
-                });              
+                });
         });
     });
 

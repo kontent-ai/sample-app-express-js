@@ -3,8 +3,8 @@ import { Router } from 'express';
 const router = Router();
 
 router.post('/subscribe', (req, res, next) => {
-    let json = JSON.parse(req.body);
-    let sub = {
+    const json = JSON.parse(req.body);
+    const sub = {
         endpoint: json.endpoint,
         p256dh: json.keys.p256dh,
         auth: json.keys.auth

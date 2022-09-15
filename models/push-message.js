@@ -20,8 +20,7 @@ class PushMessage {
                 .update(this.body)
                 .digest();
             return timingSafeEqual(Buffer.from(this.signature, 'base64'), computedSignature);
-        }
-        catch(error) {
+        } catch(error) {
             console.log(error)
         }
     }

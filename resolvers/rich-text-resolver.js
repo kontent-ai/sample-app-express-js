@@ -37,8 +37,7 @@ export const resolveRichText = (element) => createRichTextHtmlResolver(nodeParse
                     >
                     </iframe>`
                 };
-            }
-            else if (contentItem.elements.videoHost.value[0].codename === "youtube") {      
+            } else if (contentItem.elements.videoHost.value[0].codename === "youtube") {
                 return {
                     contentItemHtml: `<iframe class="hosted-video__wrapper"
                     width="560"
@@ -49,13 +48,11 @@ export const resolveRichText = (element) => createRichTextHtmlResolver(nodeParse
                     >
                     </iframe>`
                 }
-            }       
+            }
             return {
                 contentItemHtml: ''
             };
-        }
-
-        else if ((contentItem && contentItem.system.type === 'tweet')) {
+        } else if ((contentItem && contentItem.system.type === 'tweet')) {
             return {
                 contentItemHtml: `<div>
                 <blockquote class="twitter-tweet" data-theme="${contentItem.elements.theme.value[0].codename}" ${contentItem.elements.displayOptions.value.some(e => e.codename === "hide_thread") ? "data-conversation=hidden" : ''} ${contentItem.elements.displayOptions.value.some(e => e.codename === "hide_media") ? "data-conversation=none" : ''}>
@@ -77,8 +74,7 @@ export const resolveRichTextItem = (item, resolvedCodenames) => {
     for (const codename in item.elements) {
         if (item.elements[codename].type === 'rich_text') {
             item.elements[codename].value = resolveRichText(item.elements[codename]).html;
-        }
-        else if (item.elements[codename].type === 'modular_content' && !resolvedCodenames.includes(item.system.codename)) {
+        } else if (item.elements[codename].type === 'modular_content' && !resolvedCodenames.includes(item.system.codename)) {
                 resolvedCodenames.push(item.system.codename);
                 item.elements[codename].linkedItems.forEach(item => resolveRichTextItem(item, resolvedCodenames));
         }

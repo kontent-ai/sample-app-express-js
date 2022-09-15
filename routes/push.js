@@ -16,8 +16,7 @@ router.post('/push', (req, res) => {
     processWebHook(message);
       console.log('Webhook - success');
       res.status(200).send('SUCCESS');
-  }
-  else {
+  } else {
       console.log('Webhook - invalid signature');
       res.status(403).send('INVALID SIGNATURE');
   }
@@ -56,8 +55,8 @@ const sendPush = function(item) {
   const dao = new AppDAO();
   dao.getAllSubscriptions().then((rows) => {
     rows.forEach((row) => {
-      //Row contains sub data in flat structure, but webpush expects {endpoint,keys{auth,p256dh}}
-      let sub = {
+      // Row contains sub data in flat structure, but webpush expects {endpoint,keys{auth,p256dh}}
+      const sub = {
         endpoint: row.endpoint,
         keys: {
           p256dh: row.p256dh,
@@ -67,7 +66,7 @@ const sendPush = function(item) {
 
       webPush.sendNotification(sub, payload).catch(response => {
         if(response.statusCode === 410) {
-          //Subscription expired or removed- delete from db
+          // Subscription expired or removed- delete from db
           dao.deleteSubscription(sub);
           console.log(`Subscription ${sub.keys.p256dh} deleted`);
         }
@@ -75,5 +74,5 @@ const sendPush = function(item) {
     });
   });
 }
-    
+
 export default router;

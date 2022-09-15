@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node ./bin/www",
     "publish": "npm run eslint-local",
-    "eslint-local": "./node_modules/.bin/eslint ./",
+    "eslint-local": "eslint --fix ./",
     "kontent-generate": "npx kontent-generate --<project id> --elementResolver=camelCase --apiKey=ew0KICAiYWxnIjogIkhTMjU2IiwNCiAgInR5cCI6ICJKV1QiDQp9.ew0KICAianRpIjogIjczYzE2ZDE4MWU2NzQ5M2JhZTNiMDgzOGFhZWI3Njk3IiwNCiAgImlhdCI6ICIxNjYxMzQ1MzUxIiwNCiAgImV4cCI6ICIyMDA2OTQ1MzUxIiwNCiAgInZlciI6ICIyLjEuMCIsDQogICJ1aWQiOiAiTnRqZ3BlbGk5YVJtc2drdThmWHlCRm91QTUyYjNaa1piUHA2MnVjdk5FSSIsDQogICJwcm9qZWN0X2lkIjogIjMwMTZjZmMyNDlkNjAwZjU3MmFhN2VmNmM3YWY5OGY3IiwNCiAgImF1ZCI6ICJtYW5hZ2Uua2VudGljb2Nsb3VkLmNvbSINCn0.fzWV1K9o-YqHx5U4SsDveOHc_zFfxRbV8NPqOuOXtpE"
   },
   "devDependencies": {
