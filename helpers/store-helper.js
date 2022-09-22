@@ -1,5 +1,4 @@
 import client from '../delivery.js';
-import { from } from 'rxjs';
 
 class StoreHelper {
 

@@ -9,7 +9,7 @@ config();
 const router = Router();
 const endpoint = 'https://api.cognitive.microsofttranslator.com/translate?api-version=3.0';
 
-router.post('/webhook', (req, res, next) => {
+router.post('/webhook', (req, res, _next) => {
     const message = new WebHookMessage(req);
     if (message.hasValidSignature()) {
         processWebHook(message);
@@ -152,7 +152,7 @@ const upsertVariant = (itemId, lang, elements) => {
     client.upsertLanguageVariant()
         .byItemId(itemId)
         .byLanguageCodename(lang)
-        .withData((builder) => elements)
+        .withData((_builder) => elements)
         .toPromise()
         .then(result => {
             console.log(`language ${result.data.language.id}: ${result.debug.response.status}`);

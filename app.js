@@ -81,7 +81,7 @@ app.use(['/:lang/*', '/:lang', '/'], function (req, res, next) {
 });
 
 //generate Algolia index
-app.use('/:lang/algolia', (req, res, next) => {
+app.use('/:lang/algolia', (req, res, _next) => {
   const client = algoliasearch(process.env.algoliaApp, process.env.algoliaKey);
   const index = client.initIndex(process.env.indexName);
 
@@ -133,12 +133,12 @@ app.use('/', search);
 app.locals.formatPrice = formatPrice;
 
 //catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function(_req, _res, next) {
   next(createError(404));
 });
 
 //error handler
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res, _next) {
   //set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
