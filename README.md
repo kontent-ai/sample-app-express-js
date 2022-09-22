@@ -1,8 +1,10 @@
+# Kontent sample Express.js web application
+
 [![Stack Overflow](https://img.shields.io/badge/Stack%20Overflow-ASK%20NOW-FE7A16.svg?logo=stackoverflow&logoColor=white)](https://stackoverflow.com/tags/kontent-ai)
 [![Discord](https://img.shields.io/discord/821885171984891914?label=Discord&logo=Discord&logoColor=white)](https://discord.gg/SKCxwPtevJ)
 
-# sample-app-express-js
-This is an Express JS application meant for use with the Dancing Goat sample project within Kontent.ai. This fully featured project contains marketing content for Dancing Goat – an imaginary chain of coffee shops. If you don't have your own Sample Project, any admin of a Kontent.ai subscription [can generate one](https://app.kontent.ai/sample-project-generator).
+
+This is an Express application meant for use with the Dancing Goat sample project within Kontent.ai. This fully featured project contains marketing content for Dancing Goat – an imaginary chain of coffee shops. If you don't have your own Sample Project, any admin of a Kontent.ai subscription [can generate one](https://app.kontent.ai/sample-project-generator).
 
 You can read more about our [JavaScript SDKs](https://github.com/kontent-ai/delivery-sdk-js)
 
