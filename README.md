@@ -27,7 +27,7 @@ You can read more about our [JavaScript SDKs](https://github.com/kontent-ai/deli
 
 The application will then be available at localhost:3000 (configurable in /bin/www).
 
-:warning: Due to the optional webhook integration, we've hard-coded the language codes available to the application in [app.js](https://github.com/kontent-ai/sample-app-express-js/blob/master/app.js#L12). If necessary, you can update the languages there to match the code names in Kontent:
+:warning: Due to the optional webhook integration, we've hard-coded the language codes available to the application in [app.js](./app.js#L12). If necessary, you can update the languages there to match the code names in Kontent:
 
 ```js
 const supportedLangs = ["en-US", "es-ES"];
@@ -48,7 +48,7 @@ indexName=dancing_goat
 
 The application will automatically create, configure, and populate a search index when you visit the **/algolia** route. It will redirect you to the home page when finished, and you should immediately be able to search for articles using the search bar.
 
-To check out the code used to create the index, see [app.js](https://github.com/kontent-ai/sample-app-express-js/blob/master/app.js#L61):
+To check out the code used to create the index, see [app.js](./app.js#L61):
 
 ```js
 //generate Algolia index
@@ -65,7 +65,7 @@ To view the search functionality, see [/routes/search.js](/routes/search.js).
 
 There is a `/webhook` route that you can use with [workflow webhooks](https://docs.kontent.ai/tutorials/develop-apps/integrate/using-webhooks-for-automatic-updates) to automatically submit an English language variant to [Microsoft's Translator Text Cognitive Service](https://docs.microsoft.com/en-us/azure/cognitive-services/translator/translator-info-overview), translate the variant into other supported languages, and create new language variants in Kontent.
 
-At the moment, this integration only works if you are using 4-letter language code names in Kontent.ai (e.g. "es-es"). The application's supported languages can be modified in [app.js](https://github.com/kontent-ai/sample-app-express/blob/master/app.js#L12).
+At the moment, this integration only works if you are using 4-letter language code names in Kontent.ai (e.g. "es-es"). The application's supported languages can be modified in [app.js](./app.js#L12).
 
 First, you need to [create an Azure Cognitive Services account](https://docs.microsoft.com/en-us/azure/cognitive-services/cognitive-services-apis-create-account) for the Translator Text service. Then, add `Key 1` from the **Keys** tab to `.env`:
 
@@ -96,7 +96,9 @@ contentManagementKey=<CM API key>
 webhookSecret=<secret>
 ```
 
-Run your Express application, then move an English language variant into the workflow step you selected in the webhook. You should see some debugging information in the console when the webhook is consumed, then you will find your new language variants in the **Draft** step!
+> ℹ The translation process is prepared to translate only `article` items.
+
+Run your Express application, then move an English language variant into the workflow step you selected in the webhook. You should see some debugging information in the console when the webhook is consumed, then you will find your new language variants in the **Draft** step! 
 
 ## Sending push notifications
 
@@ -112,9 +114,9 @@ To start, you need to create a new content type in Kontent.ai with the codename 
 
 Next, go to the **Project settings > Webhooks** page in Kontent.ai and create a new webhook. We want to send push notifications whenever an item of our _push_notification_ type is published, so select "Publish" from the **Content item events to watch** drop-down.
 
-![push webhook](/assets/pushnotifications-webhook.png)
+![push webhook](./assets/pushnotifications-webhook.png)
 
-For the **URL address**, use the /push endpoint, e.g. `https://mysite.com/push`. You can also run the project locally as in the [Automatic content translation](https://github.com/kontent-ai/kontent-sample-app-express-js#automatic-content-translation) section and enter the ngrok URL with /push at the end.
+For the **URL address**, use the /push endpoint, e.g. `https://mysite.com/push`. You can also run the project locally as in the [Automatic content translation](#automatic-content-translation) section and enter the ngrok URL with /push at the end.
 
 > **NOTE:** Management API webhook triggers are supported as well. Use /push_cm endpoint instead.
 
@@ -156,12 +158,12 @@ You're ready to test the notification now! Make sure to access your site via _ht
 
 Now that you're subscribed, head over to Kontent.ai and create a new content item using the _push_notification_ content type. When you publish it, the webhook will shortly trigger and a notification will appear on your desktop:
 
-![push demo](/assets/pushnotifications-demo.gif)
+![push demo](./assets/pushnotifications-demo.gif)
 
 ### Documentation
 
-Read full documentation and code samples for the [JavaScript Delivery SDK](https://github.com/kontent-ai/delivery-sdk-js/blob/master/DOCS.md).
+Read full documentation and code samples for the [JavaScript Delivery SDK](https://github.com/kontent-ai/delivery-sdk-js).
 
 ## Feedback & Contributing
 
-Check out the [contributing](https://github.com/kontent-ai/sample-app-express-js/blob/master/CONTRIBUTING.md) page to see the best places to file issues, start discussions, and begin contributing.
+Check out the [contributing](./CONTRIBUTING.md) page to see the best places to file issues, start discussions, and begin contributing.
