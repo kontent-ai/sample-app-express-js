@@ -4,7 +4,7 @@ import { nodeParser } from '@kontent-ai/delivery-node-parser';
 export const resolveRichText = (element) => createRichTextHtmlResolver(nodeParser).resolveRichText({
     element,
     linkedItems: element.linkedItems,
-    urlResolver: (linkId, linkText, link) => {
+    urlResolver: (linkId, _linkText, link) => {
         switch (link.type) {
             case "article":
                 return {
@@ -12,17 +12,17 @@ export const resolveRichText = (element) => createRichTextHtmlResolver(nodeParse
                 }
             case "coffee":
                 return {
-                    linkUrl: `/articles/${linkId}`
+                    linkUrl: `/coffee/${link.codename}`
                 }
             case "brewer":
                 return {
-                    linkUrl: `/articles/${linkId}`
+                    linkUrl: `/brewer/${link.codename}`
                 }
             default:
                 return { linkUrl: ""}
         }
     },
-    contentItemResolver: (itemId, contentItem) => {
+    contentItemResolver: (_itemId, contentItem) => {
         if (contentItem && contentItem.system.type === 'hosted_video') {
             if (contentItem.elements.videoHost.value[0].codename === "vimeo") {
                 return {
