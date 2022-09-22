@@ -12,16 +12,18 @@ You can read more about our [JavaScript SDKs](https://github.com/kontent-ai/deli
 1. Clone the repository
 1. Create a `.env` file on the root and set the `projectId` variable to your sample project's Project ID:
 
-  ```sh
-  projectId=<your project ID>
-  ```
+   - _You can use `env.example` as a template for the `.env` file_
+
+   ```sh
+   projectId=<your project ID>
+   ```
 
 1. Run the following commands:
 
-  ```sh
-  npm install
-  npm start
-  ```
+   ```sh
+   npm install
+   npm start
+   ```
 
 The application will then be available at localhost:3000 (configurable in /bin/www).
 
@@ -139,7 +141,7 @@ vapidPrivateKey=<private key>
 Also add the Public key to the top of `/public/scripts/client.js`:
 
 ```js
-const publicVapidKey = '<public key>';
+const publicVapidKey = "<public key>";
 ```
 
 The application uses SQLite database to store push notification subscriptions. Make sure to specify dbPath in the `.env` file, e.g.:
