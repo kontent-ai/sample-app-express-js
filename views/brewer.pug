@@ -5,16 +5,16 @@ block content
         .row
             .col-md-12
                 header
-                    h2 #{brewer.productName.value}
+                    h2 #{brewer.elements.productName.value}
         .row-fluid
             .col-lg-7.col-md-6
                 figure.image
-                    img(alt=brewer.productName.value, src=brewer.image.value[0].url)
+                    img(alt=brewer.elements.productName.value, src=brewer.elements.image.value[0].url)
                 .description
                     div
-                        != brewer.longDescription.resolveHtml()
+                        != brewer.elements.longDescription.value
                     .product-detail-properties
                         h4 Parameters
                         .row
                             dt.col-xs-12.col-sm-4 Manufacturer
-                            dd.col-xs-12.col-sm-8 #{brewer.manufacturer.value[0].name}
+                            dd.col-xs-12.col-sm-8 #{brewer.elements.manufacturer.value[0].name}

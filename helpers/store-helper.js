@@ -1,4 +1,4 @@
-const deliveryClient = require('../delivery');
+import client from '../delivery.js';
 
 class StoreHelper {
 
@@ -25,16 +25,14 @@ class StoreHelper {
         ];
     }
 
-    static getAllProductStatuses() {
-        return deliveryClient
-            .taxonomy('product_status')
-            .toObservable();
+    static async getAllProductStatuses() {
+        return await client.taxonomy('product_status')
+            .toPromise();
     }
 
-    static getAllProcessings() {
-        return deliveryClient
-            .taxonomy('processing')
-            .toObservable();
+    static async getAllProcessings() {
+        return await client.taxonomy('processing')
+            .toPromise();
     }
 
     static applyCoffeeFilters(items, params, processings, statuses) {
@@ -78,8 +76,8 @@ class StoreHelper {
 
             for (let key = 0; key < keys.length; key += 1) {
                 if (!match) {
-                    for (let manu = 0; manu < brewer.manufacturer.value.length; manu += 1) {
-                        if (brewer.manufacturer.value[manu].codename == keys[key]) {
+                    for (let manu = 0; manu < brewer.elements.manufacturer.value.length; manu += 1) {
+                        if (brewer.elements.manufacturer.value[manu].codename == keys[key]) {
                             match = true;
                             result.push(brewer);
                             break;
@@ -114,8 +112,8 @@ class StoreHelper {
 
             for (let key = 0; key < keys.length; key += 1) {
                 if (!match) {
-                    for (let proc = 0; proc < coffee.processing.value.length; proc += 1) {
-                        if (coffee.processing.value[proc].codename == keys[key]) {
+                    for (let proc = 0; proc < coffee.elements.processing.value.length; proc += 1) {
+                        if (coffee.elements.processing.value[proc].codename == keys[key]) {
                             match = true;
                             result.push(coffee);
                             break;
@@ -168,7 +166,7 @@ class StoreHelper {
                     const range = StoreHelper.PRICE_RANGES.find(rng => rng.id === keys[key]);
 
                     if (range) {
-                        if (prod.price.value <= range.max && prod.price.value >= range.min) {
+                        if (prod.elements.price.value <= range.max && prod.elements.price.value >= range.min) {
                             match = true;
                             result.push(prod);
                             break;
@@ -195,10 +193,9 @@ class StoreHelper {
         return ret;
     }
 
-    static getAllManufacturers() {
-        return deliveryClient
-            .taxonomy('manufacturer')
-            .toObservable();
+    static async getAllManufacturers() {
+        return await client.taxonomy('manufacturer')
+            .toPromise();
     }
 
     static filterProductsByStatus(products, keys) {
@@ -206,7 +203,7 @@ class StoreHelper {
 
         products.forEach(prod => {
             let match = false;
-            const statuses = prod.productStatus.value.map((status) => status.codename);
+            const statuses = prod.elements.productStatus.value.map((status) => status.codename);
 
             for (let key = 0; key < keys.length; key += 1) {
                 if (!match) {
@@ -225,4 +222,4 @@ class StoreHelper {
     }
 }
 
-module.exports = StoreHelper;
+export default StoreHelper;

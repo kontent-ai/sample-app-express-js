@@ -1,80 +1,80 @@
-const express = require('express');
-const router = express.Router();
-const BrewerHelper = require('../helpers/brewer-helper');
-const CoffeeHelper = require('../helpers/coffee-helper');
-const StoreHelper = require('../helpers/store-helper');
-const { zip } = require('rxjs');
-const { map } = require('rxjs/operators');
+import { Router } from 'express';
+import brewerHelper from '../helpers/brewer-helper.js';
+import coffeeHelper from '../helpers/coffee-helper.js';
+import storeHelper from '../helpers/store-helper.js';
 
-const render = function (req, res, next) {
+const { getAllBrewers } = brewerHelper;
+const { getAllCoffees } = coffeeHelper;
+const { getAllProductStatuses, getAllProcessings, getAllManufacturers, applyCoffeeFilters, applyBrewerFilters, PRICE_RANGES } = storeHelper;
+const router = Router();
+
+const render = async (req, res, next) => {
     const type = req.params.type ? req.params.type : 'coffees';
-    let obs;
+    let results;
 
-    //Create single observable to obtain all product information
+    //Create single promise to obtain all product information
     switch (type) {
         default:
         case 'coffees':
-            obs = zip(
-                StoreHelper.getAllProductStatuses().pipe(map(result => ['statuses', result.taxonomy.terms])),
-                CoffeeHelper.getAllCoffees(req.params.lang).pipe(map(result => ['coffees', result.items])),
-                StoreHelper.getAllProcessings().pipe(map(result => ['processings', result.taxonomy.terms]))
+            results = await Promise.all([
+                    getAllProductStatuses().then(result => ['statuses', result.data.taxonomy.terms]).catch(next),
+                    getAllCoffees(req.params.lang).then(result => ['coffees', result.data.items]).catch(next),
+                    getAllProcessings().then(result => ['processings', result.data.taxonomy.terms]).catch(next)
+                ]
             )
             break;
         case 'brewers':
-            obs = zip(
-                StoreHelper.getAllProductStatuses().pipe(map(result => ['statuses', result.taxonomy.terms])),
-                BrewerHelper.getAllBrewers(req.params.lang).pipe(map(result => ['brewers', result.items])),
-                StoreHelper.getAllManufacturers().pipe(map(result => ['manufacturers', result.taxonomy.terms]))
+            results = await Promise.all([
+                    getAllProductStatuses().then(result => ['statuses', result.data.taxonomy.terms]).catch(next),
+                    getAllBrewers(req.params.lang).then(result => ['brewers', result.data.items]).catch(next),
+                    getAllManufacturers().then(result => ['manufacturers', result.data.taxonomy.terms]).catch(next)
+                ]
             )
             break;
     }
 
-    //Run the obserable
-    const sub = obs.subscribe(result => {
-        let coffees, processings, manufacturers, brewers;
-        const [[, statuses]] = result.filter(arr => arr[0] == 'statuses');
+    let coffees, processings, manufacturers, brewers;
+    const [[, statuses]] = results.filter(arr => arr[0] == 'statuses');
 
-        //Apply selected filters (in query string) to products
-        switch (type) {
-            default:
-            case 'coffees':
-                [[, processings]] = result.filter(arr => arr[0] == 'processings');
-                [[, coffees]] = result.filter(arr => arr[0] == 'coffees');
-                coffees = StoreHelper.applyCoffeeFilters(coffees, req.query, processings, statuses);
-                break;
-            case 'brewers':
-                [[, manufacturers]] = result.filter(arr => arr[0] == 'manufacturers');
-                [[, brewers]] = result.filter(arr => arr[0] == 'brewers');
-                brewers = StoreHelper.applyBrewerFilters(brewers, req.query, manufacturers, statuses);
-                break;
+    //Apply selected filters (in query string) to products
+    switch (type) {
+        default:
+        case 'coffees':
+            [[, processings]] = results.filter(arr => arr[0] == 'processings');
+            [[, coffees]] = results.filter(arr => arr[0] == 'coffees');
+            coffees = applyCoffeeFilters(coffees, req.query, processings, statuses);
+            break;
+        case 'brewers':
+            [[, manufacturers]] = results.filter(arr => arr[0] == 'manufacturers');
+            [[, brewers]] = results.filter(arr => arr[0] == 'brewers');
+            brewers = applyBrewerFilters(brewers, req.query, manufacturers, statuses);
+            break;
+    }
+
+    res.render('store', {
+        'type': type,
+        //req is needed in Pug to get URL
+        'req': req,
+        'productStatuses': statuses,
+        'priceRanges': PRICE_RANGES,
+        //Coffee items
+        'processings': (type == 'coffees') ? processings : [],
+        'coffees': (type == 'coffees') ? coffees : [],
+        //Brewer items
+        'brewers': (type == 'brewers') ? brewers : [],
+        'manufacturers': (type == 'brewers') ? manufacturers : [],
+    }, (err, html) => {
+        if (err) {
+            next(err);
         }
-
-        sub.unsubscribe();
-        res.render('store', {
-            'type': type,
-            //req is needed in Pug to get URL
-            'req': req,
-            'productStatuses': statuses,
-            'priceRanges': StoreHelper.PRICE_RANGES,
-            //Coffee items
-            'processings': (type == 'coffees') ? processings : [],
-            'coffees': (type == 'coffees') ? coffees : [],
-            //Brewer items
-            'brewers': (type == 'brewers') ? brewers : [],
-            'manufacturers': (type == 'brewers') ? manufacturers : [],
-        }, (err, html) => {
-            if (err) {
-                next(err);
-            }
-            else {
-                res.send(html);
-                res.end();
-            }
-        });
+        else {
+            res.send(html);
+            res.end();
+        }
     });
 }
 
 router.get('/:lang/store', render);
 router.get('/:lang/store/:type', render);
 
-module.exports = router;
+export default router;

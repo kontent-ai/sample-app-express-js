@@ -1,20 +1,24 @@
-const express = require('express');
-const router = express.Router();
-const CoffeeHelper = require('../helpers/coffee-helper');
+import coffeHelper from '../helpers/coffee-helper.js';
+import { Router } from 'express';
+import { resolveRichTextItem } from '../resolvers/rich-text-resolver.js'
 
-router.get('/:lang/coffee/:codename', (req, res, next) => {
-    const sub = CoffeeHelper.getCoffee(req.params.codename, req.params.lang).subscribe(result => {
-        sub.unsubscribe();
-        res.render('coffee', { 'coffee': result.firstItem }, (err, html) => {
-            if (err) {
-                next(err);
-            }
-            else {
-                res.send(html);
-                res.end();
-            }
-        });
+const { getCoffee } = coffeHelper;
+const router = Router();
+
+router.get('/:lang/coffee/:codename', async (req, res, next) => {
+    let resolvedCodenames = [];
+    const response = await getCoffee(req.params.codename, req.params.lang).catch(next);
+    resolveRichTextItem(response.data.items[0], resolvedCodenames);
+
+    res.render('coffee', { 'coffee': response.data.items[0] }, (err, html) => {
+        if (err) {
+            next(err);
+        }
+        else {
+            res.send(html);
+            res.end();
+        }
     });
 });
 
-module.exports = router;
+export default router;

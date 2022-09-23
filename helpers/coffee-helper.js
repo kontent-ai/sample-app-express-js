@@ -1,21 +1,21 @@
-const deliveryClient = require('../delivery');
+import client from '../delivery.js';
 
 class CoffeeHelper {
 
-    static getCoffee(codename, lang) {
-        return deliveryClient.items()
+    static async getCoffee(codename, lang) {
+        return await client.items()
             .type('coffee')
             .languageParameter(lang)
             .equalsFilter('system.codename', codename)
-            .toObservable();
+            .toPromise();
     }
 
-    static getAllCoffees(lang) {
-        return deliveryClient.items()
+    static async getAllCoffees(lang) {
+        return await client.items()
             .type('coffee')
             .languageParameter(lang)
-            .toObservable();
+            .toPromise();
     }
 }
 
-module.exports = CoffeeHelper;
+export default CoffeeHelper;

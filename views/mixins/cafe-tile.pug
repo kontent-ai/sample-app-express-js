@@ -1,8 +1,8 @@
 mixin cafe-tile(cafe)
     .col-xs-6.col-md-3
         div
-           a.ourcoffee-tile-link(href=`/${app.locals.currentCulture}/cafes`)
-            h2.ourcoffee-tile-text.center-text #{cafe.city.value}
+           a.ourcoffee-tile-link(href=`/${currentCulture}/cafes`)
+            h2.ourcoffee-tile-text.center-text #{cafe.elements.city.value}
             span.cafe-overlay
-            img.ourcoffee-tile-image(src=cafe.photo.value[0].url)
+            img.ourcoffee-tile-image(src=cafe.elements.photo.value[0].url)
 

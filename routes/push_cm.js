@@ -1,14 +1,14 @@
-const dotenv = require('dotenv');
-dotenv.config();
-const express = require('express');
-const router = express.Router();
-const PushMessage = require('../models/push-message');
-const webpush = require('web-push');
-const AppDAO = require('../dao');
-const cmClient = require('../contentmanagement');
-const { mergeMap } = require('rxjs/operators');
+import { config } from 'dotenv';
+import PushMessage from '../models/push-message.js';
+import webPush from 'web-push';
+import AppDAO from '../dao.js';
+import client from '../contentmanagement.js';
+import { Router } from 'express';
+
+config();
 const publicVapidKey = process.env.vapidPublicKey;
 const privateVapidKey = process.env.vapidPrivateKey;
+const router = Router();
 
 router.post('/push_cm', (req, res) => {
   const message = new PushMessage(req);
@@ -23,37 +23,29 @@ router.post('/push_cm', (req, res) => {
   }
 });
 
-const processWebHook = (message) => {
-    const updatedVariantLangID = message.items[0].language;
+const processWebHook = async (message) => {
+    const updatedVariantLangID = message.items[0].language.id;
     let updatedVariant;
-
-    const getLanguageVariant = cmClient
-                .viewLanguageVariant()
-                .byItemId(message.items[0].id)
-                .byLanguageCodename(updatedVariantLangID)
-                .toObservable();
-    const getContentItem = result => {
+    const getLanguageVariant = client.viewLanguageVariant()
+                .byItemId(message.items[0].item.id)
+                .byLanguageId(updatedVariantLangID)
+                .toPromise();
+    const getContentItem = async result => {
         updatedVariant = result;
-        return cmClient
-                .viewContentItem()
+        return await client.viewContentItem()
                 .byItemId(result.data.item.id)
-                .toObservable();
+                .toPromise();
     };
-    const getContentType = result => {
-        return cmClient
-                .viewContentType()
+    const getContentType = async result => {
+        return await client.viewContentType()
                 .byTypeId(result.data.type.id)
-                .toObservable()
+                .toPromise()
     };
 
-    const obs = getLanguageVariant.pipe(mergeMap(getContentItem)).pipe(mergeMap(getContentType));
-    const sub = obs.subscribe(result => {
-        sub.unsubscribe();
-        const type = result.data;
+    const type = (await (getLanguageVariant.then(result => getContentItem(result)).then(result => getContentType(result)))).data;
         if(type.codename === 'push_notification') {
             sendPush(updatedVariant, type);
         }
-    });
 };
 
 
@@ -67,7 +59,7 @@ const sendPush = function(variant, type) {
   assetID = variant.data.elements.filter(e => e.element.id === iconID)[0].value[0].id;
 
   //Get asset URL
-  cmClient.viewAsset().byAssetId(assetID).toObservable().subscribe(result => {
+  client.viewAsset().byAssetId(assetID).toPromise().then(result => {
     const payload = JSON.stringify({
       title: variant.data.elements.filter(e => e.element.id === titleID)[0].value,
       body: variant.data.elements.filter(e => e.element.id === bodyID)[0].value,
@@ -76,7 +68,7 @@ const sendPush = function(variant, type) {
       url: variant.data.elements.filter(e => e.element.id === urlID)[0].value
     });
   
-    webpush.setVapidDetails('mailto:support@kentico.com', publicVapidKey, privateVapidKey);
+    webPush.setVapidDetails('mailto:address@localhost.local', publicVapidKey, privateVapidKey);
     const dao = new AppDAO();
     dao.getAllSubscriptions().then((rows) => {
   
@@ -90,7 +82,7 @@ const sendPush = function(variant, type) {
           }
         };
 
-        webpush.sendNotification(sub, payload).catch(response => {
+        webPush.sendNotification(sub, payload).catch(response => {
           if(response.statusCode === 410) {
             //Subscription expired or removed- delete from db
             dao.deleteSubscription(sub);
@@ -102,4 +94,4 @@ const sendPush = function(variant, type) {
   })
 }
     
-module.exports = router;
+export default router;

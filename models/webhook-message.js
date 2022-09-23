@@ -1,6 +1,6 @@
-const dotenv = require('dotenv');
-dotenv.config();
-const crypto = require('crypto');
+import { config } from 'dotenv';
+config();
+import { createHmac, timingSafeEqual } from 'crypto';
 
 class WebHookMessage {
     constructor(req) {
@@ -15,11 +15,11 @@ class WebHookMessage {
     }
 
     hasValidSignature() {
-        const computedSignature = crypto.createHmac('sha256', process.env.webhookSecret)
+        const computedSignature = createHmac('sha256', process.env.webhookSecret)
             .update(this.body)
             .digest();
-        return crypto.timingSafeEqual(Buffer.from(this.signature, 'base64'), computedSignature);
+        return timingSafeEqual(Buffer.from(this.signature, 'base64'), computedSignature);
     }
 }
 
-module.exports = WebHookMessage
+export default WebHookMessage

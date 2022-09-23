@@ -6,12 +6,12 @@ block content
     .col-md-12
         h2.contact-title Roastery
         ul.contact-info
-            li #{americanCafes[0].phone.value}
+            li #{americanCafes[0].elements.phone.value}
             li
-                a(href='mailto:#{americanCafes[0].email.value}')
-                    =americanCafes[0].email.value
-            li #{americanCafes[0].city.value}, #{americanCafes[0].street.value},
-            li #{americanCafes[0].zipCode.value}, #{americanCafes[0].country.value}, #{americanCafes[0].state.value}
+                a(href='mailto:#{americanCafes[0].elements.email.value}')
+                    =americanCafes[0].elements.email.value
+            li #{americanCafes[0].elements.city.value}, #{americanCafes[0].elements.street.value},
+            li #{americanCafes[0].elements.zipCode.value}, #{americanCafes[0].elements.country.value}, #{americanCafes[0].elements.state.value}
     div
         h2 Our cafes
         .row
@@ -22,7 +22,7 @@ block content
         -
             var addresses = '';
             americanCafes.forEach(function(cafe){
-                addresses += (cafe.street.value.substring(1) + ", " + cafe.city.value + ", " + cafe.zipCode.value + "|");
+                addresses += (cafe.elements.street.value.substring(1) + ", " + cafe.elements.city.value + ", " + cafe.elements.zipCode.value + "|");
             });
             addresses = addresses.slice(0, -1);
         +google-map(addresses)

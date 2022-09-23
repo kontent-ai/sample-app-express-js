@@ -1,7 +1,7 @@
-module.exports.formatPrice = function(price, language) {
+export function formatPrice(price, language) {
     return price.toLocaleString(language, {
         style: "currency",
         currency: "USD",
         maximumFractionDigits: 2
     });
-};
+}

@@ -1,10 +1,10 @@
-const AppDAO = require('../dao');
-const express = require('express');
-const router = express.Router();
+import AppDAO from '../dao.js';
+import { Router } from 'express';
+const router = Router();
 
 router.post('/subscribe', (req, res, next) => {
-    let json = JSON.parse(req.body);
-    let sub = {
+    const json = JSON.parse(req.body);
+    const sub = {
         endpoint: json.endpoint,
         p256dh: json.keys.p256dh,
         auth: json.keys.auth
@@ -14,8 +14,8 @@ router.post('/subscribe', (req, res, next) => {
     dao.ensureTable().then(() => {
         dao.insertSubscription(sub).then((response) => {
             res.status(201).json(response);
-        });
+        }).catch(next);
     });
 });
 
-module.exports = router;
+export default router;

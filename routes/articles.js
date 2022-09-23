@@ -1,31 +1,38 @@
-const express = require('express');
-const router = express.Router();
-const ArticleHelper = require('../helpers/article-helper');
+import { Router } from 'express';
+import articleHelper from '../helpers/article-helper.js';
+import { resolveRichTextItem } from '../resolvers/rich-text-resolver.js';
 
-router.get('/:lang/articles', (req, res, next) => {
-    const sub = ArticleHelper.getAllArticles(req.params.lang).subscribe(result => {
-        sub.unsubscribe();
-        res.render('articles', { 'articleList': result.items }, (err, html) => {
-            if (err) {
-                next(err);
-            }
+const { getAllArticles, getArticle } = articleHelper;
+const router = Router();
+
+router.get('/:lang/articles', async (req, res, next) => {
+    const response = await getAllArticles(req.params.lang).catch(next);
+
+    res.render('articles', { 'articleList': response.data.items }, (err, html) => {
+        if (err) {
+            next(err);
+        }
+        else {
             res.send(html);
             res.end();
-        });
+        }
     });
 });
 
-router.get('/:lang/articles/:id', (req, res, next) => {
-    const sub = ArticleHelper.getArticle(req.params.id, req.params.lang).subscribe(result => {
-        sub.unsubscribe();
-        res.render('articles', { 'articleList': result.items }, (err, html) => {
-            if (err) {
-                next(err);
-            }
+router.get('/:lang/articles/:id', async (req, res, next) => {
+    let resolvedCodenames = [];
+    const response = await getArticle(req.params.id, req.params.lang).catch(next);
+    resolveRichTextItem(response.data.items[0], resolvedCodenames);
+
+    res.render('articles', { 'articleList': response.data.items }, (err, html) => {
+        if (err) {
+            next(err);
+        }
+        else {
             res.send(html);
             res.end();
-        });
+        }
     });
 });
 
-module.exports = router;
+export default router;

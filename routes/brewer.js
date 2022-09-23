@@ -1,20 +1,25 @@
-const express = require('express');
-const router = express.Router();
-const BrewerHelper = require('../helpers/brewer-helper');
+import brewerHelper from '../helpers/brewer-helper.js';
+import { Router } from 'express';
+import { resolveRichTextItem } from '../resolvers/rich-text-resolver.js'
 
-router.get('/:lang/brewer/:codename', (req, res, next) => {
-    const sub = BrewerHelper.getBrewer(req.params.codename, req.params.lang).subscribe(result => {
-        sub.unsubscribe();
-        res.render('brewer', { 'brewer': result.firstItem }, (err, html) => {
-            if (err) {
-                next(err);
-            }
-            else {
-                res.send(html);
-                res.end();
-            }
-        });
+const { getBrewer } = brewerHelper;
+const router = Router();
+
+router.get('/:lang/brewer/:codename', async (req, res, next) => {
+    let resolvedCodenames = [];
+    const response = await getBrewer(req.params.codename, req.params.lang).catch(next);
+    resolveRichTextItem(response.data.items[0], resolvedCodenames);
+
+    res.render('brewer', { 'brewer': response.data.items[0] }, (err, html) => {
+        if (err) {
+            next(err);
+        }
+        else {
+            res.send(html);
+            res.end();
+        }
     });
+
 });
 
-module.exports = router;
+export default router;

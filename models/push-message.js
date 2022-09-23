@@ -1,6 +1,6 @@
-const dotenv = require('dotenv');
-dotenv.config();
-const crypto = require('crypto');
+import { config } from 'dotenv';
+config();
+import { createHmac, timingSafeEqual } from 'crypto';
 
 class PushMessage {
     constructor(req) {
@@ -15,11 +15,15 @@ class PushMessage {
     }
 
     hasValidSignature() {
-        const computedSignature = crypto.createHmac('sha256', process.env.pushSecret)
-            .update(this.body)
-            .digest();
-        return crypto.timingSafeEqual(Buffer.from(this.signature, 'base64'), computedSignature);
+        try {
+            const computedSignature = createHmac('sha256', process.env.pushSecret)
+                .update(this.body)
+                .digest();
+            return timingSafeEqual(Buffer.from(this.signature, 'base64'), computedSignature);
+        } catch(error) {
+            console.log(error)
+        }
     }
 }
 
-module.exports = PushMessage
+export default PushMessage

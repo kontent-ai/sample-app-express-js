@@ -10,6 +10,6 @@ block content
     .row
         each cafe in partnerCafes
             div
-                h3 #{cafe.city.value}, #{cafe.country.value}
+                h3 #{cafe.elements.city.value}, #{cafe.elements.country.value}
                 p.
-                    #{cafe.country.value}, #{cafe.street.value}, #{cafe.phone.value}
+                    #{cafe.elements.country.value}, #{cafe.elements.street.value}, #{cafe.elements.phone.value}

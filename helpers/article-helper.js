@@ -1,25 +1,25 @@
-const deliveryClient = require('../delivery');
+import client from '../delivery.js';
 
 class ArticleHelper {
 
-    static getAllArticles(lang = '', force = false) {
-        const query = deliveryClient.items()
+    static async getAllArticles(lang = '', force = false) {
+        const query = client.items()
             .type('article')
-            .orderParameter('elements.post_date', 1);
+            .orderParameter('elements.post_date', 'asc');
 
         if(lang !== '') query.languageParameter(lang);
         if(force) query.equalsFilter('system.language', lang);
 
-        return query.toObservable();
+        return await query.toPromise();
     }
 
-    static getArticle(id, lang) {
-        return deliveryClient.items()
+    static async getArticle(id, lang) {
+        return await client.items()
             .type('article')
             .languageParameter(lang)
             .equalsFilter('system.id', id)
-            .toObservable();
+            .toPromise();
     }
 }
 
-module.exports = ArticleHelper;
+export default ArticleHelper;

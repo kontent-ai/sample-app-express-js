@@ -1,28 +1,28 @@
-const deliveryClient = require('../delivery');
-const linkResolver = require('../resolvers/link-resolver');
-const express = require('express');
-const router = express.Router();
+import client from '../delivery.js';
+import { Router } from 'express';
+import { resolveRichTextItem } from '../resolvers/rich-text-resolver.js';
 
-router.get('/:lang/about-us', (req, res, next) => {
-  const sub = deliveryClient.item('about_us')
+const router = Router();
+
+router.get('/:lang/about-us', async (req, res, next) => {
+  let resolvedCodenames = [];
+  const response = await client.item('about_us')
     .languageParameter(req.params.lang)
     .depthParameter(2)
-    .queryConfig({
-      linkResolver: (link) => linkResolver.resolveContentLink(link)
-    })
-    .toObservable()
-    .subscribe(result => {
-      sub.unsubscribe();
-      res.render('about-us', { 'content_item': result.item }, (err, html) => {
-        if (err) {
-          next(err);
-        }
-        else {
-          res.send(html);
-          res.end();
-        }
-      });
-    });
+    .toPromise()
+    .catch(next)
+
+resolveRichTextItem(response.data.item, resolvedCodenames);
+
+  res.render('about-us', { 'content_item': response.data.item }, (err, html) => {
+    if (err) {
+      next(err);
+    }
+    else {
+      res.send(html);
+      res.end();
+    }
+  });
 });
 
-module.exports = router;
+export default router;

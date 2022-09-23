@@ -1,22 +1,22 @@
-const deliveryClient = require('../delivery');
+import client from '../delivery.js';
 
 class BrewerHelper {
 
-    static getBrewer(codename, lang) {
-        return deliveryClient.items()
+    static async getBrewer(codename, lang) {
+        return await client.items()
             .type('brewer')
             .languageParameter(lang)
             .equalsFilter('system.codename', codename)
-            .toObservable();
+            .toPromise();
     }
 
-    static getAllBrewers(lang) {
-        return deliveryClient.items()
+    static async getAllBrewers(lang) {
+        return await client.items()
             .type('brewer')
             .languageParameter(lang)
-            .toObservable();
+            .toPromise();
     }
 
 }
 
-module.exports = BrewerHelper;
+export default BrewerHelper;

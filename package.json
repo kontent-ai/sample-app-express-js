@@ -1,37 +1,35 @@
 {
-  "name": "kc-expressjs",
+  "name": "sample-app-express",
   "version": "1.0.0",
-  "private": true,
+  "type": "module",
   "scripts": {
     "start": "node ./bin/www",
-    "publish": "npm run eslint-local",
-    "eslint-local": "./node_modules/.bin/eslint ./",
-    "kc-generate": "./node_modules/.bin/kc-generate --projectId=<your project ID> --moduleResolution=CommonJs --codeType=JavaScript"
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix ."
   },
   "devDependencies": {
-    "acorn": "^6.4.2",
-    "cookie-parser": "^1.4.4",
+    "@types/express": "^4.17.13",
+    "acorn": "^8.8.0",
+    "cookie-parser": "^1.4.6",
     "datejs": "^1.0.0-rc3",
-    "debug": "^4.1.1",
-    "eslint": "^5.16.0",
-    "eslint-utils": ">=1.4.1",
-    "express": "~4.16.0",
+    "debug": "^4.3.4",
+    "eslint": "^8.23.1",
+    "eslint-utils": "^3.0.0",
+    "express": "~4.18.1",
     "global": "^4.4.0",
-    "http-errors": "^1.7.3",
-    "kentico-cloud-model-generator-utility": "^2.1.0",
-    "morgan": "~1.9.0",
-    "pug": "^3.0.2",
-    "rxjs": "^6.5.4"
+    "http-errors": "^2.0.0",
+    "morgan": "~1.10.0",
+    "pug": "^3.0.2"
   },
   "dependencies": {
-    "@kentico/kontent-delivery": "^10.3.0",
-    "@kentico/kontent-management": "^0.4.8",
-    "algoliasearch": "^3.33.0",
-    "axios": "^0.21.1",
-    "axios-observable": "^1.1.2",
+    "@kontent-ai/delivery-node-parser": "^3.0.0",
+    "@kontent-ai/delivery-sdk": "^12.0.2",
+    "@kontent-ai/management-sdk": "^3.1.0",
+    "algoliasearch": "^4.14.2",
+    "axios": "^0.27.2",
+    "axios-observable": "^1.5.0",
     "body-parser": "^1.19.0",
-    "dotenv": "^8.1.0",
-    "sqlite3": "^4.1.1",
-    "web-push": "^3.4.3"
+    "sqlite3": "^5.0.11",
+    "web-push": "^3.5.0"
   }
 }

@@ -1,21 +1,20 @@
-const deliveryClient = require('../delivery');
-const { map } = require('rxjs/operators');
+import client from '../delivery.js';
 
 class CafeHelper {
 
-    static getCafesInCountry(country) {
-        return deliveryClient.items()
+    static async getCafesInCountry(country) {
+        return await client.items()
             .type('cafe')
             .equalsFilter('elements.country', country)
-            .toObservable();
+            .toPromise();
     }
 
-    static getCafesNotInCountry(country) {
-        return deliveryClient.items()
+    static async getCafesNotInCountry(country) {
+        return await client.items()
             .type('cafe')
-            .toObservable()
-            .pipe(map(result => result.items.filter((cafe) => cafe.country.value != country)));
+            .toPromise()
+            .then(result => result.data.items.filter((cafe) => cafe.elements.country.value != country));
     }
 }
 
-module.exports = CafeHelper;
+export default CafeHelper;
