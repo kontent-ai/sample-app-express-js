@@ -29,7 +29,7 @@
     "axios": "^0.27.2",
     "axios-observable": "^1.5.0",
     "body-parser": "^1.19.0",
-    "sqlite3": "^5.0.11",
+    "sqlite3": "^5.1.5",
     "web-push": "^3.5.0"
   }
 }
